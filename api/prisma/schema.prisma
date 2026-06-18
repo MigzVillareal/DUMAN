@@ -12,12 +12,22 @@ datasource db {
   provider = "postgresql"
 }
 
+enum MeetingStatus {
+  UPCOMING
+  ONGOING
+  FINISHED
+}
+
 model User {
   userId            Int       @id @default(autoIncrement())
   username          String
   email             @unique
   firstname         String
   lastname          String
+
+  groups            Group[]   @relation
+  meetings          Meeting[]
+  notifications     Notification
 
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
@@ -31,6 +41,7 @@ model Meeting {
   title                   String
   description             String?
   category                String
+  meetingStatus           MeetingStatus
 
   latitude                float
   longitude               float
@@ -41,9 +52,11 @@ model Meeting {
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 
+  //actual foreign key column stored in the database
   setterId          Int
   intendedGroupId   Int
-
+  
+  //prisma relation mapping
   setter            User      @relation(fields: [setterId], references: [userId])
   intendedGroup     Group     @relation(fields: [intendedGroupId], references: [groupId])
   
@@ -54,9 +67,28 @@ model Group {
   groupId           Int       @id @default(autoIncrement())
   groupName         String
   groupDescription  String?
+  groupColor        String
+
+  groupCalendarId
+
+  calendar          calendar
 
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
   @@map("groups")
+}
+
+model Calendar {
+  calendarId      @id @default(autoIncrement())
+
+  @@map("calendars")
+}
+
+model Notification {
+  notificationId      @id @default(autoIncrement())
+  userId
+  title
+
+  @@map("notifications")
 }
