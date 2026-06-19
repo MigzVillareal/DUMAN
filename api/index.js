@@ -1,6 +1,12 @@
 import express from "express"
 import dotenv from "dotenv"
 import path from "path"
+import UserRoute from "./routes/User.routes.js";
+import AuthRoute from "./routes/Auth.routes.js";
+import GroupRoute from "./routes/Group.routes.js";
+import MeetingRoute from "./routes/Meeting.routes.js";
+import CalednarRoute from "./routes/Calendar.routes.js";
+import NotificationRoute from "./routes/Notification.routes.js";
 import { fileURLToPath } from "url";
 import { readFile } from "fs/promises";
 import { PrismaClient } from '@prisma/client';
@@ -29,3 +35,9 @@ app.listen(PORT, () => {
 });
 
 //import user routes here
+app.use("/api/v1/users", UserRoute);
+app.use("/api/v1/auths", AuthRoute);
+app.use("/api/v1/groups", GroupRoute);
+app.use("/api/v1/meetings", MeetingRoute);
+app.use("/api/v1/calendars", CalendarRoute);
+app.use("/api/v1/notifications", NotificationRoute);
