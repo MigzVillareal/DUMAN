@@ -6,6 +6,7 @@
 generator client {
   provider = "prisma-client"
   output   = "./generated"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -20,10 +21,11 @@ enum MeetingStatus {
 
 model User {
   userId            Int       @id @default(autoIncrement())
-  username          String
-  email             @unique
+  username          String    @unique
+  email             @unique   @unique
   firstname         String
   lastname          String
+  password          String    @map("password_hash")
 
   groups            Group[]   @relation
   meetings          Meeting[]
