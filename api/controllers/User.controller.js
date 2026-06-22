@@ -1,7 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '../prisma/generated/index.js';
 import prisma from "../lib/prisma.js";
 
-export const getAllUser = async (req, res) => {
+export const getAllUsers = async (req, res) => {
     try {
         const users = await prisma.user.findMany();
         

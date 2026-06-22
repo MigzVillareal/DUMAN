@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+enum MeetingStatus {
+  UPCOMING
+  ONGOING
+  FINISHED
+}
+
+model User {
+  userId    Int    @id @default(autoincrement())
+  username  String @unique
+  email     String @unique
+  firstname String
+  lastname  String
+  password  String @map("password_hash")
+
+  groupId      Int
+  joinedGroups Group[]
+
+  meetings      Meeting[]
+  notifications Notification @relation(fields: [notificationNotificationId], references: [notificationId])
+
+  createdAt                  DateTime      @default(now())
+  updatedAt                  DateTime      @updatedAt
+  notificationNotificationId Int
+  groupMembers               GroupMember[]
+
+  @@map("users")
+}
+
+model Meeting {
+  meetingId     Int           @id @default(autoincrement())
+  meetingNumber Int
+  title         String
+  description   String?
+  category      String
+  meetingStatus MeetingStatus
+
+  latitude            Float
+  longitude           Float
+  locationDescription String
+
+  schedule DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //actual foreign key column stored in the database
+  setterId        Int
+  intendedGroupId Int
+
+  //prisma relation mapping
+  setter        User  @relation(fields: [setterId], references: [userId])
+  intendedGroup Group @relation(fields: [intendedGroupId], references: [groupId])
+
+  @@map("meetings")
+}
+
+model Group {
+  groupId     Int     @id @default(autoincrement())
+  name        String
+  description String?
+  groupColor  String
+
+  userId Int
+  user   User @relation(fields: [userId], references: [userId])
+
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  meetings     Meeting[]
+  groupMembers GroupMember[]
+
+  @@map("groups")
+}
+
+model GroupMember {
+  memberId Int
+  groupId  Int
+  role     Role     @default(MEMBER)
+  joinedAt DateTime @default(now())
+
+  user  User  @relation(fields: [memberId], references: [userId], onDelete: Cascade)
+  group Group @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
+
+  @@id([memberId, groupId]) //composite primary key
+  @@map("members")
+}
+
+model Calendar {
+  calendarId Int @id @default(autoincrement())
+
+  groupId String
+  userId  String
+
+  @@map("calendars")
+}
+
+model Notification {
+  notificationId Int    @id @default(autoincrement())
+  userId         Int
+  title          String
+  users          User[]
+
+  @@map("notifications")
+}

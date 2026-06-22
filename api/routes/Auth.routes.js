@@ -3,8 +3,8 @@ import * as authController from "../controllers/Auth.controller.js";
 
 const router = express.Router();
 
-routes.post('/register', authController.registerUser);
-routes.post('/login', authController.loginUser);
-routes.post('/logout', authController.logoutUser);
+router.post('/register', authController.registerUser);
+router.post('/login', authController.loginUser);
+router.post('/logout', authController.logoutUser);
 
 export default router;
