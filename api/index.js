@@ -20,7 +20,7 @@ const PORT = process.env.PORT || 8000;
 
 app.get("/", async (req, res) => {
   const filePath = path.join(__dirname, "..", "frontend", "home.html");
-  res.send(await readFile(filePath, "utf8")); // was `response.send` which would throw
+  res.send(await readFile(filePath, "utf8"));
 });
 
 app.use("/api/v1/users", UserRoute);

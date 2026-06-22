@@ -6,11 +6,15 @@
 generator client {
   provider = "prisma-client"
   output   = "./generated"
-  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  MEMBER
 }
 
 enum MeetingStatus {
@@ -20,77 +24,99 @@ enum MeetingStatus {
 }
 
 model User {
-  userId            Int       @id @default(autoIncrement())
-  username          String    @unique
-  email             @unique   @unique
-  firstname         String
-  lastname          String
-  password          String    @map("password_hash")
+  userId    Int    @id @default(autoincrement())
+  username  String @unique
+  email     String @unique
+  firstname String
+  lastname  String
+  password  String @map("password_hash")
 
-  groups            Group[]   @relation
-  meetings          Meeting[]
-  notifications     Notification
+  groupId      Int
+  joinedGroups Group[]
 
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  meetings      Meeting[]
+  notifications Notification @relation(fields: [notificationNotificationId], references: [notificationId])
+
+  createdAt                  DateTime      @default(now())
+  updatedAt                  DateTime      @updatedAt
+  notificationNotificationId Int
+  groupMembers               GroupMember[]
 
   @@map("users")
 }
 
 model Meeting {
-  meetingId               Int     @id @default(autoIncrement())
-  meetingNumber           Int
-  title                   String
-  description             String?
-  category                String
-  meetingStatus           MeetingStatus
+  meetingId     Int           @id @default(autoincrement())
+  meetingNumber Int
+  title         String
+  description   String?
+  category      String
+  meetingStatus MeetingStatus
 
-  latitude                float
-  longitude               float
-  locationDescription     String
+  latitude            Float
+  longitude           Float
+  locationDescription String
 
-  schedule                DateTime
+  schedule DateTime
 
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   //actual foreign key column stored in the database
-  setterId          Int
-  intendedGroupId   Int
-  
+  setterId        Int
+  intendedGroupId Int
+
   //prisma relation mapping
-  setter            User      @relation(fields: [setterId], references: [userId])
-  intendedGroup     Group     @relation(fields: [intendedGroupId], references: [groupId])
-  
+  setter        User  @relation(fields: [setterId], references: [userId])
+  intendedGroup Group @relation(fields: [intendedGroupId], references: [groupId])
+
   @@map("meetings")
 }
 
 model Group {
-  groupId           Int       @id @default(autoIncrement())
-  groupName         String
-  groupDescription  String?
-  groupColor        String
+  groupId     Int     @id @default(autoincrement())
+  name        String
+  description String?
+  groupColor  String
 
-  groupCalendarId
+  userId Int
+  user   User @relation(fields: [userId], references: [userId])
 
-  calendar          calendar
-
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  meetings     Meeting[]
+  groupMembers GroupMember[]
 
   @@map("groups")
 }
 
+model GroupMember {
+  memberId Int
+  groupId  Int
+  role     Role     @default(MEMBER)
+  joinedAt DateTime @default(now())
+
+  user  User  @relation(fields: [memberId], references: [userId], onDelete: Cascade)
+  group Group @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
+
+  @@id([memberId, groupId]) //composite primary key
+  @@map("members")
+}
+
 model Calendar {
-  calendarId      @id @default(autoIncrement())
+  calendarId Int @id @default(autoincrement())
+
+  groupId String
+  userId  String
 
   @@map("calendars")
 }
 
 model Notification {
-  notificationId      @id @default(autoIncrement())
-  userId
-  title
+  notificationId Int    @id @default(autoincrement())
+  userId         Int
+  title          String
+  users          User[]
 
   @@map("notifications")
 }

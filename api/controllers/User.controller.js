@@ -1,4 +1,4 @@
-import { PrismaCliente } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import prisma from "../lib/prisma.js";
 
 export const getAllUser = async (req, res) => {
@@ -41,7 +41,7 @@ export const updateUser = async (req, res) => {
 
         res.status(200).json({ message: "User updated successfully.", user });
     } catch (error) {
-        res.status(500).json({ errorMessage: "Unableto update user." });
+        res.status(500).json({ errorMessage: "Unable to update user." });
     }
 };
 
