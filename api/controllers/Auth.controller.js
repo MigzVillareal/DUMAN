@@ -27,6 +27,10 @@ export const registerUser = async (req, res) => {
     } catch (error) {
         console.error(error);
 
+        if (error.code = 'P2002') {
+            return res.status(409).json({ errorMessage: "Username or email already exists" });
+        }
+
         res.status(500).json({ errorMessage:"Unable to create user." })
     }
 };

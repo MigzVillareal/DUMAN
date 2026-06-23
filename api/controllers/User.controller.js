@@ -20,7 +20,7 @@ export const getUserById = async (req, res) => {
 
         res.status(200).json(user);
     } catch (error) {
-        res.stattus(500).json({ errorMessage: "Unable to get user." });
+        res.status(500).json({ errorMessage: "Unable to get user." });
     }
 };
 
@@ -30,7 +30,7 @@ export const updateUser = async (req, res) => {
         const { firstname, lastname, username, email } = req.body;
 
         const user = await prisma.user.update({
-            where: { id: parseInt(id) },
+            where: { userId: parseInt(id) },
             data: {
                 firstname,
                 lastname,
@@ -49,7 +49,7 @@ export const deleteUser = async (req, res) => {
     try {
         const { id } = req.params;
 
-        await prisma.user.delete({ where: { id: parseInt(id) } });
+        await prisma.user.delete({ where: { userId: parseInt(id) } });
 
         res.status(200).json({ message: "User deleted successfully" });
     } catch (error) {
