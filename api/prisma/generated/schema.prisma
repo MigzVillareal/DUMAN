@@ -31,18 +31,48 @@ model User {
   lastname  String
   password  String @map("password_hash")
 
-  groupId      Int
+  notificationId Int?
+  groupId        Int?
+
   joinedGroups Group[]
+  meetings     Meeting[]
 
-  meetings      Meeting[]
-  notifications Notification @relation(fields: [notificationNotificationId], references: [notificationId])
-
-  createdAt                  DateTime      @default(now())
-  updatedAt                  DateTime      @updatedAt
-  notificationNotificationId Int
-  groupMembers               GroupMember[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  groupMembers GroupMember[]
 
   @@map("users")
+}
+
+model Group {
+  groupId     Int     @id @default(autoincrement())
+  name        String
+  description String?
+  groupColor  String
+
+  members       GroupMember[]
+  notifications Notification[]
+  meetings      Meeting[]
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User?    @relation(fields: [userUserId], references: [userId])
+  userUserId Int?
+
+  @@map("groups")
+}
+
+model GroupMember {
+  memberId Int
+  groupId  Int
+  role     Role     @default(MEMBER)
+  joinedAt DateTime @default(now())
+
+  user  User  @relation(fields: [memberId], references: [userId], onDelete: Cascade)
+  group Group @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
+
+  @@id([memberId, groupId])
+  @@map("members")
 }
 
 model Meeting {
@@ -73,36 +103,6 @@ model Meeting {
   @@map("meetings")
 }
 
-model Group {
-  groupId     Int     @id @default(autoincrement())
-  name        String
-  description String?
-  groupColor  String
-
-  userId Int
-  user   User @relation(fields: [userId], references: [userId])
-
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  meetings     Meeting[]
-  groupMembers GroupMember[]
-
-  @@map("groups")
-}
-
-model GroupMember {
-  memberId Int
-  groupId  Int
-  role     Role     @default(MEMBER)
-  joinedAt DateTime @default(now())
-
-  user  User  @relation(fields: [memberId], references: [userId], onDelete: Cascade)
-  group Group @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
-
-  @@id([memberId, groupId]) //composite primary key
-  @@map("members")
-}
-
 model Calendar {
   calendarId Int @id @default(autoincrement())
 
@@ -115,8 +115,10 @@ model Calendar {
 model Notification {
   notificationId Int    @id @default(autoincrement())
   userId         Int
+  groupId        Int
   title          String
-  users          User[]
+
+  group Group @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
 
   @@map("notifications")
 }

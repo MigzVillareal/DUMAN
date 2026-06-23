@@ -2,9 +2,13 @@ import { PrismaClient } from '../prisma/generated/index.js';
 import bcrypt from "bcrypt"
 import prisma from "../lib/prisma.js";
 
-export const registerUser = async(req, res) => {
+export const registerUser = async (req, res) => {
     try {
-        const newUser = new User(req.body);
+        const { firstname, lastname, username, email, password } = req.body; 
+
+        if (!firstname || !lastname || !username || !email || !password) {
+            return res.status(400).json({ errorMessage: "All fields are required." });
+        }
 
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
@@ -21,6 +25,8 @@ export const registerUser = async(req, res) => {
 
         res.status(201).json({ message: 'User created successfully', userId: user.userId });
     } catch (error) {
+        console.error(error);
+
         res.status(500).json({ errorMessage:"Unable to create user." })
     }
 };

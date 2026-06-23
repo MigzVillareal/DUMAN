@@ -127,10 +127,27 @@ exports.Prisma.UserScalarFieldEnum = {
   firstname: 'firstname',
   lastname: 'lastname',
   password: 'password',
+  notificationId: 'notificationId',
   groupId: 'groupId',
   createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.GroupScalarFieldEnum = {
+  groupId: 'groupId',
+  name: 'name',
+  description: 'description',
+  groupColor: 'groupColor',
+  createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  notificationNotificationId: 'notificationNotificationId'
+  userUserId: 'userUserId'
+};
+
+exports.Prisma.GroupMemberScalarFieldEnum = {
+  memberId: 'memberId',
+  groupId: 'groupId',
+  role: 'role',
+  joinedAt: 'joinedAt'
 };
 
 exports.Prisma.MeetingScalarFieldEnum = {
@@ -150,23 +167,6 @@ exports.Prisma.MeetingScalarFieldEnum = {
   intendedGroupId: 'intendedGroupId'
 };
 
-exports.Prisma.GroupScalarFieldEnum = {
-  groupId: 'groupId',
-  name: 'name',
-  description: 'description',
-  groupColor: 'groupColor',
-  userId: 'userId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.GroupMemberScalarFieldEnum = {
-  memberId: 'memberId',
-  groupId: 'groupId',
-  role: 'role',
-  joinedAt: 'joinedAt'
-};
-
 exports.Prisma.CalendarScalarFieldEnum = {
   calendarId: 'calendarId',
   groupId: 'groupId',
@@ -176,6 +176,7 @@ exports.Prisma.CalendarScalarFieldEnum = {
 exports.Prisma.NotificationScalarFieldEnum = {
   notificationId: 'notificationId',
   userId: 'userId',
+  groupId: 'groupId',
   title: 'title'
 };
 
@@ -193,22 +194,22 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.Role = exports.$Enums.Role = {
+  ADMIN: 'ADMIN',
+  MEMBER: 'MEMBER'
+};
+
 exports.MeetingStatus = exports.$Enums.MeetingStatus = {
   UPCOMING: 'UPCOMING',
   ONGOING: 'ONGOING',
   FINISHED: 'FINISHED'
 };
 
-exports.Role = exports.$Enums.Role = {
-  ADMIN: 'ADMIN',
-  MEMBER: 'MEMBER'
-};
-
 exports.Prisma.ModelName = {
   User: 'User',
-  Meeting: 'Meeting',
   Group: 'Group',
   GroupMember: 'GroupMember',
+  Meeting: 'Meeting',
   Calendar: 'Calendar',
   Notification: 'Notification'
 };

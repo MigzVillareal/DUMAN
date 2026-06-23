@@ -12,12 +12,35 @@ CREATE TABLE "users" (
     "firstname" TEXT NOT NULL,
     "lastname" TEXT NOT NULL,
     "password_hash" TEXT NOT NULL,
-    "groupId" INTEGER NOT NULL,
+    "notificationId" INTEGER,
+    "groupId" INTEGER,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "notificationNotificationId" INTEGER NOT NULL,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("userId")
+);
+
+-- CreateTable
+CREATE TABLE "groups" (
+    "groupId" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT,
+    "groupColor" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "userUserId" INTEGER,
+
+    CONSTRAINT "groups_pkey" PRIMARY KEY ("groupId")
+);
+
+-- CreateTable
+CREATE TABLE "members" (
+    "memberId" INTEGER NOT NULL,
+    "groupId" INTEGER NOT NULL,
+    "role" "Role" NOT NULL DEFAULT 'MEMBER',
+    "joinedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "members_pkey" PRIMARY KEY ("memberId","groupId")
 );
 
 -- CreateTable
@@ -41,29 +64,6 @@ CREATE TABLE "meetings" (
 );
 
 -- CreateTable
-CREATE TABLE "groups" (
-    "groupId" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "description" TEXT,
-    "groupColor" TEXT NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "groups_pkey" PRIMARY KEY ("groupId")
-);
-
--- CreateTable
-CREATE TABLE "members" (
-    "memberId" INTEGER NOT NULL,
-    "groupId" INTEGER NOT NULL,
-    "role" "Role" NOT NULL DEFAULT 'MEMBER',
-    "joinedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "members_pkey" PRIMARY KEY ("memberId","groupId")
-);
-
--- CreateTable
 CREATE TABLE "calendars" (
     "calendarId" SERIAL NOT NULL,
     "groupId" TEXT NOT NULL,
@@ -76,6 +76,7 @@ CREATE TABLE "calendars" (
 CREATE TABLE "notifications" (
     "notificationId" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
+    "groupId" INTEGER NOT NULL,
     "title" TEXT NOT NULL,
 
     CONSTRAINT "notifications_pkey" PRIMARY KEY ("notificationId")
@@ -88,7 +89,13 @@ CREATE UNIQUE INDEX "users_username_key" ON "users"("username");
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- AddForeignKey
-ALTER TABLE "users" ADD CONSTRAINT "users_notificationNotificationId_fkey" FOREIGN KEY ("notificationNotificationId") REFERENCES "notifications"("notificationId") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "groups" ADD CONSTRAINT "groups_userUserId_fkey" FOREIGN KEY ("userUserId") REFERENCES "users"("userId") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "members" ADD CONSTRAINT "members_memberId_fkey" FOREIGN KEY ("memberId") REFERENCES "users"("userId") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "members" ADD CONSTRAINT "members_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "groups"("groupId") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "meetings" ADD CONSTRAINT "meetings_setterId_fkey" FOREIGN KEY ("setterId") REFERENCES "users"("userId") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -97,10 +104,4 @@ ALTER TABLE "meetings" ADD CONSTRAINT "meetings_setterId_fkey" FOREIGN KEY ("set
 ALTER TABLE "meetings" ADD CONSTRAINT "meetings_intendedGroupId_fkey" FOREIGN KEY ("intendedGroupId") REFERENCES "groups"("groupId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "groups" ADD CONSTRAINT "groups_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("userId") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "members" ADD CONSTRAINT "members_memberId_fkey" FOREIGN KEY ("memberId") REFERENCES "users"("userId") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "members" ADD CONSTRAINT "members_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "groups"("groupId") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "notifications" ADD CONSTRAINT "notifications_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "groups"("groupId") ON DELETE CASCADE ON UPDATE CASCADE;

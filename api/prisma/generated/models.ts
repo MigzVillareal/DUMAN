@@ -8,10 +8,10 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/User.ts'
-export type * from './models/Meeting.ts'
-export type * from './models/Group.ts'
-export type * from './models/GroupMember.ts'
-export type * from './models/Calendar.ts'
-export type * from './models/Notification.ts'
-export type * from './commonInputTypes.ts'
+export type * from './models/User.js'
+export type * from './models/Meeting.js'
+export type * from './models/Group.js'
+export type * from './models/GroupMember.js'
+export type * from './models/Calendar.js'
+export type * from './models/Notification.js'
+export type * from './commonInputTypes.js'

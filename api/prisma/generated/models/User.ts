@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums.ts"
-import type * as Prisma from "../internal/prismaNamespace.ts"
+import type * as $Enums from "../enums.js"
+import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model User
@@ -224,7 +224,7 @@ export type UserGroupByOutputType = {
   firstname: string
   lastname: string
   password: string
-  groupId: number
+  groupId: number | null
   createdAt: Date
   updatedAt: Date
   notificationNotificationId: number
@@ -260,7 +260,7 @@ export type UserWhereInput = {
   firstname?: Prisma.StringFilter<"User"> | string
   lastname?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
-  groupId?: Prisma.IntFilter<"User"> | number
+  groupId?: Prisma.IntNullableFilter<"User"> | number | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   notificationNotificationId?: Prisma.IntFilter<"User"> | number
@@ -277,7 +277,7 @@ export type UserOrderByWithRelationInput = {
   firstname?: Prisma.SortOrder
   lastname?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  groupId?: Prisma.SortOrder
+  groupId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   notificationNotificationId?: Prisma.SortOrder
@@ -297,7 +297,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   firstname?: Prisma.StringFilter<"User"> | string
   lastname?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
-  groupId?: Prisma.IntFilter<"User"> | number
+  groupId?: Prisma.IntNullableFilter<"User"> | number | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   notificationNotificationId?: Prisma.IntFilter<"User"> | number
@@ -314,7 +314,7 @@ export type UserOrderByWithAggregationInput = {
   firstname?: Prisma.SortOrder
   lastname?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  groupId?: Prisma.SortOrder
+  groupId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   notificationNotificationId?: Prisma.SortOrder
@@ -335,7 +335,7 @@ export type UserScalarWhereWithAggregatesInput = {
   firstname?: Prisma.StringWithAggregatesFilter<"User"> | string
   lastname?: Prisma.StringWithAggregatesFilter<"User"> | string
   password?: Prisma.StringWithAggregatesFilter<"User"> | string
-  groupId?: Prisma.IntWithAggregatesFilter<"User"> | number
+  groupId?: Prisma.IntNullableWithAggregatesFilter<"User"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   notificationNotificationId?: Prisma.IntWithAggregatesFilter<"User"> | number
@@ -347,7 +347,7 @@ export type UserCreateInput = {
   firstname: string
   lastname: string
   password: string
-  groupId: number
+  groupId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   joinedGroups?: Prisma.GroupCreateNestedManyWithoutUserInput
@@ -363,7 +363,7 @@ export type UserUncheckedCreateInput = {
   firstname: string
   lastname: string
   password: string
-  groupId: number
+  groupId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   notificationNotificationId: number
@@ -378,7 +378,7 @@ export type UserUpdateInput = {
   firstname?: Prisma.StringFieldUpdateOperationsInput | string
   lastname?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.IntFieldUpdateOperationsInput | number
+  groupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinedGroups?: Prisma.GroupUpdateManyWithoutUserNestedInput
@@ -394,7 +394,7 @@ export type UserUncheckedUpdateInput = {
   firstname?: Prisma.StringFieldUpdateOperationsInput | string
   lastname?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.IntFieldUpdateOperationsInput | number
+  groupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   notificationNotificationId?: Prisma.IntFieldUpdateOperationsInput | number
@@ -410,7 +410,7 @@ export type UserCreateManyInput = {
   firstname: string
   lastname: string
   password: string
-  groupId: number
+  groupId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   notificationNotificationId: number
@@ -422,7 +422,7 @@ export type UserUpdateManyMutationInput = {
   firstname?: Prisma.StringFieldUpdateOperationsInput | string
   lastname?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.IntFieldUpdateOperationsInput | number
+  groupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -434,7 +434,7 @@ export type UserUncheckedUpdateManyInput = {
   firstname?: Prisma.StringFieldUpdateOperationsInput | string
   lastname?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.IntFieldUpdateOperationsInput | number
+  groupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   notificationNotificationId?: Prisma.IntFieldUpdateOperationsInput | number
@@ -510,8 +510,8 @@ export type StringFieldUpdateOperationsInput = {
   set?: string
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
   increment?: number
   decrement?: number
   multiply?: number
@@ -520,6 +520,14 @@ export type IntFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type UserCreateNestedOneWithoutMeetingsInput = {
@@ -612,7 +620,7 @@ export type UserCreateWithoutMeetingsInput = {
   firstname: string
   lastname: string
   password: string
-  groupId: number
+  groupId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   joinedGroups?: Prisma.GroupCreateNestedManyWithoutUserInput
@@ -627,7 +635,7 @@ export type UserUncheckedCreateWithoutMeetingsInput = {
   firstname: string
   lastname: string
   password: string
-  groupId: number
+  groupId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   notificationNotificationId: number
@@ -657,7 +665,7 @@ export type UserUpdateWithoutMeetingsInput = {
   firstname?: Prisma.StringFieldUpdateOperationsInput | string
   lastname?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.IntFieldUpdateOperationsInput | number
+  groupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinedGroups?: Prisma.GroupUpdateManyWithoutUserNestedInput
@@ -672,7 +680,7 @@ export type UserUncheckedUpdateWithoutMeetingsInput = {
   firstname?: Prisma.StringFieldUpdateOperationsInput | string
   lastname?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.IntFieldUpdateOperationsInput | number
+  groupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   notificationNotificationId?: Prisma.IntFieldUpdateOperationsInput | number
@@ -686,7 +694,7 @@ export type UserCreateWithoutJoinedGroupsInput = {
   firstname: string
   lastname: string
   password: string
-  groupId: number
+  groupId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   meetings?: Prisma.MeetingCreateNestedManyWithoutSetterInput
@@ -701,7 +709,7 @@ export type UserUncheckedCreateWithoutJoinedGroupsInput = {
   firstname: string
   lastname: string
   password: string
-  groupId: number
+  groupId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   notificationNotificationId: number
@@ -731,7 +739,7 @@ export type UserUpdateWithoutJoinedGroupsInput = {
   firstname?: Prisma.StringFieldUpdateOperationsInput | string
   lastname?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.IntFieldUpdateOperationsInput | number
+  groupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   meetings?: Prisma.MeetingUpdateManyWithoutSetterNestedInput
@@ -746,7 +754,7 @@ export type UserUncheckedUpdateWithoutJoinedGroupsInput = {
   firstname?: Prisma.StringFieldUpdateOperationsInput | string
   lastname?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.IntFieldUpdateOperationsInput | number
+  groupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   notificationNotificationId?: Prisma.IntFieldUpdateOperationsInput | number
@@ -760,7 +768,7 @@ export type UserCreateWithoutGroupMembersInput = {
   firstname: string
   lastname: string
   password: string
-  groupId: number
+  groupId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   joinedGroups?: Prisma.GroupCreateNestedManyWithoutUserInput
@@ -775,7 +783,7 @@ export type UserUncheckedCreateWithoutGroupMembersInput = {
   firstname: string
   lastname: string
   password: string
-  groupId: number
+  groupId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   notificationNotificationId: number
@@ -805,7 +813,7 @@ export type UserUpdateWithoutGroupMembersInput = {
   firstname?: Prisma.StringFieldUpdateOperationsInput | string
   lastname?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.IntFieldUpdateOperationsInput | number
+  groupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinedGroups?: Prisma.GroupUpdateManyWithoutUserNestedInput
@@ -820,7 +828,7 @@ export type UserUncheckedUpdateWithoutGroupMembersInput = {
   firstname?: Prisma.StringFieldUpdateOperationsInput | string
   lastname?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.IntFieldUpdateOperationsInput | number
+  groupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   notificationNotificationId?: Prisma.IntFieldUpdateOperationsInput | number
@@ -834,7 +842,7 @@ export type UserCreateWithoutNotificationsInput = {
   firstname: string
   lastname: string
   password: string
-  groupId: number
+  groupId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   joinedGroups?: Prisma.GroupCreateNestedManyWithoutUserInput
@@ -849,7 +857,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   firstname: string
   lastname: string
   password: string
-  groupId: number
+  groupId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   joinedGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutUserInput
@@ -893,7 +901,7 @@ export type UserScalarWhereInput = {
   firstname?: Prisma.StringFilter<"User"> | string
   lastname?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
-  groupId?: Prisma.IntFilter<"User"> | number
+  groupId?: Prisma.IntNullableFilter<"User"> | number | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   notificationNotificationId?: Prisma.IntFilter<"User"> | number
@@ -906,7 +914,7 @@ export type UserCreateManyNotificationsInput = {
   firstname: string
   lastname: string
   password: string
-  groupId: number
+  groupId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -917,7 +925,7 @@ export type UserUpdateWithoutNotificationsInput = {
   firstname?: Prisma.StringFieldUpdateOperationsInput | string
   lastname?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.IntFieldUpdateOperationsInput | number
+  groupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinedGroups?: Prisma.GroupUpdateManyWithoutUserNestedInput
@@ -932,7 +940,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   firstname?: Prisma.StringFieldUpdateOperationsInput | string
   lastname?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.IntFieldUpdateOperationsInput | number
+  groupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   joinedGroups?: Prisma.GroupUncheckedUpdateManyWithoutUserNestedInput
@@ -947,7 +955,7 @@ export type UserUncheckedUpdateManyWithoutNotificationsInput = {
   firstname?: Prisma.StringFieldUpdateOperationsInput | string
   lastname?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.IntFieldUpdateOperationsInput | number
+  groupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1090,7 +1098,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     firstname: string
     lastname: string
     password: string
-    groupId: number
+    groupId: number | null
     createdAt: Date
     updatedAt: Date
     notificationNotificationId: number
