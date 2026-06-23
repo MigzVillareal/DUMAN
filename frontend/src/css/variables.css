@@ -1,0 +1,30 @@
+:root {
+  /* Typography */
+  --font-ui: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* Color registry */
+  --color-navy: #001e40;
+  --color-text: #111c2c;
+  --color-canvas: #f9f9ff;
+  --color-gold: #ffe088;
+  --color-gold-text: #745c00;
+  --color-slate-light: #e7eeff;
+  --color-panel: #f0f3ff;
+  --color-border: #c3c6d1;
+  --color-destructive: #b42318;
+
+  /* Semantic aliases */
+  --color-primary: var(--color-navy);
+  --color-background: var(--color-canvas);
+  --color-surface: #ffffff;
+  --color-muted: var(--color-border);
+  --color-accent: var(--color-gold);
+  --color-accent-text: var(--color-gold-text);
+  --color-hover: var(--color-slate-light);
+}
