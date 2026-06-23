@@ -143,4 +143,4 @@ vite.config.ts.timestamp-*
 .vite/
 
 #node modules
-node_modules/
+./api/node_modules
