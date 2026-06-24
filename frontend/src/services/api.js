@@ -7,3 +7,13 @@ export async function login(email, password) {
 
   return response.json();
 }
+
+export async function register(userData) {
+  const response = await fetch("/api/v1/auths/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(userData),
+  });
+
+  return response.json();
+}
