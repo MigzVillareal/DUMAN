@@ -140,7 +140,7 @@ exports.Prisma.GroupScalarFieldEnum = {
   groupColor: 'groupColor',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  userUserId: 'userUserId'
+  userId: 'userId'
 };
 
 exports.Prisma.GroupMemberScalarFieldEnum = {

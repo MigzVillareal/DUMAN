@@ -2700,12 +2700,12 @@ export namespace Prisma {
 
   export type GroupAvgAggregateOutputType = {
     groupId: number | null
-    userUserId: number | null
+    userId: number | null
   }
 
   export type GroupSumAggregateOutputType = {
     groupId: number | null
-    userUserId: number | null
+    userId: number | null
   }
 
   export type GroupMinAggregateOutputType = {
@@ -2715,7 +2715,7 @@ export namespace Prisma {
     groupColor: string | null
     createdAt: Date | null
     updatedAt: Date | null
-    userUserId: number | null
+    userId: number | null
   }
 
   export type GroupMaxAggregateOutputType = {
@@ -2725,7 +2725,7 @@ export namespace Prisma {
     groupColor: string | null
     createdAt: Date | null
     updatedAt: Date | null
-    userUserId: number | null
+    userId: number | null
   }
 
   export type GroupCountAggregateOutputType = {
@@ -2735,19 +2735,19 @@ export namespace Prisma {
     groupColor: number
     createdAt: number
     updatedAt: number
-    userUserId: number
+    userId: number
     _all: number
   }
 
 
   export type GroupAvgAggregateInputType = {
     groupId?: true
-    userUserId?: true
+    userId?: true
   }
 
   export type GroupSumAggregateInputType = {
     groupId?: true
-    userUserId?: true
+    userId?: true
   }
 
   export type GroupMinAggregateInputType = {
@@ -2757,7 +2757,7 @@ export namespace Prisma {
     groupColor?: true
     createdAt?: true
     updatedAt?: true
-    userUserId?: true
+    userId?: true
   }
 
   export type GroupMaxAggregateInputType = {
@@ -2767,7 +2767,7 @@ export namespace Prisma {
     groupColor?: true
     createdAt?: true
     updatedAt?: true
-    userUserId?: true
+    userId?: true
   }
 
   export type GroupCountAggregateInputType = {
@@ -2777,7 +2777,7 @@ export namespace Prisma {
     groupColor?: true
     createdAt?: true
     updatedAt?: true
-    userUserId?: true
+    userId?: true
     _all?: true
   }
 
@@ -2874,7 +2874,7 @@ export namespace Prisma {
     groupColor: string
     createdAt: Date
     updatedAt: Date
-    userUserId: number | null
+    userId: number
     _count: GroupCountAggregateOutputType | null
     _avg: GroupAvgAggregateOutputType | null
     _sum: GroupSumAggregateOutputType | null
@@ -2903,7 +2903,7 @@ export namespace Prisma {
     groupColor?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    userUserId?: boolean
+    userId?: boolean
     members?: boolean | Group$membersArgs<ExtArgs>
     notifications?: boolean | Group$notificationsArgs<ExtArgs>
     meetings?: boolean | Group$meetingsArgs<ExtArgs>
@@ -2918,7 +2918,7 @@ export namespace Prisma {
     groupColor?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    userUserId?: boolean
+    userId?: boolean
     user?: boolean | Group$userArgs<ExtArgs>
   }, ExtArgs["result"]["group"]>
 
@@ -2929,7 +2929,7 @@ export namespace Prisma {
     groupColor?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    userUserId?: boolean
+    userId?: boolean
     user?: boolean | Group$userArgs<ExtArgs>
   }, ExtArgs["result"]["group"]>
 
@@ -2940,10 +2940,10 @@ export namespace Prisma {
     groupColor?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    userUserId?: boolean
+    userId?: boolean
   }
 
-  export type GroupOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"groupId" | "name" | "description" | "groupColor" | "createdAt" | "updatedAt" | "userUserId", ExtArgs["result"]["group"]>
+  export type GroupOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"groupId" | "name" | "description" | "groupColor" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["group"]>
   export type GroupInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     members?: boolean | Group$membersArgs<ExtArgs>
     notifications?: boolean | Group$notificationsArgs<ExtArgs>
@@ -2973,7 +2973,7 @@ export namespace Prisma {
       groupColor: string
       createdAt: Date
       updatedAt: Date
-      userUserId: number | null
+      userId: number
     }, ExtArgs["result"]["group"]>
     composites: {}
   }
@@ -3407,7 +3407,7 @@ export namespace Prisma {
     readonly groupColor: FieldRef<"Group", 'String'>
     readonly createdAt: FieldRef<"Group", 'DateTime'>
     readonly updatedAt: FieldRef<"Group", 'DateTime'>
-    readonly userUserId: FieldRef<"Group", 'Int'>
+    readonly userId: FieldRef<"Group", 'Int'>
   }
     
 
@@ -8393,7 +8393,7 @@ export namespace Prisma {
     groupColor: 'groupColor',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    userUserId: 'userUserId'
+    userId: 'userId'
   };
 
   export type GroupScalarFieldEnum = (typeof GroupScalarFieldEnum)[keyof typeof GroupScalarFieldEnum]
@@ -8662,7 +8662,7 @@ export namespace Prisma {
     groupColor?: StringFilter<"Group"> | string
     createdAt?: DateTimeFilter<"Group"> | Date | string
     updatedAt?: DateTimeFilter<"Group"> | Date | string
-    userUserId?: IntNullableFilter<"Group"> | number | null
+    userId?: IntFilter<"Group"> | number
     members?: GroupMemberListRelationFilter
     notifications?: NotificationListRelationFilter
     meetings?: MeetingListRelationFilter
@@ -8676,7 +8676,7 @@ export namespace Prisma {
     groupColor?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userUserId?: SortOrderInput | SortOrder
+    userId?: SortOrder
     members?: GroupMemberOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
     meetings?: MeetingOrderByRelationAggregateInput
@@ -8693,7 +8693,7 @@ export namespace Prisma {
     groupColor?: StringFilter<"Group"> | string
     createdAt?: DateTimeFilter<"Group"> | Date | string
     updatedAt?: DateTimeFilter<"Group"> | Date | string
-    userUserId?: IntNullableFilter<"Group"> | number | null
+    userId?: IntFilter<"Group"> | number
     members?: GroupMemberListRelationFilter
     notifications?: NotificationListRelationFilter
     meetings?: MeetingListRelationFilter
@@ -8707,7 +8707,7 @@ export namespace Prisma {
     groupColor?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userUserId?: SortOrderInput | SortOrder
+    userId?: SortOrder
     _count?: GroupCountOrderByAggregateInput
     _avg?: GroupAvgOrderByAggregateInput
     _max?: GroupMaxOrderByAggregateInput
@@ -8725,7 +8725,7 @@ export namespace Prisma {
     groupColor?: StringWithAggregatesFilter<"Group"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Group"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Group"> | Date | string
-    userUserId?: IntNullableWithAggregatesFilter<"Group"> | number | null
+    userId?: IntWithAggregatesFilter<"Group"> | number
   }
 
   export type GroupMemberWhereInput = {
@@ -9104,7 +9104,7 @@ export namespace Prisma {
     groupColor: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    userUserId?: number | null
+    userId: number
     members?: GroupMemberUncheckedCreateNestedManyWithoutGroupInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutGroupInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutIntendedGroupInput
@@ -9129,7 +9129,7 @@ export namespace Prisma {
     groupColor?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    userId?: IntFieldUpdateOperationsInput | number
     members?: GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutGroupNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutIntendedGroupNestedInput
@@ -9142,7 +9142,7 @@ export namespace Prisma {
     groupColor: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    userUserId?: number | null
+    userId: number
   }
 
   export type GroupUpdateManyMutationInput = {
@@ -9160,7 +9160,7 @@ export namespace Prisma {
     groupColor?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    userId?: IntFieldUpdateOperationsInput | number
   }
 
   export type GroupMemberCreateInput = {
@@ -9643,12 +9643,12 @@ export namespace Prisma {
     groupColor?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userUserId?: SortOrder
+    userId?: SortOrder
   }
 
   export type GroupAvgOrderByAggregateInput = {
     groupId?: SortOrder
-    userUserId?: SortOrder
+    userId?: SortOrder
   }
 
   export type GroupMaxOrderByAggregateInput = {
@@ -9658,7 +9658,7 @@ export namespace Prisma {
     groupColor?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userUserId?: SortOrder
+    userId?: SortOrder
   }
 
   export type GroupMinOrderByAggregateInput = {
@@ -9668,12 +9668,12 @@ export namespace Prisma {
     groupColor?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userUserId?: SortOrder
+    userId?: SortOrder
   }
 
   export type GroupSumOrderByAggregateInput = {
     groupId?: SortOrder
-    userUserId?: SortOrder
+    userId?: SortOrder
   }
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -10646,7 +10646,7 @@ export namespace Prisma {
     groupColor?: StringFilter<"Group"> | string
     createdAt?: DateTimeFilter<"Group"> | Date | string
     updatedAt?: DateTimeFilter<"Group"> | Date | string
-    userUserId?: IntNullableFilter<"Group"> | number | null
+    userId?: IntFilter<"Group"> | number
   }
 
   export type MeetingUpsertWithWhereUniqueWithoutSetterInput = {
@@ -10979,7 +10979,7 @@ export namespace Prisma {
     groupColor: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    userUserId?: number | null
+    userId: number
     notifications?: NotificationUncheckedCreateNestedManyWithoutGroupInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutIntendedGroupInput
   }
@@ -11058,7 +11058,7 @@ export namespace Prisma {
     groupColor?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    userId?: IntFieldUpdateOperationsInput | number
     notifications?: NotificationUncheckedUpdateManyWithoutGroupNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutIntendedGroupNestedInput
   }
@@ -11115,7 +11115,7 @@ export namespace Prisma {
     groupColor: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    userUserId?: number | null
+    userId: number
     members?: GroupMemberUncheckedCreateNestedManyWithoutGroupInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutGroupInput
   }
@@ -11194,7 +11194,7 @@ export namespace Prisma {
     groupColor?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    userId?: IntFieldUpdateOperationsInput | number
     members?: GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutGroupNestedInput
   }
@@ -11217,7 +11217,7 @@ export namespace Prisma {
     groupColor: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    userUserId?: number | null
+    userId: number
     members?: GroupMemberUncheckedCreateNestedManyWithoutGroupInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutIntendedGroupInput
   }
@@ -11256,7 +11256,7 @@ export namespace Prisma {
     groupColor?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    userId?: IntFieldUpdateOperationsInput | number
     members?: GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutIntendedGroupNestedInput
   }

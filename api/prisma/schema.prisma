@@ -54,11 +54,13 @@ model Group {
   notifications Notification[]
   meetings      Meeting[]
 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  user       User?    @relation(fields: [userUserId], references: [userId])
-  userUserId Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
+  user   User? @relation(fields: [userId], references: [userId])
+  userId Int
+
+  @@unique([groupId, userId])
   @@map("groups")
 }
 
@@ -99,7 +101,7 @@ model Meeting {
   //prisma relation mapping
   setter        User  @relation(fields: [setterId], references: [userId])
   intendedGroup Group @relation(fields: [intendedGroupId], references: [groupId])
-
+  
   @@map("meetings")
 }
 
