@@ -6,16 +6,16 @@ import { dmmfToRuntimeDataModel } from '../prisma/generated/runtime/client';
 
 export const createMeeting = async (req, res) => {
     try {
-        const { title, description, locationDetail, schedule, endsAt, intendedGroup } = req.body;
+        const { title, description, locationDetail, schedule, endsAt, intendedGroupId } = req.body;
 
         const meeting = await prisma.meeting.create({
             data: {
                 title,
                 description,
                 locationDetail,
-                schedule,
-                endsAt,
-                intendedGroup
+                schedule: new Date(schedule),
+                endsAt: endAt ? new Date(endAt) : null,
+                intendedGroupId
             }
         });
         
@@ -54,7 +54,7 @@ export const getAllMeetingsByUserId = async (req, res) => {
 
         res.status(200).json({ meetings });
     } catch (error) {
-        res.status(500).json({ errorMessage: "" });
+        res.status(500).json({ errorMessage: "Unable to get meetings." });
     }
 };
 
@@ -62,9 +62,14 @@ export const getMeetingById = async (req, res) => {
     try {
         const { meetingId } = req.params;
 
-        const meeting = await.prisma.findUnique({
-            where: { meetingId: parseInt(meeting)}
-        })
+        const meeting = await prisma.meeting.findUnique({
+            where: { meetingId: parseInt(meetingId) },
+            include: {
+                setter: true,
+                intendedGroup: true,
+                notifications: true,
+            },
+        });
 
         if (!meeting) {
             return res.status(404).json({ errorMessage: "Meeting not found." });
@@ -87,13 +92,60 @@ export const updateMeeting = async (req, res) => {
                 title,
                 description,
                 locationDetail,
-                schedule,
-                endsAt
-            }
-        })
+                ...(schedule && { schedule: new Data(schedule) }),
+                ...(endsAt && { endsAt: new Data(endsAt) }),
+            },
+        });
 
         res.status(200).json({ meeting });
     } catch (error) {
         res.status(500).json({ errorMessage: "Unable to update meeting." });
+    }
+};
+
+export const deleteMeeting = async (req, res) => {
+    try {
+        const { meetingId } = req.params;
+        
+        await prisma.meeting.delete({
+            where: { meetingId: parseInt(meetingId) },
+        });
+
+        res.status(200).json({ message: "Meeting deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ errorMessage: "Unable to delete meeting." });
+    }
+};
+
+// Status Management
+
+export const updateMeetingStatus = async (req, res) => {
+    try {
+        const { meetingId } = req.params;
+        const { status } = req.body;
+
+        const meeting = await prisma.meeting.update({
+            wjere: { meetingId: parseInt(meetingId) },
+            data: { status }
+        });
+
+        res.status(200).json({ meeting });
+    } catch (error) {
+        res.status(500).json({ errorMessage: "Unable to get meeting status." });
+    }
+};
+
+export const getMeetingNotifications = async (req, res) => {
+    try {
+        const { meetingId } = req.params;
+
+        const notification = await prisma.notifications.findMany({
+            where: { meetingId: parseInt(meetingId) },
+            include: {user: true }
+        });
+
+        res.status(200).json({ notifications });
+    } catch (error) {
+        res.status(500).json({ errorMessage: "Unable to get meeting notifications." });
     }
 };
