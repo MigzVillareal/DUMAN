@@ -3,7 +3,7 @@ import * as groupController from "../controllers/Group.controller.js";
 
 const router = express.Router();
 
-// Group Crud
+// Group CRUD
 router.get("/groups", groupController.createGroup);
 router.get("/groups", groupController.getAllGroups);
 router.get("/groups", groupController.getGroupById);    
@@ -15,7 +15,7 @@ router.get("/groups", groupController.addMember);
 router.get("/groups", groupController.getAllMembers);
 router.get("/groups", groupController.removeMember);
 
-// Group Related Data Operations
+// Related Data Operations
 router.get("/groups", groupController.getGroupMeetings);
 router.get("/groups", groupController.getGroupNotifications);
 

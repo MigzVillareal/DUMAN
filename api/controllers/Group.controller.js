@@ -56,6 +56,8 @@ export const getGroupById = async (req, res) => {
         if (!group) {
             return res.status(404).json({ errorMessage: "Group not found. " });
         }
+        
+        res.status(200).json({ group });
     } catch (error) {
         res.status(500).json({ errorMessage: "Unable to get group." });
     }
