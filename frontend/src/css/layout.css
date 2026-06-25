@@ -1,6 +1,21 @@
 .app-layout {
   display: flex;
+  height: 100vh;
   min-height: 100vh;
+  overflow: hidden;
+}
+
+/* Top-navbar variant: stack vertically */
+.app-layout--topnav {
+  flex-direction: column;
+}
+
+/* Row below the navbar: sidebar + main content */
+.app-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .sidebar {
@@ -61,6 +76,8 @@
   padding: 1.5rem;
   background-color: var(--color-container);
   color: var(--color-container-text);
+  overflow-y: auto;
+  min-width: 0;
 }
 
 .container h1,
