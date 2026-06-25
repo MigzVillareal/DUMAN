@@ -86,7 +86,12 @@ export const updateGroup = async (req, res) => {
 export const deleteGroup = async (req, res) => {
     try {
         const { groupId } = req.params
-        const { userId, role} = req.body;
+        
+        await prisma.group.delete({
+            where: { groupId: parseInt(groupId) },
+        });
+
+        res.status(200).json({ message: "Group deleted successfully" });
     } catch (error) {
         res.status(500).json({ errorMessage: "Unable to delete group. "});
     }
