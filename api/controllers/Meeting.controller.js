@@ -1,6 +1,7 @@
 import { PrismaClient } from '../prisma/generated/index.js';
 import prisma from "../lib/prisma.js";
 import { dmmfToRuntimeDataModel } from '../prisma/generated/runtime/client';
+import { sendNotificationEmail } from '../services/email.service.js';
 
 // Meeting CRUD
 
@@ -18,8 +19,17 @@ export const createMeeting = async (req, res) => {
                 intendedGroupId
             }
         });
+
+        const notification = await prisma.notification.create({ 
+            data: {
+                subject,
+                body
+            }
+         });
+
+        await sendNotificationEmail(notification.notificationId);
         
-        res.status(201).json({ neeting });
+        res.status(201).json({ meeting });
     } catch (error) {
         res.status(500).json({ errorMessage: "Unable to create meeting." });
     }

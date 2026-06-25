@@ -114,7 +114,7 @@ model Notification {
 
   subject String
   body    String             @db.Text
-  status  NotificationStatus
+  status  NotificationStatus @default(PENDING)
 
   user    User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
   group   Group    @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
