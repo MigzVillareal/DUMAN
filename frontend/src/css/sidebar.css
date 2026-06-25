@@ -3,7 +3,7 @@
    ================================ */
 
 .groups-sidebar {
-  width: 160px;
+  width: 185px;
   flex-shrink: 0;
   background-color: var(--color-sidebar);   /* --color-blue: #273c8d */
   color: var(--color-sidebar-text);          /* white */

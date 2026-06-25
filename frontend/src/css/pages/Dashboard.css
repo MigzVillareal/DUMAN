@@ -1,0 +1,221 @@
+.dashboard-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  font-family: var(--font-ui);
+  color: var(--color-text);
+}
+
+.dashboard-welcome {
+  background-color: var(--color-panel);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  padding: 1.5rem 1.75rem;
+}
+
+.dashboard-welcome__title {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: var(--weight-bold);
+  margin: 0 0 0.35rem;
+}
+
+.dashboard-page .dashboard-welcome__title {
+  color: var(--color-primary);
+}
+
+.dashboard-welcome__subtitle {
+  font-size: 0.9375rem;
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
+  margin: 0 0 0.75rem;
+}
+
+.dashboard-welcome__summary {
+  font-size: 0.875rem;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.dashboard-welcome__highlight {
+  font-weight: var(--weight-semibold);
+}
+
+.dashboard-welcome__highlight--primary {
+  color: var(--color-primary);
+}
+
+.dashboard-welcome__highlight--accent {
+  color: var(--color-accent-text);
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.dashboard-panel {
+  background-color: var(--color-panel);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dashboard-panel__title {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: var(--weight-bold);
+  color: var(--color-text);
+  margin: 0;
+}
+
+.dashboard-panel__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.dashboard-meeting-card {
+  padding: 1rem 1.25rem;
+}
+
+.dashboard-meeting-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.dashboard-meeting-card__title {
+  font-size: 0.9375rem;
+  font-weight: var(--weight-bold);
+  color: var(--color-text);
+  margin: 0 0 0.25rem;
+}
+
+.dashboard-meeting-card__meta {
+  font-size: 0.8125rem;
+  color: var(--color-text);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.dashboard-meeting-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.dashboard-meeting-card__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: none;
+  color: var(--color-text);
+  cursor: pointer;
+  padding: 0;
+}
+
+.dashboard-meeting-card__body {
+  margin-top: 0.875rem;
+  padding-top: 0.875rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.dashboard-meeting-card__label {
+  font-size: 0.8125rem;
+  font-weight: var(--weight-bold);
+  margin: 0 0 0.25rem;
+}
+
+.dashboard-meeting-card__text {
+  font-size: 0.8125rem;
+  margin: 0 0 0.75rem;
+}
+
+.dashboard-meeting-card__text:last-child {
+  margin-bottom: 0;
+}
+
+.dashboard-meeting-card__agenda {
+  margin: 0;
+  padding-left: 1.25rem;
+  font-size: 0.8125rem;
+}
+
+.dashboard-meeting-card__agenda li {
+  margin-bottom: 0.25rem;
+}
+
+.dashboard-meeting-card__agenda li:last-child {
+  margin-bottom: 0;
+}
+
+.dashboard-invite-card {
+  padding: 1rem 1.25rem;
+}
+
+.dashboard-invite-card__title {
+  font-size: 0.9375rem;
+  font-weight: var(--weight-bold);
+  color: var(--color-text);
+  margin: 0 0 0.15rem;
+}
+
+.dashboard-invite-card__meta {
+  font-size: 0.8125rem;
+  color: var(--color-text);
+  margin: 0 0 0.15rem;
+  line-height: 1.3;
+}
+
+.dashboard-invite-card__meta:last-of-type {
+  margin-bottom: 0.75rem;
+}
+
+.dashboard-invite-card__actions {
+  display: flex;
+  gap: 0.625rem;
+  justify-content: center;
+}
+
+.dashboard-page .dashboard-btn-pill {
+  width: auto;
+  padding: 0.45rem 1.1rem;
+  font-size: 0.8125rem;
+  border-radius: 999px;
+}
+
+.dashboard-page .dashboard-btn-pill--soft {
+  background-color: var(--color-sidebar);
+  color: var(--color-sidebar-text);
+}
+
+.dashboard-page .dashboard-btn-pill--soft:hover:not(:disabled) {
+  background-color: #1e2f6e;
+}
+
+.dashboard-page .dashboard-btn-pill--outline {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.dashboard-page .dashboard-btn-pill--outline:hover:not(:disabled) {
+  background-color: var(--color-hover-surface);
+}
+
+@media (max-width: 960px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
