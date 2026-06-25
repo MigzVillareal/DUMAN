@@ -111,7 +111,7 @@ export const addMember = async (req, res) => {
     }
 };
 
-export const getMembers = async (req, res) => {
+export const getAllMembers = async (req, res) => {
     try {
         const { groupId } = req.params;
         
