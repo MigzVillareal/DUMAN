@@ -1,7 +1,7 @@
 :root {
   /* Typography */
-  --font-ui: "Inter", system-ui, -apple-system, sans-serif;
-  --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-ui: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  --font-display: "Space Grotesk", system-ui, -apple-system, sans-serif;
 
   --weight-regular: 400;
   --weight-medium: 500;
@@ -9,22 +9,32 @@
   --weight-bold: 700;
 
   /* Color registry */
-  --color-navy: #001e40;
-  --color-text: #111c2c;
-  --color-canvas: #f9f9ff;
+  --color-blue: #273c8d;
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-gray-light: #f5f5f5;
   --color-gold: #ffe088;
   --color-gold-text: #745c00;
-  --color-slate-light: #e7eeff;
-  --color-panel: #f0f3ff;
-  --color-border: #c3c6d1;
+  --color-border: #d9d9d9;
+  --color-hover: #e9ecf5;
   --color-destructive: #b42318;
 
-  /* Semantic aliases */
-  --color-primary: var(--color-navy);
-  --color-background: var(--color-canvas);
-  --color-surface: #ffffff;
+  /* Layout */
+  --color-sidebar: var(--color-blue);
+  --color-sidebar-text: var(--color-white);
+  --color-topbar: var(--color-white);
+  --color-topbar-text: var(--color-blue);
+  --color-container: var(--color-gray-light);
+  --color-container-text: var(--color-black);
+
+  /* Semantic aliases (Laag koba? garo makaribong na HAHAHAHA) */ 
+  --color-primary: var(--color-blue);
+  --color-text: var(--color-black);
+  --color-background: var(--color-gray-light);
+  --color-surface: var(--color-white);
   --color-muted: var(--color-border);
   --color-accent: var(--color-gold);
   --color-accent-text: var(--color-gold-text);
-  --color-hover: var(--color-slate-light);
+  --color-panel: var(--color-gray-light);
+  --color-hover-surface: var(--color-hover);
 }
