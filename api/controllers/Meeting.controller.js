@@ -7,7 +7,7 @@ import { sendNotificationEmail } from '../services/email.service.js';
 
 export const createMeeting = async (req, res) => {
     try {
-        const { title, description, locationDetail, schedule, endsAt, intendedGroupId } = req.body;
+        const { title, description, locationDetail, schedule, endsAt, setterId, intendedGroupId } = req.body;
 
         const meeting = await prisma.meeting.create({
             data: {
@@ -15,56 +15,36 @@ export const createMeeting = async (req, res) => {
                 description,
                 locationDetail,
                 schedule: new Date(schedule),
-                endsAt: endAt ? new Date(endAt) : null,
+                endsAt: endsAt ? new Date(endAt) : null,
                 intendedGroupId
             }
         });
 
-        const notification = await prisma.notification.create({ 
-            data: {
-                subject,
-                body
-            }
-         });
+        const members = await prisma.groupMember.findMany({
+            where: { 
+                groupId: intendedGroupId,
+                status: "ACCEPTED"
+             },
+            include: { user: true}
+        });
 
-        await sendNotificationEmail(notification.notificationId);
+        for (const member of members) {
+            const notification = await prisma.notification.create({
+                data: {
+                    userId: member.memberId,
+                    groupId: intendedGroupId,
+                    meetingId: meeting.meetingId,
+                    subject: 'Upcoming Meeting: ${title}',
+                    body: 'A meeting has been scheduled for ${schedule}.',
+                    status: "PENDING"
+                }
+            });
+            await sendNotificationEmail(notification.notificationId);
+        }
         
         res.status(201).json({ meeting });
     } catch (error) {
         res.status(500).json({ errorMessage: "Unable to create meeting." });
-    }
-};
-
-export const getAllMeetingsByUserId = async (req, res) => {
-    try {
-        const { groupId, setterId, memberId, status } = req.query;
-
-        const meetings = await prisma.meeting.findMany({
-            where: {
-                ...(groupId && { intendedGroupId: parseInt(groupId) }),
-                ...(setterId && { setterId: parseInt(setterId) }),
-                ...(status && { status }),
-                ...(memberId && {
-                    intendedGroup: {
-                        members: {
-                            some: {
-                                memberId: parseInt(memberId)
-                            }
-                        }
-                    }
-                })
-            },
-            orderBy: { schedule: "asc"},
-            include: {
-                setter: true,
-                intendedGroup: true,
-                notifications: true,
-            },
-        });
-
-        res.status(200).json({ meetings });
-    } catch (error) {
-        res.status(500).json({ errorMessage: "Unable to get meetings." });
     }
 };
 

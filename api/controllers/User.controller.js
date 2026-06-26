@@ -56,3 +56,90 @@ export const deleteUser = async (req, res) => {
         res.status(500).json({ errorMessage: "Unable to delete user." });
     }
 };
+
+// User Invite Operations
+
+export const getUserInvites = async (req, res) => {
+    try {
+        const { userUd } = req.params;
+
+        const invites = await prisma.groupMember.findMany({
+            where : {
+                memberId: parseInt(userId),
+                status: "PENDING"
+            },
+            include: {
+                group: true,
+                inviter: true
+            }
+        });
+
+        res.status(200).json({ invites });
+    } catch (error) {
+        res.status(500).json({ errorMessage: "Unable to get invites." });
+    }
+};
+
+export const getUserMeetings = async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const meetings = await prisma.meeting.findMany({
+            where: {
+                intendedGroup: {
+                    members: {
+                        some: {
+                            memberId: parseInt(userId),
+                            status: "ACCEPTED"
+                        }
+                    }
+                }
+            },
+            orderBy: { schedule: "asc"},
+            include: {
+                setter: true,
+                intendedGroup: true,
+                notifications: true,
+            },
+        });
+
+        res.status(200).json({ meetings });
+    } catch (error) {
+        res.status(500).json({ errorMessage: "Unable to get user meetings." });
+    }
+};
+
+export const getUserMeeting = async (req, res) => {
+    try {
+        const { userId, meetingId } = req.params;
+
+        const meeting = await prisma.meeting.findUnique({
+            where: { meetingId: parseInt(meetingId) },
+            include : {
+                setter: true,
+                intendedGroup: true,
+            }
+        });
+
+        if (!meeting) {
+            res.status(404).json({ errorMessage: "Meeting not found." });
+        }
+
+        const isMember = await prisma.groupMember.findUnique({
+            where: {
+                memberId_groupId: {
+                    memberId: parseInt(userId),
+                    groupId: meeting.intendedGroupId,
+                }
+            }
+        });
+
+        if (!isMember || isMember.status !== ACCEPTED) {
+            res.status(404).json({ errorMessage: "User is not a member of this" });
+        }
+
+        res.status(200).json({ meeting });
+    } catch (error) {
+        res.status(500).json({ errorMessage: "Unable to get user meeting." });
+    }
+};

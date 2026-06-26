@@ -152,7 +152,63 @@ export const removeMember = async (req, res) => {
     }
 };
 
-// Related-Data
+// Invite System
+
+export const sendInvite = async (req, res) => {
+    try { 
+        const { groupId } = req.params;
+        const { userId, InvitedBy } = req.body;
+
+        const existing = await prisma.groupMember.findUnique({
+            where: {
+                memberId_groupId: {
+                    memberId: userId,
+                    groupId: parseInt(groupId)
+                }
+            }
+        });
+
+        if (exisitng) {
+            res.status(400).json({ errorMessage: "User already invited or is a member of the group." });
+        }
+
+        const member = await prisma.groupMember.create({
+            data: {
+                memberId: userId,
+                groupId: parseInt(groupId),
+                invitiedBy,
+                status: "PENDING"
+            }
+        });
+
+        res.status(201).json({ member });
+    } catch (error) {
+        res.status(500).json({ errorMessage: "Unable to send invites." });
+    }
+};
+
+export const getGroupInvites = async (req, res) => {
+    try {
+        const { groupId } = req.params;
+
+        const invites = await prisma.groupMember.findMany({
+            where: {
+                groupId: parseInt(groupid),
+                staus: "PENDING"
+            },
+            include: {
+                user: true,
+                inviter: true,
+            }
+        });
+
+        res.status(200).json({ invites })
+    } catch (error) {
+        res.status(500).json({ errorMessage: "Unable to get group invites." });
+    }
+};
+
+// Related-Data Operations
 
 export const getGroupMeetings = async (req, res) => {
     try {
@@ -181,3 +237,48 @@ export const getGroupNotifications = async (req, res) => {
         res.status(500).json({ errorMessage: "Unable to get group notifications." });
     }
 };
+
+export const acceptInvite = async (req, res) => {
+    try {
+        const { groupId } = req.params;
+        const { userId } = req.body;
+
+        const member = await prisma.groupMember.update({
+            where: {
+                memberId_groupId: {
+                    memberId: parseInt(memberId),
+                    groupId: parseInt(groupId)
+                }
+            },
+            data: {
+                status: "ACCEPTED",
+                joinedAt: new Date()
+            }
+        });
+
+        res.status(200).json({ member });
+    } catch (error) {
+        res.status(500).json({ errorMessage: "Unable to accecpt invite." });
+    }
+};
+
+export const declineInvite = async (req, res) => {
+    try {
+        const { groupId } = req.params;
+        const { userId } = req.body;
+
+        await prisma.groupMember.delete({
+            where: {
+                memberId_groupId: {
+                    memberId: parseInt(userId),
+                    groupId: parseInt(groupId)
+                }
+            }
+        });
+
+        res.status(200).json({ message: "Invite declined." });
+    } catch (error) {
+        res.status(500).json({ errorMessage: "Unable to decline invite." });
+    }
+};
+

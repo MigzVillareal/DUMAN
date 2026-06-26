@@ -17,6 +17,12 @@ enum Role {
   MEMBER
 }
 
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
 enum MeetingStatus {
   UPCOMING
   ONGOING
@@ -41,6 +47,8 @@ model User {
   setMeetings   Meeting[]
   groupMembers  GroupMember[]
   notifications Notification[]
+
+  sentInvites GroupMember[] @relation("invitedBy")
 
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
@@ -71,13 +79,16 @@ model Group {
 }
 
 model GroupMember {
-  memberId Int
-  groupId  Int
-  role     Role     @default(MEMBER)
-  joinedAt DateTime @default(now())
+  memberId  Int
+  groupId   Int
+  role      Role         @default(MEMBER)
+  status    InviteStatus @default(PENDING)
+  invitedBy Int
+  joinedAt  DateTime?
 
-  user  User  @relation(fields: [memberId], references: [userId], onDelete: Cascade)
-  group Group @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
+  user     User  @relation(fields: [memberId], references: [userId], onDelete: Cascade)
+  group    Group @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
+  invitier User  @relation("invitedBy", fields: [invitedBy], references: [userId])
 
   @@id([memberId, groupId])
   @@map("members")
