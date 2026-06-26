@@ -1,6 +1,6 @@
 import { PrismaClient } from '../prisma/generated/index.js';
 import prisma from "../lib/prisma.js";
-import { dmmfToRuntimeDataModel } from '../prisma/generated/runtime/client';
+// import { dmmfToRuntimeDataModel } from '../prisma/generated/runtime/client';
 import { sendNotificationEmail } from '../services/email.service.js';
 
 // Meeting CRUD
