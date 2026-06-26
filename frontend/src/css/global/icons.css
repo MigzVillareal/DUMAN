@@ -1,0 +1,35 @@
+/* Font Awesome — global icon styles (kit loaded in index.html) */
+
+.app-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.app-icon--xs {
+  font-size: 0.75rem;
+}
+
+.app-icon--sm {
+  font-size: 0.875rem;
+}
+
+.app-icon--md {
+  font-size: 1rem;
+}
+
+.app-icon--lg {
+  font-size: 1.25rem;
+}
+
+.app-icon-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease;
+}
+
+.app-icon-chevron--expanded {
+  transform: rotate(180deg);
+}

@@ -1,40 +1,40 @@
 import { useState } from "react";
-import "../css/sidebar.css";
-
-const SearchIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="11" cy="11" r="8" />
-    <line x1="21" y1="21" x2="16.65" y2="16.65" />
-  </svg>
-);
-
-const PlusIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="12" y1="5" x2="12" y2="19" />
-    <line x1="5" y1="12" x2="19" y2="12" />
-  </svg>
-);
-
-/* Placeholder groups — replace with real data when backend is connected */
-const SAMPLE_GROUPS = ["Research", "Volunteer", "Study Group"];
+import { NavLink, useNavigate } from "react-router-dom";
+import { useGroups } from "../context/GroupsContext.jsx";
+import Icon from "./Icon.jsx";
+import "../css/global/sidebar.css";
 
 export default function GroupsSidebar() {
   const [query, setQuery] = useState("");
-  const [activeGroup, setActiveGroup] = useState(null);
+  const { groups, addGroup } = useGroups();
+  const navigate = useNavigate();
 
-  const filtered = SAMPLE_GROUPS.filter((g) =>
-    g.toLowerCase().includes(query.toLowerCase())
+  const filtered = groups.filter((g) =>
+    g.name.toLowerCase().includes(query.toLowerCase())
   );
+
+  const handleCreateGroup = () => {
+    const name = window.prompt("Enter a name for your new group:");
+    if (!name?.trim()) return;
+    const newGroup = addGroup(name);
+    navigate(`/groups/${newGroup.id}`);
+  };
 
   return (
     <aside className="groups-sidebar">
-      {/* Title */}
-      <h2 className="groups-sidebar__title">My Groups</h2>
+      <NavLink
+        to="/groups"
+        end
+        className={({ isActive }) =>
+          `groups-sidebar__title${isActive ? " groups-sidebar__title--active" : ""}`
+        }
+      >
+        My Groups
+      </NavLink>
 
-      {/* Search */}
       <div className="groups-sidebar__search-wrapper">
         <span className="groups-sidebar__search-icon">
-          <SearchIcon />
+          <Icon icon="search" size="sm" />
         </span>
         <input
           className="groups-sidebar__search"
@@ -45,24 +45,28 @@ export default function GroupsSidebar() {
         />
       </div>
 
-      {/* Group List */}
       <ul className="groups-sidebar__list">
         {filtered.map((group) => (
-          <li key={group}>
-            <button
-              className={`groups-sidebar__item${activeGroup === group ? " groups-sidebar__item--active" : ""}`}
-              onClick={() => setActiveGroup(group)}
+          <li key={group.id}>
+            <NavLink
+              to={`/groups/${group.id}`}
+              className={({ isActive }) =>
+                `groups-sidebar__item${isActive ? " groups-sidebar__item--active" : ""}`
+              }
             >
-              {group}
-            </button>
+              {group.name}
+            </NavLink>
           </li>
         ))}
       </ul>
 
-      {/* Create New Group */}
       <div className="groups-sidebar__footer">
-        <button className="groups-sidebar__create-btn">
-          <PlusIcon />
+        <button
+          type="button"
+          className="groups-sidebar__create-btn"
+          onClick={handleCreateGroup}
+        >
+          <Icon icon="plus" size="sm" />
           Create New Group
         </button>
       </div>

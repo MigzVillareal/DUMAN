@@ -3,7 +3,7 @@
    ================================ */
 
 .groups-sidebar {
-  width: 185px;
+  width: 200px;
   flex-shrink: 0;
   background-color: var(--color-sidebar);   /* --color-blue: #273c8d */
   color: var(--color-sidebar-text);          /* white */
@@ -25,6 +25,17 @@
   margin: 0;
   padding-left: 0.25rem;
   letter-spacing: 0.01em;
+  text-decoration: none;
+  display: block;
+}
+
+.groups-sidebar__title:hover {
+  opacity: 0.85;
+}
+
+.groups-sidebar__title--active {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 /* ── Search ── */
@@ -79,8 +90,11 @@
 }
 
 .groups-sidebar__item {
+  display: block;
   width: 100%;
   text-align: left;
+  text-decoration: none;
+  box-sizing: border-box;
   background: none;
   border: none;
   cursor: pointer;

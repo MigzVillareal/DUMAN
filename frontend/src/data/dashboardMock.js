@@ -1,3 +1,5 @@
+import { isToday } from "../utils/date.js";
+
 export const DASHBOARD_USER = {
   firstName: "Miggy",
   university: "Ateneo de Naga University",
@@ -73,16 +75,6 @@ export const PENDING_INVITATIONS = [
     sentAt: "Yesterday",
   },
 ];
-
-function isToday(dateString) {
-  const today = new Date();
-  const date = new Date(`${dateString}T00:00:00`);
-  return (
-    date.getFullYear() === today.getFullYear() &&
-    date.getMonth() === today.getMonth() &&
-    date.getDate() === today.getDate()
-  );
-}
 
 export function getDashboardStats(meetings, invitations) {
   return {

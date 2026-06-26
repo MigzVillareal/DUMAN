@@ -18,6 +18,8 @@
   --color-border: #d9d9d9;
   --color-hover: #e9ecf5;
   --color-destructive: #b42318;
+  --color-green: #15803d;
+  --color-green-text: #14532d;
 
   /* Layout */
   --color-sidebar: var(--color-blue);
@@ -37,4 +39,6 @@
   --color-accent-text: var(--color-gold-text);
   --color-panel: var(--color-gray-light);
   --color-hover-surface: var(--color-hover);
+  --color-meeting-today: var(--color-green);
+  --color-meeting-today-text: var(--color-green-text);
 }

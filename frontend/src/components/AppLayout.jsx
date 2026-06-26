@@ -1,22 +1,23 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
 import GroupsSidebar from "./GroupsSidebar";
-import "../css/layout.css";
+import { GroupsProvider } from "../context/GroupsContext.jsx";
+import "../css/global/layout.css";
 
 function AppLayout() {
   return (
-    <div className="app-layout app-layout--topnav">
-      {/* Top navbar */}
-      <Navbar />
+    <GroupsProvider>
+      <div className="app-layout app-layout--topnav">
+        <Navbar />
 
-      {/* Below navbar: sidebar + content */}
-      <div className="app-body">
-        <GroupsSidebar />
-        <main className="container">
-          <Outlet />
-        </main>
+        <div className="app-body">
+          <GroupsSidebar />
+          <main className="container">
+            <Outlet />
+          </main>
+        </div>
       </div>
-    </div>
+    </GroupsProvider>
   );
 }
 

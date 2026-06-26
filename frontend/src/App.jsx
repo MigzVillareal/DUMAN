@@ -3,6 +3,7 @@ import AppLayout from "./components/AppLayout.jsx";
 import Login from "./pages/Login.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import MyGroups from "./pages/MyGroups.jsx";
+import GroupPage from "./pages/GroupPage.jsx";
 import Calendar from "./pages/Calendar.jsx";
 import CampusMap from "./pages/CampusMap.jsx";
 import Meetings from "./pages/Meetings.jsx";
@@ -14,7 +15,9 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route element={<AppLayout />}>
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/my-groups" element={<MyGroups />} />
+        <Route path="/groups" element={<MyGroups />} />
+        <Route path="/groups/:groupId" element={<GroupPage />} />
+        <Route path="/my-groups" element={<Navigate to="/groups" replace />} />
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/campus-map" element={<CampusMap />} />
         <Route path="/meetings" element={<Meetings />} />

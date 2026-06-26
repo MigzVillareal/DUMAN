@@ -1,18 +1,14 @@
 import { useState } from "react";
 import "../css/pages/Login.css";
 import "../css/pages/Dashboard.css";
+import Icon from "../components/Icon.jsx";
+import { isToday } from "../utils/date.js";
 import {
   DASHBOARD_USER,
   UPCOMING_MEETINGS,
   PENDING_INVITATIONS,
   getDashboardStats,
 } from "../data/dashboardMock.js";
-
-const ChevronIcon = ({ up }) => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    {up ? <polyline points="18 15 12 9 6 15" /> : <polyline points="6 9 12 15 18 9" />}
-  </svg>
-);
 
 function formatWelcomeDate() {
   return new Intl.DateTimeFormat("en-US", {
@@ -27,7 +23,9 @@ function MeetingCard({ meeting }) {
   const [expanded, setExpanded] = useState(meeting.defaultExpanded);
 
   return (
-    <article className="auth-card dashboard-meeting-card">
+    <article
+      className={`auth-card dashboard-meeting-card${isToday(meeting.date) ? " meeting-card--today" : ""}`}
+    >
       <div className="dashboard-meeting-card__header">
         <div className="dashboard-meeting-card__info">
           <h3 className="dashboard-meeting-card__title">
@@ -47,7 +45,7 @@ function MeetingCard({ meeting }) {
             aria-expanded={expanded}
             aria-label={expanded ? "Collapse meeting details" : "Expand meeting details"}
           >
-            <ChevronIcon up={expanded} />
+            <Icon icon="chevron-down" size="sm" expanded={expanded} />
           </button>
         </div>
       </div>
