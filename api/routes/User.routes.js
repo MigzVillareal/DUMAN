@@ -10,8 +10,8 @@ router.put("/:id", userController.updateUser);
 router.delete("/:id", userController.deleteUser);
 
 // Related Data Operations
-router.get("/:userId/invites", userController.getUserInvites);
+grouter.get("/:userId/invites", userController.getUserInvites);
 router.get("/:userId/meetings", userController.getUserMeetings);
-// router.get("/:userId/meeting", userController.getUserMeeting);
+router.get("/:userId/meeting", userController.getUserMeeting);
 
 export default router;
