@@ -135,7 +135,7 @@ export const getUserMeeting = async (req, res) => {
         });
 
         if (!isMember || isMember.status !== ACCEPTED) {
-            res.status(404).json({ errorMessage: "User is not a member of this group." });
+            res.status(404).json({ errorMessage: "User is not a member of this" });
         }
 
         res.status(200).json({ meeting });
