@@ -9,4 +9,9 @@ router.get("/:id", userController.getUserById);
 router.put("/:id", userController.updateUser);
 router.delete("/:id", userController.deleteUser);
 
+// Related Data Operations
+router.get("/:userId/invites", userController.getUserInvites);
+router.get("/:userId/meetings", userController.getUserMeetings);
+// router.get("/:userId/meeting", userController.getUserMeeting);
+
 export default router;
