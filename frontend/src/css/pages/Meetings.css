@@ -1,0 +1,641 @@
+/* ================================================================
+   Meetings Page
+   ================================================================ */
+
+.meetings-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-family: var(--font-ui);
+  color: var(--color-text);
+  height: 100%;
+}
+
+/* ── Header ─────────────────────────────────────────────────────── */
+.meetings-page__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.meetings-page__title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: var(--weight-bold);
+  color: var(--color-primary);
+  margin: 0 0 0.2rem;
+}
+
+.meetings-page__subtitle {
+  font-size: 0.875rem;
+  color: var(--color-text);
+  margin: 0;
+  opacity: 0.65;
+}
+
+/* ── Shared button styles ────────────────────────────────────────── */
+.meetings-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: 999px;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.15s ease, opacity 0.15s ease,
+    box-shadow 0.15s ease;
+  white-space: nowrap;
+}
+
+.meetings-btn--primary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.meetings-btn--primary:hover:not(:disabled) {
+  background-color: #1e2f6e;
+}
+
+.meetings-btn--primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.meetings-btn--outline {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.meetings-btn--outline:hover {
+  background-color: var(--color-hover-surface);
+}
+
+/* ── Filter Tabs ─────────────────────────────────────────────────── */
+.meetings-filters {
+  display: flex;
+  gap: 0.375rem;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.meetings-filter-tab {
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.meetings-filter-tab:hover {
+  background-color: var(--color-hover-surface);
+}
+
+.meetings-filter-tab--active {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+/* ── Content area (two-column) ───────────────────────────────────── */
+.meetings-content {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 1rem;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ── Left: Meeting List Panel ────────────────────────────────────── */
+.meetings-list-panel {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.875rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  padding: 0.875rem;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.meetings-list-panel__search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.meetings-list-panel__search-icon {
+  position: absolute;
+  left: 9px;
+  display: flex;
+  align-items: center;
+  color: #aaa;
+  pointer-events: none;
+}
+
+.meetings-list-panel__search {
+  width: 100%;
+  padding: 0.425rem 0.625rem 0.425rem 1.875rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background-color: var(--color-gray-light);
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  color: var(--color-text);
+  outline: none;
+  transition: border-color 0.15s ease;
+  box-sizing: border-box;
+}
+
+.meetings-list-panel__search::placeholder {
+  color: #aaa;
+}
+
+.meetings-list-panel__search:focus {
+  border-color: var(--color-primary);
+}
+
+.meetings-list-panel__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.meetings-list-panel__empty {
+  font-size: 0.8125rem;
+  color: #999;
+  text-align: center;
+  padding: 1.5rem 0;
+  margin: 0;
+}
+
+/* ── Meeting List Item ───────────────────────────────────────────── */
+.meetings-list-item {
+  width: 100%;
+  text-align: left;
+  background-color: var(--color-gray-light);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.75rem;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.175rem;
+  flex-shrink: 0;
+}
+
+.meetings-list-item:hover {
+  background-color: var(--color-hover-surface);
+}
+
+.meetings-list-item--selected {
+  background-color: #dce5f8;
+  border-color: var(--color-primary);
+}
+
+.meetings-list-item__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.meetings-list-item__name {
+  font-size: 0.8125rem;
+  font-weight: var(--weight-semibold);
+  color: var(--color-text);
+  line-height: 1.3;
+}
+
+.meetings-list-item__meta {
+  font-size: 0.75rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* ── Status badges ───────────────────────────────────────────────── */
+.meetings-badge {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: var(--weight-semibold);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.meetings-badge--upcoming {
+  background-color: #dce5f8;
+  color: var(--color-primary);
+}
+
+.meetings-badge--past {
+  background-color: #f0f0f0;
+  color: #555;
+}
+
+.meetings-badge--voting {
+  background-color: #fff3cd;
+  color: var(--color-gold-text);
+}
+
+/* ── Right: Detail Panel ─────────────────────────────────────────── */
+.meetings-detail-panel {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.875rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* ── Meeting Detail View ─────────────────────────────────────────── */
+.meetings-detail {
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 1.5rem;
+  gap: 1rem;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.meetings-detail--empty {
+  align-items: center;
+  justify-content: center;
+}
+
+.meetings-detail__placeholder {
+  font-size: 0.9375rem;
+  color: #bbb;
+  text-align: center;
+  margin: 0;
+}
+
+.meetings-detail__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.875rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.meetings-detail__title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: var(--weight-bold);
+  color: var(--color-text);
+  margin: 0 0 0.2rem;
+}
+
+.meetings-detail__group {
+  font-size: 0.875rem;
+  color: var(--color-primary);
+  font-weight: var(--weight-semibold);
+  margin: 0;
+}
+
+.meetings-detail__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.meetings-detail__field {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.meetings-detail__field--block {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+}
+
+.meetings-detail__label {
+  font-size: 0.75rem;
+  font-weight: var(--weight-semibold);
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+  min-width: 80px;
+}
+
+.meetings-detail__field--block .meetings-detail__label {
+  min-width: unset;
+}
+
+.meetings-detail__value {
+  font-size: 0.9rem;
+  color: var(--color-text);
+}
+
+.meetings-detail__value--text {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  margin: 0;
+  color: #444;
+}
+
+.meetings-detail__agenda {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.875rem;
+  color: #444;
+  line-height: 1.7;
+}
+
+/* ================================================================
+   Finalize Meeting Modal
+   ================================================================ */
+
+.finalize-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1.5rem;
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.finalize-modal {
+  background-color: var(--color-surface);
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.2s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(16px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.finalize-modal__content {
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.finalize-modal__title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: var(--weight-bold);
+  color: var(--color-text);
+  margin: 0;
+}
+
+.finalize-modal__subtitle {
+  font-size: 0.875rem;
+  color: #666;
+  margin: -0.5rem 0 0;
+}
+
+.finalize-modal__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.finalize-modal__empty {
+  font-size: 0.875rem;
+  color: #999;
+  text-align: center;
+  padding: 1rem 0;
+  margin: 0;
+}
+
+/* ── Proposal card (Step 1) ──────────────────────────────────────── */
+.finalize-proposal-card {
+  width: 100%;
+  text-align: left;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.625rem;
+  padding: 0.875rem 1rem;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    box-shadow 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.finalize-proposal-card:hover {
+  background-color: var(--color-hover-surface);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(39, 60, 141, 0.08);
+}
+
+.finalize-proposal-card__title {
+  font-size: 0.9375rem;
+  font-weight: var(--weight-semibold);
+  color: var(--color-text);
+}
+
+.finalize-proposal-card__group {
+  font-size: 0.8125rem;
+  color: #888;
+}
+
+/* ── Modal sections (Step 2) ─────────────────────────────────────── */
+.finalize-modal__section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding-bottom: 0.875rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.finalize-modal__section:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.finalize-modal__field-label {
+  font-size: 0.8125rem;
+  font-weight: var(--weight-semibold);
+  color: var(--color-text);
+  margin: 0;
+}
+
+.finalize-modal__field-label--sub {
+  margin-top: 0.25rem;
+}
+
+.finalize-modal__field-value {
+  font-size: 0.875rem;
+  color: #444;
+  margin: 0;
+}
+
+.finalize-modal__field-value--sub {
+  font-size: 0.8125rem;
+  color: #888;
+}
+
+/* ── Vote rows ───────────────────────────────────────────────────── */
+.finalize-vote-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.finalize-vote-row {
+  width: 100%;
+  background-color: var(--color-gray-light);
+  border: 1.5px solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 0.625rem;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.finalize-vote-row:hover {
+  border-color: var(--color-primary);
+  background-color: #f0f4ff;
+}
+
+.finalize-vote-row--selected {
+  border-color: var(--color-primary);
+  background-color: #dce5f8;
+}
+
+.finalize-vote-row__label {
+  font-size: 0.8125rem;
+  color: var(--color-text);
+  font-weight: var(--weight-medium);
+  text-align: left;
+}
+
+.finalize-vote-row__bar-wrap {
+  width: 80px;
+  height: 8px;
+  background-color: var(--color-border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.finalize-vote-row__bar {
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.finalize-vote-row--selected .finalize-vote-row__bar {
+  background-color: #1e2f6e;
+}
+
+.finalize-vote-row__count {
+  font-size: 0.8125rem;
+  font-weight: var(--weight-semibold);
+  color: var(--color-primary);
+  min-width: 28px;
+  text-align: right;
+}
+
+/* ── Meta grid (Step 2 bottom) ───────────────────────────────────── */
+.finalize-modal__meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  padding-bottom: 0 !important;
+  border-bottom: none !important;
+}
+
+.finalize-modal__meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.finalize-modal__meta-item--full {
+  grid-column: 1 / -1;
+}
+
+.finalize-modal__agenda {
+  margin: 0.1rem 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.8125rem;
+  color: #555;
+  line-height: 1.7;
+}
+
+/* ── Modal action row ────────────────────────────────────────────── */
+.finalize-modal__actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 0.25rem;
+}
+
+.finalize-modal__actions--right {
+  justify-content: flex-end;
+}
+
+/* ================================================================
+   Responsive
+   ================================================================ */
+@media (max-width: 860px) {
+  .meetings-content {
+    grid-template-columns: 1fr;
+  }
+
+  .meetings-detail-panel {
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 560px) {
+  .meetings-page__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .finalize-modal__meta-grid {
+    grid-template-columns: 1fr;
+  }
+}
