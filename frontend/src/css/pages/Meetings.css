@@ -5,14 +5,14 @@
 .meetings-page {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
   font-family: var(--font-ui);
   color: var(--color-text);
   height: 100%;
 }
 
-/* ── Header ─────────────────────────────────────────────────────── */
-.meetings-page__header {
+/* ── Page header (matches dashboard-welcome panel) ──────────────── */
+.meetings-page-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -20,19 +20,12 @@
   flex-shrink: 0;
 }
 
-.meetings-page__title {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: var(--weight-bold);
-  color: var(--color-primary);
-  margin: 0 0 0.2rem;
+.meetings-page-header__text {
+  min-width: 0;
 }
 
-.meetings-page__subtitle {
-  font-size: 0.875rem;
-  color: var(--color-text);
-  margin: 0;
-  opacity: 0.65;
+.meetings-page-header .dashboard-welcome__subtitle {
+  margin-bottom: 0;
 }
 
 /* ── Shared button styles ────────────────────────────────────────── */
@@ -89,7 +82,7 @@
   padding: 0.35rem 0.9rem;
   border-radius: 999px;
   border: 1px solid var(--color-border);
-  background-color: var(--color-surface);
+  background-color: var(--color-panel);
   font-family: var(--font-ui);
   font-size: 0.8125rem;
   font-weight: var(--weight-medium);
@@ -120,7 +113,7 @@
 
 /* ── Left: Meeting List Panel ────────────────────────────────────── */
 .meetings-list-panel {
-  background-color: var(--color-surface);
+  background-color: var(--color-panel);
   border: 1px solid var(--color-border);
   border-radius: 0.875rem;
   display: flex;
@@ -152,7 +145,7 @@
   padding: 0.425rem 0.625rem 0.425rem 1.875rem;
   border: 1px solid var(--color-border);
   border-radius: 6px;
-  background-color: var(--color-gray-light);
+  background-color: var(--color-inset);
   font-family: var(--font-ui);
   font-size: 0.8125rem;
   color: var(--color-text);
@@ -190,7 +183,7 @@
 .meetings-list-item {
   width: 100%;
   text-align: left;
-  background-color: var(--color-gray-light);
+  background-color: var(--color-inset);
   border: 1px solid var(--color-border);
   border-radius: 0.5rem;
   padding: 0.625rem 0.75rem;
@@ -261,7 +254,7 @@
 
 /* ── Right: Detail Panel ─────────────────────────────────────────── */
 .meetings-detail-panel {
-  background-color: var(--color-surface);
+  background-color: var(--color-panel);
   border: 1px solid var(--color-border);
   border-radius: 0.875rem;
   overflow: hidden;
@@ -444,7 +437,7 @@
 .finalize-proposal-card {
   width: 100%;
   text-align: left;
-  background-color: var(--color-surface);
+  background-color: var(--color-inset);
   border: 1px solid var(--color-border);
   border-radius: 0.625rem;
   padding: 0.875rem 1rem;
@@ -520,7 +513,7 @@
 
 .finalize-vote-row {
   width: 100%;
-  background-color: var(--color-gray-light);
+  background-color: var(--color-inset);
   border: 1.5px solid var(--color-border);
   border-radius: 0.5rem;
   padding: 0.5rem 0.75rem;
@@ -630,9 +623,13 @@
 }
 
 @media (max-width: 560px) {
-  .meetings-page__header {
+  .meetings-page-header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+  }
+
+  .meetings-page-header .meetings-btn {
+    width: 100%;
   }
 
   .finalize-modal__meta-grid {

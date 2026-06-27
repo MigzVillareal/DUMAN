@@ -37,7 +37,8 @@
   --color-muted: var(--color-border);
   --color-accent: var(--color-gold);
   --color-accent-text: var(--color-gold-text);
-  --color-panel: var(--color-gray-light);
+  --color-panel: var(--color-white);
+  --color-inset: var(--color-container);
   --color-hover-surface: var(--color-hover);
   --color-meeting-today: var(--color-green);
   --color-meeting-today-text: var(--color-green-text);

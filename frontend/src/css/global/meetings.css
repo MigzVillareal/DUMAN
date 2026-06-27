@@ -1,6 +1,6 @@
 .meeting-card--today {
   border-color: var(--color-meeting-today);
-  background-color: color-mix(in srgb, var(--color-meeting-today) 8%, var(--color-surface));
+  background-color: color-mix(in srgb, var(--color-meeting-today) 8%, var(--color-inset));
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-meeting-today) 20%, transparent);
 }
 

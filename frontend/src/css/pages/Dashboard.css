@@ -66,6 +66,10 @@
   gap: 1rem;
 }
 
+.dashboard-panel .auth-card {
+  background-color: var(--color-inset);
+}
+
 .dashboard-panel__title {
   font-family: var(--font-display);
   font-size: 1.125rem;
