@@ -146,7 +146,7 @@ function Login() {
                       className="form-input"
                       id="email"
                       type="email"
-                      placeholder="name@university.edu"
+                      placeholder="name@gbox.adnu.edu.ph"
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
                       required

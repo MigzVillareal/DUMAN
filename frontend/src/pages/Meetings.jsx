@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import "../css/pages/Login.css";
-import "../css/pages/Dashboard.css";
 import "../css/pages/Meetings.css";
 import Icon from "../components/Icon.jsx";
+import PageHeader from "../components/PageHeader.jsx";
 import { MEETINGS_LIST, UNFINALIZED_MEETINGS } from "../data/meetingsMock.js";
 
 // ── Status badge ──────────────────────────────────────────────────────────────
@@ -330,22 +330,20 @@ function Meetings() {
   return (
     <div className="meetings-page">
       {/* ── Page Header ── */}
-      <section className="dashboard-welcome meetings-page-header">
-        <div className="meetings-page-header__text">
-          <h1 className="dashboard-welcome__title">Meetings</h1>
-          <p className="dashboard-welcome__subtitle">
-            Your finalized scheduled meetings
-          </p>
-        </div>
-        <button
-          type="button"
-          id="finalize-meeting-btn"
-          className="meetings-btn meetings-btn--primary"
-          onClick={() => setShowModal(true)}
-        >
-          Finalize Meeting
-        </button>
-      </section>
+      <PageHeader
+        title="Meetings"
+        subtitle="Your finalized scheduled meetings"
+        action={
+          <button
+            type="button"
+            id="finalize-meeting-btn"
+            className="meetings-btn meetings-btn--primary"
+            onClick={() => setShowModal(true)}
+          >
+            Finalize Meeting
+          </button>
+        }
+      />
 
       {/* ── Filter Tabs ── */}
       <nav className="meetings-filters" aria-label="Meeting filters">

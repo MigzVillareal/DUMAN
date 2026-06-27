@@ -2,6 +2,7 @@ import { useState } from "react";
 import "../css/pages/Login.css";
 import "../css/pages/Dashboard.css";
 import Icon from "../components/Icon.jsx";
+import PageHeader from "../components/PageHeader.jsx";
 import { isToday } from "../utils/date.js";
 import {
   DASHBOARD_USER,
@@ -81,25 +82,22 @@ function Dashboard() {
 
   return (
     <div className="dashboard-page">
-      <section className="dashboard-welcome">
-        <h1 className="dashboard-welcome__title">
-          Welcome Back, {DASHBOARD_USER.firstName}!
-        </h1>
-        <p className="dashboard-welcome__subtitle">
-          {formatWelcomeDate()} — {DASHBOARD_USER.university}
-        </p>
-        <p className="dashboard-welcome__summary">
+      <PageHeader
+        title={`Welcome Back, ${DASHBOARD_USER.firstName}!`}
+        subtitle={`${formatWelcomeDate()} — ${DASHBOARD_USER.university}`}
+      >
+        <p className="page-header__summary">
           You have{" "}
-          <span className="dashboard-welcome__highlight dashboard-welcome__highlight--primary">
+          <span className="page-header__highlight page-header__highlight--primary">
             {meetingsToday} meeting{meetingsToday !== 1 ? "s" : ""}
           </span>{" "}
           scheduled for today and{" "}
-          <span className="dashboard-welcome__highlight dashboard-welcome__highlight--accent">
+          <span className="page-header__highlight page-header__highlight--accent">
             {pendingInvitations} pending invitation{pendingInvitations !== 1 ? "s" : ""}
           </span>{" "}
           awaiting your review.
         </p>
-      </section>
+      </PageHeader>
 
       <div className="dashboard-grid">
         <section className="dashboard-panel">

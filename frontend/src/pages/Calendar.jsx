@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import "../css/pages/Login.css";
-import "../css/pages/Dashboard.css";
 import "../css/pages/Calendar.css";
 import Icon from "../components/Icon.jsx";
+import PageHeader from "../components/PageHeader.jsx";
 import CalendarGroupFilters from "../components/calendar/CalendarGroupFilters.jsx";
 import CalendarMonthView from "../components/calendar/CalendarMonthView.jsx";
 import CalendarEventPanel from "../components/calendar/CalendarEventPanel.jsx";
@@ -104,22 +104,20 @@ function Calendar() {
 
   return (
     <div className="calendar-page">
-      <section className="dashboard-welcome calendar-page-header">
-        <div className="calendar-page-header__text">
-          <h1 className="dashboard-welcome__title">Shared Calendar</h1>
-          <p className="dashboard-welcome__subtitle">
-            View and vote on group availability
-          </p>
-        </div>
-        <button
-          type="button"
-          className="calendar-btn calendar-btn--primary"
-          onClick={() => {}}
-        >
-          <Icon icon="plus" size="sm" />
-          Propose Schedule
-        </button>
-      </section>
+      <PageHeader
+        title="Shared Calendar"
+        subtitle="View and vote on group availability"
+        action={
+          <button
+            type="button"
+            className="calendar-btn calendar-btn--primary"
+            onClick={() => {}}
+          >
+            <Icon icon="plus" size="sm" />
+            Propose Schedule
+          </button>
+        }
+      />
 
       <CalendarGroupFilters
         groups={groups}
