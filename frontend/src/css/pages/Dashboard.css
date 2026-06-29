@@ -6,49 +6,6 @@
   color: var(--color-text);
 }
 
-.dashboard-welcome {
-  background-color: var(--color-panel);
-  border: 1px solid var(--color-border);
-  border-radius: 1rem;
-  padding: 1.5rem 1.75rem;
-}
-
-.dashboard-welcome__title {
-  font-family: var(--font-display);
-  font-size: 1.75rem;
-  font-weight: var(--weight-bold);
-  margin: 0 0 0.35rem;
-}
-
-.dashboard-page .dashboard-welcome__title {
-  color: var(--color-primary);
-}
-
-.dashboard-welcome__subtitle {
-  font-size: 0.9375rem;
-  font-weight: var(--weight-medium);
-  color: var(--color-text);
-  margin: 0 0 0.75rem;
-}
-
-.dashboard-welcome__summary {
-  font-size: 0.875rem;
-  color: var(--color-text);
-  margin: 0;
-}
-
-.dashboard-welcome__highlight {
-  font-weight: var(--weight-semibold);
-}
-
-.dashboard-welcome__highlight--primary {
-  color: var(--color-primary);
-}
-
-.dashboard-welcome__highlight--accent {
-  color: var(--color-accent-text);
-}
-
 .dashboard-grid {
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
@@ -64,6 +21,10 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.dashboard-panel .auth-card {
+  background-color: var(--color-inset);
 }
 
 .dashboard-panel__title {

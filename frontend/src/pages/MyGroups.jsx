@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useGroups } from "../context/GroupsContext.jsx";
+import PageHeader from "../components/PageHeader.jsx";
 import "../css/pages/MyGroups.css";
 
 export default function MyGroups() {
@@ -7,12 +8,10 @@ export default function MyGroups() {
 
   return (
     <div className="my-groups-page">
-      <header className="my-groups-page__header">
-        <h1 className="my-groups-page__title">My Groups</h1>
-        <p className="my-groups-page__subtitle">
-          Select a group from the sidebar or create a new one to get started.
-        </p>
-      </header>
+      <PageHeader
+        title="My Groups"
+        subtitle="Select a group from the sidebar or create a new one to get started."
+      />
 
       {groups.length > 0 && (
         <ul className="my-groups-page__list">

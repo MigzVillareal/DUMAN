@@ -1,0 +1,71 @@
+/* ================================================================
+   Universal page header panel
+   ================================================================ */
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-shrink: 0;
+  background-color: var(--color-panel);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  padding: 1.5rem 1.75rem;
+}
+
+.page-header__content {
+  min-width: 0;
+}
+
+.container .page-header__title {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: var(--weight-bold);
+  margin: 0 0 0.35rem;
+  color: var(--color-primary);
+}
+
+.page-header__subtitle {
+  font-size: 0.9375rem;
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
+  margin: 0;
+}
+
+.page-header__subtitle:not(:last-child) {
+  margin-bottom: 0.75rem;
+}
+
+.page-header__summary {
+  font-size: 0.875rem;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.page-header__highlight {
+  font-weight: var(--weight-semibold);
+}
+
+.page-header__highlight--primary {
+  color: var(--color-primary);
+}
+
+.page-header__highlight--accent {
+  color: var(--color-accent-text);
+}
+
+.page-header__action {
+  flex-shrink: 0;
+}
+
+@media (max-width: 560px) {
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .page-header__action > * {
+    width: 100%;
+  }
+}

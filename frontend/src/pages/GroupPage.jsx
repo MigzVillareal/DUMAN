@@ -3,6 +3,7 @@ import { Navigate, useParams } from "react-router-dom";
 import { useGroups } from "../context/GroupsContext.jsx";
 import { getGroupDetails } from "../data/groupsMock.js";
 import Icon from "../components/Icon.jsx";
+import PageHeader from "../components/PageHeader.jsx";
 import { isToday } from "../utils/date.js";
 import "../css/pages/Login.css";
 import "../css/pages/Dashboard.css";
@@ -63,17 +64,18 @@ export default function GroupPage() {
 
   return (
     <div className="group-page">
-      <header className="group-page__header">
-        <div className="group-page__header-text">
-          <h1 className="group-page__title">{group.name}</h1>
-          {group.description && (
-            <p className="group-page__description">{group.description}</p>
-          )}
-        </div>
-        <button type="button" className="btn-primary group-page__btn-pill group-page__btn-pill--soft">
-          Schedule
-        </button>
-      </header>
+      <PageHeader
+        title={group.name}
+        subtitle={group.description || undefined}
+        action={
+          <button
+            type="button"
+            className="btn-primary group-page__btn-pill group-page__btn-pill--soft"
+          >
+            Schedule
+          </button>
+        }
+      />
 
       <div className="group-page__grid">
         <section className="dashboard-panel">
