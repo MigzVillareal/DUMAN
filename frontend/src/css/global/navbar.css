@@ -162,3 +162,23 @@
   font-weight: var(--weight-regular);
   color: var(--color-muted);
 }
+
+
+/* Sign-out */
+.navbar__signout-btn {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-destructive);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 8px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.navbar__signout-btn:hover {
+  background-color: var(--color-hover-surface);
+}

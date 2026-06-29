@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login, register } from "../services/api.js";
+import { useAuth } from "../context/AuthContext.jsx";
 import "../css/pages/Login.css";
 
 function Login() {
   const navigate = useNavigate();
+  const { setUser } = useAuth();
   const [authMode, setAuthMode] = useState("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,6 +34,10 @@ function Login() {
       if (data.errorMessage) {
         setError(data.errorMessage);
         return;
+      }
+
+      if (data.user) {
+        setUser(data.user);
       }
 
       navigate("/dashboard");

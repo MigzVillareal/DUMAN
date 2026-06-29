@@ -3,13 +3,10 @@ import "../css/pages/Login.css";
 import "../css/pages/Dashboard.css";
 import Icon from "../components/Icon.jsx";
 import PageHeader from "../components/PageHeader.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 import { isToday } from "../utils/date.js";
-import {
-  DASHBOARD_USER,
-  UPCOMING_MEETINGS,
-  PENDING_INVITATIONS,
-  getDashboardStats,
-} from "../data/dashboardMock.js";
+
+const UNIVERSITY_NAME = "Ateneo de Naga University";
 
 function formatWelcomeDate() {
   return new Intl.DateTimeFormat("en-US", {
@@ -67,10 +64,13 @@ function MeetingCard({ meeting }) {
 }
 
 function Dashboard() {
-  const [meetings] = useState(UPCOMING_MEETINGS);
-  const [invitations, setInvitations] = useState(PENDING_INVITATIONS);
+  const { user } = useAuth();
+  const [meetings] = useState([]);
+  const [invitations, setInvitations] = useState([]);
 
-  const { meetingsToday, pendingInvitations } = getDashboardStats(meetings, invitations);
+  const firstName = user?.firstname ?? "blank";
+  const meetingsToday = meetings.filter((m) => isToday(m.date)).length;
+  const pendingInvitations = invitations.length;
 
   const handleDeclineInvite = (id) => {
     setInvitations((prev) => prev.filter((invite) => invite.id !== id));
@@ -83,8 +83,8 @@ function Dashboard() {
   return (
     <div className="dashboard-page">
       <PageHeader
-        title={`Welcome Back, ${DASHBOARD_USER.firstName}!`}
-        subtitle={`${formatWelcomeDate()} — ${DASHBOARD_USER.university}`}
+        title={`Welcome Back, ${firstName}!`}
+        subtitle={`${formatWelcomeDate()} — ${UNIVERSITY_NAME}`}
       >
         <p className="page-header__summary">
           You have{" "}
@@ -103,9 +103,13 @@ function Dashboard() {
         <section className="dashboard-panel">
           <h2 className="dashboard-panel__title">All Upcoming Meetings</h2>
           <div className="dashboard-panel__list">
-            {meetings.map((meeting) => (
-              <MeetingCard key={meeting.id} meeting={meeting} />
-            ))}
+            {meetings.length === 0 ? (
+              <p className="dashboard-invite-card__meta">No upcoming meetings.</p>
+            ) : (
+              meetings.map((meeting) => (
+                <MeetingCard key={meeting.id} meeting={meeting} />
+              ))
+            )}
           </div>
         </section>
 

@@ -60,6 +60,18 @@ export default function Navbar() {
             <span className="navbar__user-role">Student</span>
           </div>
         </div>
+
+        <div className="navbar__signout">  
+          <button
+            className="navbar__signout-btn"
+            onClick={() => {
+              navigate("/signout");
+            }}
+            title="Sign Out"
+          >
+            <Icon icon="signout" />
+          </button>
+        </div>
       </div>
     </nav>
   );

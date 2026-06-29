@@ -5,6 +5,7 @@ const ICONS = {
   search: "fa-magnifying-glass",
   plus: "fa-plus",
   "chevron-down": "fa-chevron-down",
+  signout: "fa-arrow-right-from-bracket",
 };
 
 export default function Icon({ icon, size = "md", expanded, className = "" }) {
