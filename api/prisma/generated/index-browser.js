@@ -127,8 +127,6 @@ exports.Prisma.UserScalarFieldEnum = {
   firstname: 'firstname',
   lastname: 'lastname',
   password: 'password',
-  notificationId: 'notificationId',
-  groupId: 'groupId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -147,37 +145,41 @@ exports.Prisma.GroupMemberScalarFieldEnum = {
   memberId: 'memberId',
   groupId: 'groupId',
   role: 'role',
+  status: 'status',
+  invitedBy: 'invitedBy',
   joinedAt: 'joinedAt'
 };
 
 exports.Prisma.MeetingScalarFieldEnum = {
   meetingId: 'meetingId',
-  meetingNumber: 'meetingNumber',
   title: 'title',
   description: 'description',
-  category: 'category',
-  meetingStatus: 'meetingStatus',
-  latitude: 'latitude',
-  longitude: 'longitude',
-  locationDescription: 'locationDescription',
+  status: 'status',
+  locationDetail: 'locationDetail',
   schedule: 'schedule',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  endsAt: 'endsAt',
   setterId: 'setterId',
-  intendedGroupId: 'intendedGroupId'
-};
-
-exports.Prisma.CalendarScalarFieldEnum = {
-  calendarId: 'calendarId',
-  groupId: 'groupId',
-  userId: 'userId'
+  intendedGroupId: 'intendedGroupId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.NotificationScalarFieldEnum = {
   notificationId: 'notificationId',
   userId: 'userId',
   groupId: 'groupId',
-  title: 'title'
+  meetingId: 'meetingId',
+  subject: 'subject',
+  body: 'body',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CalendarScalarFieldEnum = {
+  calendarId: 'calendarId',
+  groupId: 'groupId',
+  userId: 'userId'
 };
 
 exports.Prisma.SortOrder = {
@@ -199,10 +201,22 @@ exports.Role = exports.$Enums.Role = {
   MEMBER: 'MEMBER'
 };
 
+exports.InviteStatus = exports.$Enums.InviteStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  DECLINED: 'DECLINED'
+};
+
 exports.MeetingStatus = exports.$Enums.MeetingStatus = {
   UPCOMING: 'UPCOMING',
   ONGOING: 'ONGOING',
   FINISHED: 'FINISHED'
+};
+
+exports.NotificationStatus = exports.$Enums.NotificationStatus = {
+  PENDING: 'PENDING',
+  SENT: 'SENT',
+  FAILED: 'FAILED'
 };
 
 exports.Prisma.ModelName = {
@@ -210,8 +224,8 @@ exports.Prisma.ModelName = {
   Group: 'Group',
   GroupMember: 'GroupMember',
   Meeting: 'Meeting',
-  Calendar: 'Calendar',
-  Notification: 'Notification'
+  Notification: 'Notification',
+  Calendar: 'Calendar'
 };
 
 /**

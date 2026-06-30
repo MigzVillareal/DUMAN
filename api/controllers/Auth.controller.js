@@ -1,5 +1,5 @@
 import { PrismaClient } from '../prisma/generated/index.js';
-import bcrypt from "bcrypt"
+import bcrypt from "bcrypt";
 import prisma from "../lib/prisma.js";
 
 export const registerUser = async (req, res) => {
@@ -39,6 +39,13 @@ export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
+        // const user = await prisma.user.findUnique({
+        //     $or: [
+        //         { username: identifier },
+        //         { email: identifier }
+        //     ]
+        // });
+        
         const user = await prisma.user.findUnique({ where: { email } });
         if (!user) return res.status(404).json({ errorMessage: "User not found." });
 
