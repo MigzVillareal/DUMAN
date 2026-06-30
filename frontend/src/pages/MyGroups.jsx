@@ -4,7 +4,7 @@ import PageHeader from "../components/PageHeader.jsx";
 import "../css/pages/MyGroups.css";
 
 export default function MyGroups() {
-  const { groups } = useGroups();
+  const { groups, loading, error } = useGroups();
 
   return (
     <div className="my-groups-page">
@@ -13,14 +13,32 @@ export default function MyGroups() {
         subtitle="Select a group from the sidebar or create a new one to get started."
       />
 
-      {groups.length > 0 && (
+      {loading && (
+        <p className="my-groups-page__status">Loading your groups...</p>
+      )}
+
+      {!loading && error && (
+        <p className="my-groups-page__status my-groups-page__status--error">
+          {error}
+        </p>
+      )}
+
+      {!loading && !error && groups.length === 0 && (
+        <p className="my-groups-page__status">
+          You have no groups yet. Create one from the sidebar.
+        </p>
+      )}
+
+      {!loading && !error && groups.length > 0 && (
         <ul className="my-groups-page__list">
           {groups.map((group) => (
             <li key={group.id}>
               <Link to={`/groups/${group.id}`} className="my-groups-page__card">
                 <span className="my-groups-page__card-name">{group.name}</span>
                 {group.description && (
-                  <span className="my-groups-page__card-desc">{group.description}</span>
+                  <span className="my-groups-page__card-desc">
+                    {group.description}
+                  </span>
                 )}
               </Link>
             </li>

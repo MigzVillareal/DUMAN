@@ -4,6 +4,7 @@ const ICONS = {
   user: "fa-user",
   search: "fa-magnifying-glass",
   plus: "fa-plus",
+  xmark: "fa-xmark",
   "chevron-down": "fa-chevron-down",
   signout: "fa-arrow-right-from-bracket",
 };

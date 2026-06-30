@@ -16,6 +16,15 @@ export const INITIAL_GROUPS = [
   },
 ];
 
+export const INVITABLE_USERS = [
+  { id: 1, name: "Juan Cruz", email: "juancruz@gbox.adnu.edu.ph" },
+  { id: 2, name: "Victor Magtanggol", email: "victorm@gbox.adnu.edu.ph" },
+  { id: 3, name: "Maria Hiwaga", email: "mariahiwaga@gbox.adnu.edu.ph" },
+  { id: 4, name: "Miggy Villareal", email: "miggyv@gbox.adnu.edu.ph" },
+  { id: 5, name: "Jian Joshua Cleofe", email: "jiancleofe@gbox.adnu.edu.ph" },
+  { id: 6, name: "Ivan Zabala", email: "ivanz@gbox.adnu.edu.ph" },
+];
+
 export function slugifyGroupName(name) {
   return name
     .trim()
@@ -56,9 +65,9 @@ export const GROUP_DETAILS = {
       },
     ],
     members: [
-      { id: 1, name: "Juan Cruz" },
-      { id: 2, name: "Victor Magtanggol" },
-      { id: 3, name: "Maria Hiwaga" },
+      { id: 1, name: "Juan Cruz", role: "leader" },
+      { id: 2, name: "Victor Magtanggol", role: "member" },
+      { id: 3, name: "Maria Hiwaga", role: "member" },
     ],
   },
   volunteer: {
@@ -90,9 +99,9 @@ export const GROUP_DETAILS = {
       },
     ],
     members: [
-      { id: 1, name: "Juan Cruz" },
-      { id: 2, name: "Maria Hiwaga" },
-      { id: 3, name: "Miggy Villareal" },
+      { id: 1, name: "Juan Cruz", role: "leader" },
+      { id: 2, name: "Maria Hiwaga", role: "member" },
+      { id: 3, name: "Miggy Villareal", role: "member" },
     ],
   },
   "study-group": {
@@ -122,16 +131,16 @@ export const GROUP_DETAILS = {
       },
     ],
     members: [
-      { id: 1, name: "Juan Cruz" },
-      { id: 2, name: "Jian Joshua Cleofe" },
-      { id: 3, name: "Ivan Zabala" },
+      { id: 1, name: "Juan Cruz", role: "leader" },
+      { id: 2, name: "Jian Joshua Cleofe", role: "member" },
+      { id: 3, name: "Ivan Zabala", role: "member" },
     ],
   },
 };
 
 const DEFAULT_GROUP_DETAILS = {
   meetings: [],
-  members: [{ id: 1, name: "Juan Cruz" }],
+  members: [{ id: 1, name: "Juan Cruz", role: "leader" }],
 };
 
 export function getGroupDetails(groupId) {

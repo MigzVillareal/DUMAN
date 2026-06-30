@@ -42,3 +42,14 @@
   font-size: 0.8125rem;
   opacity: 0.8;
 }
+
+.my-groups-page__status {
+  margin: 0;
+  font-size: 0.9375rem;
+  opacity: 0.75;
+}
+
+.my-groups-page__status--error {
+  color: var(--color-destructive);
+  opacity: 1;
+}

@@ -116,6 +116,12 @@
   font-weight: var(--weight-semibold);
 }
 
+.groups-sidebar__status {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  opacity: 0.7;
+}
+
 /* ── Footer ── */
 .groups-sidebar__footer {
   padding-top: 0.5rem;

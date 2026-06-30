@@ -220,7 +220,7 @@ function Login() {
                       className="form-input"
                       id="reg-email"
                       type="email"
-                      placeholder="name@university.edu"
+                      placeholder="name@gbox.adnu.edu.ph"
                       value={registerEmail}
                       onChange={(event) => setRegisterEmail(event.target.value)}
                       required

@@ -12,7 +12,6 @@ import { MEETINGS_LIST } from "./meetingsMock.js";
  * @typedef {Object} CalendarGroup
  * @property {number} groupId
  * @property {string} name
- * @property {string} groupColor
  * @property {string} slug
  */
 
@@ -40,19 +39,16 @@ const GROUP_BY_NAME = {
   Research: {
     groupId: 1,
     name: "Research",
-    groupColor: "#273c8d",
     slug: "research",
   },
   Volunteer: {
     groupId: 2,
     name: "Volunteer",
-    groupColor: "#4b5563",
     slug: "volunteer",
   },
   "Study Group": {
     groupId: 3,
     name: "Study Group",
-    groupColor: "#9ca3af",
     slug: "study-group",
   },
 };

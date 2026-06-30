@@ -50,9 +50,31 @@
   flex: 1;
 }
 
+.group-page__member {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .group-page__member-name {
   font-size: 0.9375rem;
   font-weight: var(--weight-medium);
+}
+
+.member-role-pill {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: var(--weight-semibold);
+  line-height: 1.2;
+}
+
+.member-role-pill--leader {
+  background-color: var(--color-accent);
+  color: var(--color-accent-text);
 }
 
 .group-page__members-footer {

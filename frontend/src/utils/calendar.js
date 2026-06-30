@@ -75,6 +75,7 @@ export function getDateKey(schedule) {
 }
 
 const MUTED_BAR_COLOR = "#c8c8c8";
+const EVENT_BAR_COLOR = "#273c8d";
 
 /**
  * @param {import('../data/calendarMock.js').CalendarEvent[]} events
@@ -100,7 +101,7 @@ export function getDayEventBars(events, dateKey) {
 
     return {
       meetingId: event.meetingId,
-      color: muted ? MUTED_BAR_COLOR : event.intendedGroup.groupColor,
+      color: muted ? MUTED_BAR_COLOR : EVENT_BAR_COLOR,
       muted,
     };
   });

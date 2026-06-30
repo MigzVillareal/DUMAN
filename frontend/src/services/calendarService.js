@@ -24,7 +24,6 @@ export function normalizeMeetingForCalendar(meeting, rsvp = null) {
     intendedGroup: {
       groupId: meeting.intendedGroup.groupId,
       name: meeting.intendedGroup.name,
-      groupColor: meeting.intendedGroup.groupColor,
     },
     rsvp: { status: rsvp?.status ?? "PENDING" },
   };

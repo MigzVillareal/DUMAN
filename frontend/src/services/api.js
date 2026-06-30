@@ -17,3 +17,5 @@ export async function register(userData) {
 
   return response.json();
 }
+
+export { fetchGroups, fetchGroupById, createGroup, fetchGroupMembers, sendGroupInvite, fetchUsers } from "./groupService.js";
