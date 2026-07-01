@@ -15,12 +15,18 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+const mailSelf = "duman.masarean@gmail.com";
+const mailDevs = "jjcleofe@gbox.adnu.edu.ph, jmvillareal@gbox.adnu.edu.ph";
+const mailTo = "";
+const mailSubject = "Empty Subject";
+const mailText = "Empty Text";
+
 try {
   const info = await transporter.sendMail({
-    from: '"MASARAEN" <duman.masarean@gmail.com>',
-    to: "jmvillareal@gbox.adnu.edu.ph, jjcleofe@gbox.adnu.edu.ph",
-    subject: "For jmvillareal",
-    text: "Please believe me dada, I am not spam mail dada... please...",
+    from: '"DUMAN" <duman.masarean@gmail.com>',
+    to: `${mailSelf}, ${mailDevs}, ${mailTo}`,
+    subject: mailSubject,
+    text: mailText,
   });
 
   console.log("Message sent: %s", info.messageId);
