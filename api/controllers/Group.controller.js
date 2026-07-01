@@ -5,14 +5,20 @@ import prisma from "../lib/prisma.js";
 
 export const createGroup = async (req, res) => {
     try {
-        const { name, description, groupColor, userId } = req.body;
+        const { name, description, userId } = req.body;
 
         const group = await prisma.group.create({
             data: {
                 name, 
                 description, 
-                groupColor, 
-                userId
+                userId,
+                members: {
+                    create: {
+                        memberId: userId,
+                        invitedBy: userId,
+                        role: "ADMIN"
+                    }
+                }
             },
         })
 
@@ -73,7 +79,6 @@ export const updateGroup = async (req, res) => {
             data: {
                 name,
                 description,
-                groupColor,
             },
         });
 
@@ -98,25 +103,6 @@ export const deleteGroup = async (req, res) => {
 };
 
 // Member Management
-
-export const addMember = async (req, res) => {
-    try {
-        const { groupId } = req.params;
-        const { userId, role } = req.body;
-
-        const member = await prisma.groupMember.create({ 
-            data: {
-                groupId: parseInt(groupId),
-                userId,
-                role,
-            },
-        });
-
-        req.status(201).json({ member });
-    } catch (error) {
-        res.status(500).json({ errorMessage: "Unable to add member." });
-    }
-};
 
 export const getAllMembers = async (req, res) => {
     try {
@@ -155,35 +141,49 @@ export const removeMember = async (req, res) => {
 // Invite System
 
 export const sendInvite = async (req, res) => {
-    try { 
+    try {
         const { groupId } = req.params;
-        const { userId, InvitedBy } = req.body;
+        const { email, username, role } = req.body;
+
+        if (!email && !username) {
+            return res.status(400).json({ errorMessage: "Provide valid email or username." });
+        }
+
+        const user = await prisma.user.findFirst({
+            where: {
+                OR: [
+                    email ? { email } : undefined,
+                    username ? { username } : undefined,
+                ].filter(Boolean)
+            }
+        });
 
         const existing = await prisma.groupMember.findUnique({
             where: {
                 memberId_groupId: {
-                    memberId: userId,
+                    memberId: user.userId,
                     groupId: parseInt(groupId)
                 }
             }
         });
 
-        if (exisitng) {
-            res.status(400).json({ errorMessage: "User already invited or is a member of the group." });
+        if (existing) {
+            return res.status(400).json({ errorMessage: "User already invited or is a member of the group." });
         }
 
-        const member = await prisma.groupMember.create({
+        const member = await prisma.groupMember.create({ 
             data: {
-                memberId: userId,
                 groupId: parseInt(groupId),
-                invitiedBy,
+                memberId: user.userId,
+                invitedBy,
+                role: "MEMBER",
                 status: "PENDING"
             }
         });
 
-        res.status(201).json({ member });
+        req.status(201).json({ member });
     } catch (error) {
-        res.status(500).json({ errorMessage: "Unable to send invites." });
+        res.status(500).json({ errorMessage: "Unable to add member." });
     }
 };
 
@@ -207,6 +207,52 @@ export const getGroupInvites = async (req, res) => {
         res.status(500).json({ errorMessage: "Unable to get group invites." });
     }
 };
+
+export const acceptInvite = async (req, res) => {
+    try {
+        const { groupId } = req.params;
+        const userId = req.user.userId;
+
+        const member = await prisma.groupMember.update({
+            where: {
+                memberId_groupId: {
+                    memberId: memberId,
+                    groupId: parseInt(groupId)
+                }
+            },
+            data: {
+                status: "ACCEPTED",
+                joinedAt: new Date()
+            }
+        });
+
+        res.status(200).json({ member });
+    } catch (error) {
+        res.status(500).json({ errorMessage: "Unable to accecpt invite." });
+    }
+};
+
+export const declineInvite = async (req, res) => {
+    try {
+        const { groupId } = req.params;
+        const userId = req.user.userId;
+
+        await prisma.groupMember.delete({
+            where: {
+                memberId_groupId: {
+                    memberId: userId,
+                    groupId: parseInt(groupId)
+                }
+            }
+        });
+
+        res.status(200).json({ message: "Invite declined." });
+    } catch (error) {
+        res.status(500).json({ errorMessage: "Unable to decline invite." });
+    }
+};
+
+
 
 // Related-Data Operations
 
@@ -237,48 +283,3 @@ export const getGroupNotifications = async (req, res) => {
         res.status(500).json({ errorMessage: "Unable to get group notifications." });
     }
 };
-
-export const acceptInvite = async (req, res) => {
-    try {
-        const { groupId } = req.params;
-        const { userId } = req.body;
-
-        const member = await prisma.groupMember.update({
-            where: {
-                memberId_groupId: {
-                    memberId: parseInt(memberId),
-                    groupId: parseInt(groupId)
-                }
-            },
-            data: {
-                status: "ACCEPTED",
-                joinedAt: new Date()
-            }
-        });
-
-        res.status(200).json({ member });
-    } catch (error) {
-        res.status(500).json({ errorMessage: "Unable to accecpt invite." });
-    }
-};
-
-export const declineInvite = async (req, res) => {
-    try {
-        const { groupId } = req.params;
-        const { userId } = req.body;
-
-        await prisma.groupMember.delete({
-            where: {
-                memberId_groupId: {
-                    memberId: parseInt(userId),
-                    groupId: parseInt(groupId)
-                }
-            }
-        });
-
-        res.status(200).json({ message: "Invite declined." });
-    } catch (error) {
-        res.status(500).json({ errorMessage: "Unable to decline invite." });
-    }
-};
-

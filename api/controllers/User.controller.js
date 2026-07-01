@@ -18,7 +18,7 @@ export const getUserById = async (req, res) => {
         const user = await prisma.user.findUnique({ where: { id: parseInt(id) } });
         if (!user) return res.status(404).json({ errorMessage: "User not found." });
 
-        res.status(200).json(user);
+        res.status(200).json({ user });
     } catch (error) {
         res.status(500).json({ errorMessage: "Unable to get user." });
     }
@@ -26,7 +26,7 @@ export const getUserById = async (req, res) => {
 
 export const updateUser = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { userId } = req.params;
         const { firstname, lastname, username, email } = req.body;
 
         const user = await prisma.user.update({
@@ -41,6 +41,7 @@ export const updateUser = async (req, res) => {
 
         res.status(200).json({ message: "User updated successfully.", user });
     } catch (error) {
+        console.log("error:", error);
         res.status(500).json({ errorMessage: "Unable to update user." });
     }
 };

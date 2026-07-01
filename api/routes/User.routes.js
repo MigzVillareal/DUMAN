@@ -6,9 +6,9 @@ const router = express.Router();
 
 // User CRUD
 router.get("/", authenticateToken, userController.getAllUsers);
-router.get("/:id", authenticateToken, userController.getUserById);
-router.put("/:id", authenticateToken, userController.updateUser);
-router.delete("/:id", authenticateToken, userController.deleteUser);
+router.get("/:userId", authenticateToken, userController.getUserById);
+router.put("/:userId", authenticateToken, userController.updateUser);
+router.delete("/:userId", authenticateToken, userController.deleteUser);
 
 // Related Data Operations
 router.get("/:userId/invites", authenticateToken, userController.getUserInvites);
