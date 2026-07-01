@@ -61,7 +61,6 @@ model Group {
   groupId     Int     @id @default(autoincrement())
   name        String
   description String?
-  groupColor  String
 
   members       GroupMember[]
   notifications Notification[]

@@ -16,7 +16,8 @@ export const createGroup = async (req, res) => {
                     create: {
                         memberId: userId,
                         invitedBy: userId,
-                        role: "ADMIN"
+                        role: "ADMIN",
+                        status: "ACCEPTED"
                     }
                 }
             },
@@ -24,6 +25,7 @@ export const createGroup = async (req, res) => {
 
         res.status(201).json({ group });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ errorMessage: "Unable to get user." });
     }
 };
@@ -72,7 +74,7 @@ export const getGroupById = async (req, res) => {
 export const updateGroup = async (req, res) => {
     try {
         const { groupId } = req.params;
-        const { name, description, groupColor } = req.body;
+        const { name, description } = req.body;
 
         const group = await prisma.group.update({
             where: { groupId: parseInt(groupId) },
@@ -144,6 +146,7 @@ export const sendInvite = async (req, res) => {
     try {
         const { groupId } = req.params;
         const { email, username, role } = req.body;
+        const invitedBy = req.user.userId;
 
         if (!email && !username) {
             return res.status(400).json({ errorMessage: "Provide valid email or username." });
@@ -157,6 +160,10 @@ export const sendInvite = async (req, res) => {
                 ].filter(Boolean)
             }
         });
+
+        if (!user) {
+            return res.status(404).json({ errorMessage: "User not found." });
+        }
 
         const existing = await prisma.groupMember.findUnique({
             where: {
@@ -176,14 +183,15 @@ export const sendInvite = async (req, res) => {
                 groupId: parseInt(groupId),
                 memberId: user.userId,
                 invitedBy,
-                role: "MEMBER",
+                role: role || "MEMBER",
                 status: "PENDING"
             }
         });
 
-        req.status(201).json({ member });
+        res.status(201).json({ member });
     } catch (error) {
-        res.status(500).json({ errorMessage: "Unable to add member." });
+        console.log(error);
+        res.status(500).json({ errorMessage: "Unable to invite member." });
     }
 };
 
@@ -216,7 +224,7 @@ export const acceptInvite = async (req, res) => {
         const member = await prisma.groupMember.update({
             where: {
                 memberId_groupId: {
-                    memberId: memberId,
+                    memberId: userId,
                     groupId: parseInt(groupId)
                 }
             },

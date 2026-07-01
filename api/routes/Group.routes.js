@@ -18,7 +18,7 @@ router.delete("/:groupId/members/:memberId", authenticateToken, groupController.
 // Invite System
 router.post("/:groupId/invite", authenticateToken, groupController.sendInvite);
 router.get("/:groupId/invites", authenticateToken, groupController.getGroupInvites)
-router.patch(";/:groupId/invites/accept", authenticateToken, groupController.acceptInvite);
+router.patch("/:groupId/invites/accept", authenticateToken, groupController.acceptInvite);
 router.patch("/:groupId/invites/decline", authenticateToken, groupController.declineInvite);
 
 // Related Data Operations

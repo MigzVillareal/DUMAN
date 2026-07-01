@@ -2855,7 +2855,6 @@ export namespace Prisma {
     groupId: number | null
     name: string | null
     description: string | null
-    groupColor: string | null
     createdAt: Date | null
     updatedAt: Date | null
     userId: number | null
@@ -2865,7 +2864,6 @@ export namespace Prisma {
     groupId: number | null
     name: string | null
     description: string | null
-    groupColor: string | null
     createdAt: Date | null
     updatedAt: Date | null
     userId: number | null
@@ -2875,7 +2873,6 @@ export namespace Prisma {
     groupId: number
     name: number
     description: number
-    groupColor: number
     createdAt: number
     updatedAt: number
     userId: number
@@ -2897,7 +2894,6 @@ export namespace Prisma {
     groupId?: true
     name?: true
     description?: true
-    groupColor?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -2907,7 +2903,6 @@ export namespace Prisma {
     groupId?: true
     name?: true
     description?: true
-    groupColor?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -2917,7 +2912,6 @@ export namespace Prisma {
     groupId?: true
     name?: true
     description?: true
-    groupColor?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -3014,7 +3008,6 @@ export namespace Prisma {
     groupId: number
     name: string
     description: string | null
-    groupColor: string
     createdAt: Date
     updatedAt: Date
     userId: number | null
@@ -3043,7 +3036,6 @@ export namespace Prisma {
     groupId?: boolean
     name?: boolean
     description?: boolean
-    groupColor?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -3059,7 +3051,6 @@ export namespace Prisma {
     groupId?: boolean
     name?: boolean
     description?: boolean
-    groupColor?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -3070,7 +3061,6 @@ export namespace Prisma {
     groupId?: boolean
     name?: boolean
     description?: boolean
-    groupColor?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -3081,13 +3071,12 @@ export namespace Prisma {
     groupId?: boolean
     name?: boolean
     description?: boolean
-    groupColor?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
   }
 
-  export type GroupOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"groupId" | "name" | "description" | "groupColor" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["group"]>
+  export type GroupOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"groupId" | "name" | "description" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["group"]>
   export type GroupInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     members?: boolean | Group$membersArgs<ExtArgs>
     notifications?: boolean | Group$notificationsArgs<ExtArgs>
@@ -3116,7 +3105,6 @@ export namespace Prisma {
       groupId: number
       name: string
       description: string | null
-      groupColor: string
       createdAt: Date
       updatedAt: Date
       userId: number | null
@@ -3551,7 +3539,6 @@ export namespace Prisma {
     readonly groupId: FieldRef<"Group", 'Int'>
     readonly name: FieldRef<"Group", 'String'>
     readonly description: FieldRef<"Group", 'String'>
-    readonly groupColor: FieldRef<"Group", 'String'>
     readonly createdAt: FieldRef<"Group", 'DateTime'>
     readonly updatedAt: FieldRef<"Group", 'DateTime'>
     readonly userId: FieldRef<"Group", 'Int'>
@@ -8759,7 +8746,6 @@ export namespace Prisma {
     groupId: 'groupId',
     name: 'name',
     description: 'description',
-    groupColor: 'groupColor',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     userId: 'userId'
@@ -9059,7 +9045,6 @@ export namespace Prisma {
     groupId?: IntFilter<"Group"> | number
     name?: StringFilter<"Group"> | string
     description?: StringNullableFilter<"Group"> | string | null
-    groupColor?: StringFilter<"Group"> | string
     createdAt?: DateTimeFilter<"Group"> | Date | string
     updatedAt?: DateTimeFilter<"Group"> | Date | string
     userId?: IntNullableFilter<"Group"> | number | null
@@ -9074,7 +9059,6 @@ export namespace Prisma {
     groupId?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
-    groupColor?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrderInput | SortOrder
@@ -9093,7 +9077,6 @@ export namespace Prisma {
     NOT?: GroupWhereInput | GroupWhereInput[]
     name?: StringFilter<"Group"> | string
     description?: StringNullableFilter<"Group"> | string | null
-    groupColor?: StringFilter<"Group"> | string
     createdAt?: DateTimeFilter<"Group"> | Date | string
     updatedAt?: DateTimeFilter<"Group"> | Date | string
     userId?: IntNullableFilter<"Group"> | number | null
@@ -9108,7 +9091,6 @@ export namespace Prisma {
     groupId?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
-    groupColor?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrderInput | SortOrder
@@ -9126,7 +9108,6 @@ export namespace Prisma {
     groupId?: IntWithAggregatesFilter<"Group"> | number
     name?: StringWithAggregatesFilter<"Group"> | string
     description?: StringNullableWithAggregatesFilter<"Group"> | string | null
-    groupColor?: StringWithAggregatesFilter<"Group"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Group"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Group"> | Date | string
     userId?: IntNullableWithAggregatesFilter<"Group"> | number | null
@@ -9528,7 +9509,6 @@ export namespace Prisma {
   export type GroupCreateInput = {
     name: string
     description?: string | null
-    groupColor: string
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: GroupMemberCreateNestedManyWithoutGroupInput
@@ -9542,7 +9522,6 @@ export namespace Prisma {
     groupId?: number
     name: string
     description?: string | null
-    groupColor: string
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: number | null
@@ -9555,7 +9534,6 @@ export namespace Prisma {
   export type GroupUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    groupColor?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: GroupMemberUpdateManyWithoutGroupNestedInput
@@ -9569,7 +9547,6 @@ export namespace Prisma {
     groupId?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    groupColor?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -9583,7 +9560,6 @@ export namespace Prisma {
     groupId?: number
     name: string
     description?: string | null
-    groupColor: string
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: number | null
@@ -9592,7 +9568,6 @@ export namespace Prisma {
   export type GroupUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    groupColor?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9601,7 +9576,6 @@ export namespace Prisma {
     groupId?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    groupColor?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -10101,7 +10075,6 @@ export namespace Prisma {
     groupId?: SortOrder
     name?: SortOrder
     description?: SortOrder
-    groupColor?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -10116,7 +10089,6 @@ export namespace Prisma {
     groupId?: SortOrder
     name?: SortOrder
     description?: SortOrder
-    groupColor?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -10126,7 +10098,6 @@ export namespace Prisma {
     groupId?: SortOrder
     name?: SortOrder
     description?: SortOrder
-    groupColor?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -11384,7 +11355,6 @@ export namespace Prisma {
   export type GroupCreateWithoutUserInput = {
     name: string
     description?: string | null
-    groupColor: string
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: GroupMemberCreateNestedManyWithoutGroupInput
@@ -11397,7 +11367,6 @@ export namespace Prisma {
     groupId?: number
     name: string
     description?: string | null
-    groupColor: string
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: GroupMemberUncheckedCreateNestedManyWithoutGroupInput
@@ -11578,7 +11547,6 @@ export namespace Prisma {
     groupId?: IntFilter<"Group"> | number
     name?: StringFilter<"Group"> | string
     description?: StringNullableFilter<"Group"> | string | null
-    groupColor?: StringFilter<"Group"> | string
     createdAt?: DateTimeFilter<"Group"> | Date | string
     updatedAt?: DateTimeFilter<"Group"> | Date | string
     userId?: IntNullableFilter<"Group"> | number | null
@@ -12011,7 +11979,6 @@ export namespace Prisma {
   export type GroupCreateWithoutMembersInput = {
     name: string
     description?: string | null
-    groupColor: string
     createdAt?: Date | string
     updatedAt?: Date | string
     notifications?: NotificationCreateNestedManyWithoutGroupInput
@@ -12024,7 +11991,6 @@ export namespace Prisma {
     groupId?: number
     name: string
     description?: string | null
-    groupColor: string
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: number | null
@@ -12130,7 +12096,6 @@ export namespace Prisma {
   export type GroupUpdateWithoutMembersInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    groupColor?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notifications?: NotificationUpdateManyWithoutGroupNestedInput
@@ -12143,7 +12108,6 @@ export namespace Prisma {
     groupId?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    groupColor?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -12233,7 +12197,6 @@ export namespace Prisma {
   export type GroupCreateWithoutMeetingsInput = {
     name: string
     description?: string | null
-    groupColor: string
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: GroupMemberCreateNestedManyWithoutGroupInput
@@ -12246,7 +12209,6 @@ export namespace Prisma {
     groupId?: number
     name: string
     description?: string | null
-    groupColor: string
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: number | null
@@ -12347,7 +12309,6 @@ export namespace Prisma {
   export type GroupUpdateWithoutMeetingsInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    groupColor?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: GroupMemberUpdateManyWithoutGroupNestedInput
@@ -12360,7 +12321,6 @@ export namespace Prisma {
     groupId?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    groupColor?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -12424,7 +12384,6 @@ export namespace Prisma {
   export type GroupCreateWithoutNotificationsInput = {
     name: string
     description?: string | null
-    groupColor: string
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: GroupMemberCreateNestedManyWithoutGroupInput
@@ -12437,7 +12396,6 @@ export namespace Prisma {
     groupId?: number
     name: string
     description?: string | null
-    groupColor: string
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: number | null
@@ -12539,7 +12497,6 @@ export namespace Prisma {
   export type GroupUpdateWithoutNotificationsInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    groupColor?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: GroupMemberUpdateManyWithoutGroupNestedInput
@@ -12552,7 +12509,6 @@ export namespace Prisma {
     groupId?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    groupColor?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -12638,7 +12594,6 @@ export namespace Prisma {
   export type GroupCreateWithoutCalendarsInput = {
     name: string
     description?: string | null
-    groupColor: string
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: GroupMemberCreateNestedManyWithoutGroupInput
@@ -12651,7 +12606,6 @@ export namespace Prisma {
     groupId?: number
     name: string
     description?: string | null
-    groupColor: string
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: number | null
@@ -12721,7 +12675,6 @@ export namespace Prisma {
   export type GroupUpdateWithoutCalendarsInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    groupColor?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: GroupMemberUpdateManyWithoutGroupNestedInput
@@ -12734,7 +12687,6 @@ export namespace Prisma {
     groupId?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    groupColor?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -12747,7 +12699,6 @@ export namespace Prisma {
     groupId?: number
     name: string
     description?: string | null
-    groupColor: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12800,7 +12751,6 @@ export namespace Prisma {
   export type GroupUpdateWithoutUserInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    groupColor?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: GroupMemberUpdateManyWithoutGroupNestedInput
@@ -12813,7 +12763,6 @@ export namespace Prisma {
     groupId?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    groupColor?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
@@ -12826,7 +12775,6 @@ export namespace Prisma {
     groupId?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    groupColor?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
