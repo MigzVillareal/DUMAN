@@ -2,7 +2,7 @@
 
 @import "./variables.css";
 @import "./icons.css";
-@import "./meetings.css";
+@import "../components_styles/meetings.css";
 @import "./page-header.css";
 
 * {

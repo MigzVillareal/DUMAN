@@ -1,13 +1,25 @@
 import { Link } from "react-router-dom";
 import { formatEventTime, formatLongDate } from "../../utils/calendar.js";
+import "../../css/pages/Meetings.css";
 
 function CalendarEventCard({ event, onRsvp, isUpdating }) {
   const { status: rsvpStatus } = event.rsvp;
+  const schedule =
+    event.scheduleLabel ?? formatEventTime(event.schedule, event.endsAt);
 
   return (
     <article className="calendar-event-card">
-      <div className="calendar-event-card__header">
-        <h3 className="calendar-event-card__title">{event.title}</h3>
+      <div className="calendar-event-card__info">
+        <p className="meetings-list-item__name">
+          {event.intendedGroup.name} &mdash; {event.title}
+        </p>
+        <p className="meetings-list-item__meta">
+          {event.locationDetail ?? "—"}
+        </p>
+        <p className="meetings-list-item__meta">{schedule}</p>
+      </div>
+
+      <div className="calendar-event-card__footer">
         <Link
           to="/meetings"
           className="calendar-event-card__details-btn"
@@ -15,43 +27,25 @@ function CalendarEventCard({ event, onRsvp, isUpdating }) {
         >
           View Details
         </Link>
-      </div>
 
-      <dl className="calendar-event-card__meta">
-        <div className="calendar-event-card__row">
-          <dt>Group Name</dt>
-          <dd>{event.intendedGroup.name}</dd>
+        <div className="calendar-event-card__actions">
+          <button
+            type="button"
+            className={`calendar-rsvp-btn calendar-rsvp-btn--attending${rsvpStatus === "ATTENDING" ? " calendar-rsvp-btn--active" : ""}`}
+            disabled={isUpdating}
+            onClick={() => onRsvp(event.meetingId, "ATTENDING")}
+          >
+            Attending
+          </button>
+          <button
+            type="button"
+            className={`calendar-rsvp-btn calendar-rsvp-btn--decline${rsvpStatus === "DECLINED" ? " calendar-rsvp-btn--active" : ""}`}
+            disabled={isUpdating}
+            onClick={() => onRsvp(event.meetingId, "DECLINED")}
+          >
+            Decline
+          </button>
         </div>
-        <div className="calendar-event-card__row">
-          <dt>Time</dt>
-          <dd>
-            {event.scheduleLabel ??
-              formatEventTime(event.schedule, event.endsAt)}
-          </dd>
-        </div>
-        <div className="calendar-event-card__row">
-          <dt>Location</dt>
-          <dd>{event.locationDetail ?? "—"}</dd>
-        </div>
-      </dl>
-
-      <div className="calendar-event-card__actions">
-        <button
-          type="button"
-          className={`calendar-rsvp-btn calendar-rsvp-btn--attending${rsvpStatus === "ATTENDING" ? " calendar-rsvp-btn--active" : ""}`}
-          disabled={isUpdating}
-          onClick={() => onRsvp(event.meetingId, "ATTENDING")}
-        >
-          Attending
-        </button>
-        <button
-          type="button"
-          className={`calendar-rsvp-btn calendar-rsvp-btn--decline${rsvpStatus === "DECLINED" ? " calendar-rsvp-btn--active" : ""}`}
-          disabled={isUpdating}
-          onClick={() => onRsvp(event.meetingId, "DECLINED")}
-        >
-          Decline
-        </button>
       </div>
     </article>
   );

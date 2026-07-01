@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Icon from "./Icon.jsx";
-import "../css/global/navbar.css";
+import SignOutModal from "./SignOutModal.jsx";
+import "../css/components_styles/navbar.css";
 
 const NAV_LINKS = [
   { to: "/dashboard", label: "Dashboard" },
@@ -12,6 +13,7 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const [hasNotification, setHasNotification] = useState(true);
+  const [showSignOutModal, setShowSignOutModal] = useState(false);
   const navigate = useNavigate();
 
   return (
@@ -64,15 +66,16 @@ export default function Navbar() {
         <div className="navbar__signout">  
           <button
             className="navbar__signout-btn"
-            onClick={() => {
-              navigate("/signout");
-            }}
+            onClick={() => setShowSignOutModal(true)}
             title="Sign Out"
           >
             <Icon icon="signout" />
           </button>
         </div>
       </div>
+      {showSignOutModal && (
+        <SignOutModal onClose={() => setShowSignOutModal(false)} />
+      )}
     </nav>
   );
 }

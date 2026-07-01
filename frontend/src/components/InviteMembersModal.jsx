@@ -4,7 +4,7 @@ import { mapApiUserToInvitable } from "../utils/groups.js";
 import { INVITABLE_USERS } from "../data/groupsMock.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import Icon from "./Icon.jsx";
-import "../css/components/CreateGroupModal.css";
+import "../css/components_styles/CreateGroupModal.css";
 
 function getMemberSuggestions(
   query,

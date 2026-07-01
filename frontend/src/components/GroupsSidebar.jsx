@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useGroups } from "../context/GroupsContext.jsx";
 import CreateGroupModal from "./CreateGroupModal.jsx";
 import Icon from "./Icon.jsx";
-import "../css/global/sidebar.css";
+import "../css/components_styles/sidebar.css";
 
 export default function GroupsSidebar() {
   const [query, setQuery] = useState("");

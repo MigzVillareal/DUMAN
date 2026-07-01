@@ -127,9 +127,7 @@
   transition: background-color 0.15s ease;
 }
 
-.navbar__user-pill:hover {
-  background-color: var(--color-hover-surface);
-}
+
 
 .navbar__user-icon-wrapper {
   width: 28px;

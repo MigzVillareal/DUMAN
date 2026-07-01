@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
 import GroupsSidebar from "./GroupsSidebar";
 import { GroupsProvider } from "../context/GroupsContext.jsx";
-import "../css/global/layout.css";
+import "../css/components_styles/layout.css";
 
 function AppLayout() {
   return (

@@ -92,7 +92,7 @@
 /* ── Content layout (calendar + meeting panel side by side) ─────── */
 .calendar-content {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(240px, 300px);
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 330px);
   gap: 1rem;
   flex: 1;
   min-height: 0;
@@ -333,40 +333,46 @@
 
 /* ── Event card ─────────────────────────────────────────────────── */
 .calendar-event-card {
+  width: 100%;
+  text-align: left;
+  background-color: var(--color-inset);
   border: 1px solid var(--color-border);
-  border-radius: 0.75rem;
-  padding: 0.875rem;
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.75rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  background-color: var(--color-inset);
+  gap: 0.625rem;
+  font-family: var(--font-ui);
 }
 
-.calendar-event-card__header {
+.calendar-event-card__info {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.5rem;
+  flex-direction: column;
+  gap: 0.175rem;
 }
 
-.calendar-event-card__title {
-  font-family: var(--font-display);
-  font-size: 0.9375rem;
-  font-weight: var(--weight-bold);
-  color: var(--color-text);
-  margin: 0;
+.calendar-event-card__info .meetings-list-item__name {
   line-height: 1.35;
 }
 
+.calendar-event-card__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .calendar-event-card__details-btn {
-  flex-shrink: 0;
-  padding: 0.2rem 0.55rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem 0.75rem;
   border: 1px solid var(--color-border);
   border-radius: 999px;
   background-color: var(--color-panel);
   font-family: var(--font-ui);
-  font-size: 0.6875rem;
-  font-weight: var(--weight-medium);
+  font-size: 0.75rem;
+  font-weight: var(--weight-semibold);
   color: var(--color-text);
   text-decoration: none;
   transition: background-color 0.15s ease;
@@ -374,32 +380,6 @@
 
 .calendar-event-card__details-btn:hover {
   background-color: var(--color-hover-surface);
-}
-
-.calendar-event-card__meta {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-}
-
-.calendar-event-card__row {
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
-}
-
-.calendar-event-card__row dt {
-  font-size: 0.75rem;
-  font-weight: var(--weight-semibold);
-  color: var(--color-text);
-  margin: 0;
-}
-
-.calendar-event-card__row dd {
-  font-size: 0.8125rem;
-  color: #555;
-  margin: 0;
 }
 
 .calendar-event-card__actions {
