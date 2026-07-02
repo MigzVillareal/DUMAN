@@ -56,6 +56,46 @@
   gap: 0.5rem;
 }
 
+.group-page__member-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: auto;
+}
+
+.group-page__remove-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-container-text);
+  cursor: pointer;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.group-page__remove-btn:hover:not(:disabled),
+.group-page__remove-btn:focus-visible {
+  background-color: var(--color-hover-surface);
+  color: var(--color-destructive);
+  outline: none;
+}
+
+.group-page__remove-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.group-page__remove-error {
+  font-size: 0.8125rem;
+  color: var(--color-destructive);
+  margin: 0 0 0.75rem;
+}
+
 .group-page__member-name {
   font-size: 0.9375rem;
   font-weight: var(--weight-medium);

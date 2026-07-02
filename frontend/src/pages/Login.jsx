@@ -37,7 +37,7 @@ function Login() {
       }
 
       if (data.user) {
-        setUser(data.user);
+        setUser(data.user, data.token);
       }
 
       navigate("/dashboard");

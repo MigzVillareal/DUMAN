@@ -82,6 +82,30 @@ export function buildGroupMembers(user, invitedMembers = []) {
   return [creator, ...others];
 }
 
+export function isGroupLeader(authUser, group, members = []) {
+  if (!authUser || !group) return false;
+
+  if (
+    group.userId != null &&
+    Number(group.userId) === Number(authUser.userId)
+  ) {
+    return true;
+  }
+
+  const self = members.find(
+    (member) => Number(member.id) === Number(authUser.userId)
+  );
+
+  return self?.role === "leader";
+}
+
+export function canRemoveGroupMember(authUser, group, member, members = []) {
+  if (!isGroupLeader(authUser, group, members)) return false;
+  if (member.role === "leader") return false;
+  if (Number(member.id) === Number(authUser.userId)) return false;
+  return true;
+}
+
 export function ensureOwnerAsLeader(members, user, groupOwnerId) {
   if (!user || groupOwnerId !== user.userId) return members;
 

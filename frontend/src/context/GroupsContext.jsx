@@ -119,8 +119,7 @@ export function GroupsProvider({ children }) {
       for (const member of members) {
         try {
           await sendGroupInvite(created.groupId, {
-            userId: member.id,
-            invitedBy: user.userId,
+            email: member.email,
           });
         } catch {
           // Invite endpoint may fail until backend fixes land.
@@ -132,9 +131,19 @@ export function GroupsProvider({ children }) {
     return newGroup;
   };
 
+  const setGroupMembers = useCallback((targetGroupId, nextMembers) => {
+    setGroups((prev) =>
+      prev.map((group) =>
+        group.id === targetGroupId
+          ? { ...group, members: nextMembers }
+          : group
+      )
+    );
+  }, []);
+
   return (
     <GroupsContext.Provider
-      value={{ groups, addGroup, loading, error, loadGroups }}
+      value={{ groups, addGroup, setGroupMembers, loading, error, loadGroups }}
     >
       {children}
     </GroupsContext.Provider>

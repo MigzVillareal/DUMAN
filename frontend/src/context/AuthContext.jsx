@@ -1,4 +1,8 @@
 import { createContext, useContext, useState } from "react";
+import {
+  persistAuthSession,
+  readStoredToken,
+} from "../utils/authStorage.js";
 
 const AUTH_STORAGE_KEY = "duman_user";
 const AuthContext = createContext(null);
@@ -14,22 +18,26 @@ function readStoredUser() {
 
 export function AuthProvider({ children }) {
   const [user, setUserState] = useState(readStoredUser);
+  const [token, setTokenState] = useState(readStoredToken);
 
-  function setUser(nextUser) {
+  function setUser(nextUser, nextToken) {
     setUserState(nextUser);
-    if (nextUser) {
-      sessionStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(nextUser));
-    } else {
-      sessionStorage.removeItem(AUTH_STORAGE_KEY);
-    }
+
+    const resolvedToken =
+      nextToken !== undefined ? nextToken : nextUser ? token : null;
+
+    setTokenState(resolvedToken);
+    persistAuthSession(nextUser, resolvedToken);
   }
 
   function clearUser() {
-    setUser(null);
+    setUserState(null);
+    setTokenState(null);
+    persistAuthSession(null, null);
   }
 
   return (
-    <AuthContext.Provider value={{ user, setUser, clearUser }}>
+    <AuthContext.Provider value={{ user, token, setUser, clearUser }}>
       {children}
     </AuthContext.Provider>
   );
