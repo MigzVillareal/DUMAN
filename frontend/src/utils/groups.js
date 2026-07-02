@@ -1,3 +1,34 @@
+export function getAuthUserDisplayName(authUser) {
+  if (!authUser) return "";
+  return `${authUser.firstname ?? ""} ${authUser.lastname ?? ""}`.trim();
+}
+
+export function isSameAsAuthUser(candidate, authUser) {
+  if (!authUser || !candidate) return false;
+
+  if (
+    authUser.userId != null &&
+    candidate.id != null &&
+    Number(candidate.id) === Number(authUser.userId)
+  ) {
+    return true;
+  }
+
+  const authEmail = authUser.email?.trim().toLowerCase();
+  const candidateEmail = candidate.email?.trim().toLowerCase();
+  if (authEmail && candidateEmail && authEmail === candidateEmail) {
+    return true;
+  }
+
+  const authName = getAuthUserDisplayName(authUser).toLowerCase();
+  const candidateName = candidate.name?.trim().toLowerCase();
+  if (authName && candidateName && authName === candidateName) {
+    return true;
+  }
+
+  return false;
+}
+
 export function mapApiGroup(group) {
   return {
     id: String(group.groupId),
