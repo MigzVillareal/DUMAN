@@ -125,9 +125,8 @@
   cursor: pointer;
   background-color: var(--color-surface);
   transition: background-color 0.15s ease;
+  flex-shrink: 0;
 }
-
-
 
 .navbar__user-icon-wrapper {
   width: 28px;

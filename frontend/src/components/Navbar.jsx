@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
+import { getAuthUserDisplayName } from "../utils/groups.js";
 import Icon from "./Icon.jsx";
 import SignOutModal from "./SignOutModal.jsx";
 import "../css/components_styles/navbar.css";
@@ -12,9 +14,13 @@ const NAV_LINKS = [
 ];
 
 export default function Navbar() {
+  const { user } = useAuth();
   const [hasNotification, setHasNotification] = useState(true);
   const [showSignOutModal, setShowSignOutModal] = useState(false);
   const navigate = useNavigate();
+
+  const displayName = getAuthUserDisplayName(user) || "User";
+  const displayEmail = user?.email ?? "";
 
   return (
     <nav className="navbar">
@@ -58,8 +64,8 @@ export default function Navbar() {
             <Icon icon="user" size="sm" />
           </div>
           <div className="navbar__user-info">
-            <span className="navbar__user-name">Juan Cruz</span>
-            <span className="navbar__user-role">Student</span>
+            <span className="navbar__user-name">{displayName}</span>
+            <span className="navbar__user-role">{displayEmail}</span>
           </div>
         </div>
 

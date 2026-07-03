@@ -8,6 +8,7 @@ import { useGroups } from "../context/GroupsContext.jsx";
 import {
   acceptGroupInvite,
   declineGroupInvite,
+  fetchGroupById,
   fetchUserInvites,
 } from "../services/groupService.js";
 import { isToday } from "../utils/date.js";
@@ -72,7 +73,7 @@ function MeetingCard({ meeting }) {
 
 function Dashboard() {
   const { user } = useAuth();
-  const { loadGroups } = useGroups();
+  const { loadGroups, mergeGroup } = useGroups();
   const [meetings] = useState([]);
   const [invitations, setInvitations] = useState([]);
   const [invitesLoading, setInvitesLoading] = useState(true);
@@ -144,7 +145,13 @@ function Dashboard() {
       }
 
       setInvitations((prev) => prev.filter((entry) => entry.id !== invite.id));
-      loadGroups();
+
+      const groupData = await fetchGroupById(invite.groupId);
+      if (groupData.group) {
+        mergeGroup(groupData.group);
+      }
+
+      await loadGroups();
     } catch (err) {
       setInviteError(err.message || "Unable to accept invitation.");
     } finally {

@@ -141,9 +141,33 @@ export function GroupsProvider({ children }) {
     );
   }, []);
 
+  const mergeGroup = useCallback((group) => {
+    const mapped = mapApiGroup(group);
+
+    setGroups((prev) => {
+      const exists = prev.some(
+        (entry) =>
+          entry.id === mapped.id || entry.groupId === mapped.groupId
+      );
+
+      if (exists) return prev;
+      return [...prev, mapped];
+    });
+
+    return mapped;
+  }, []);
+
   return (
     <GroupsContext.Provider
-      value={{ groups, addGroup, setGroupMembers, loading, error, loadGroups }}
+      value={{
+        groups,
+        addGroup,
+        mergeGroup,
+        setGroupMembers,
+        loading,
+        error,
+        loadGroups,
+      }}
     >
       {children}
     </GroupsContext.Provider>
