@@ -17,14 +17,14 @@ const transporter = nodemailer.createTransport({
 
 const mailSelf = "duman.masarean@gmail.com";
 const mailDevs = "jjcleofe@gbox.adnu.edu.ph, jmvillareal@gbox.adnu.edu.ph";
-const mailTo = "";
-const mailSubject = "Empty Subject";
-const mailText = "Empty Text";
+const mailTo = "jiancleofe7@gmail.com";
+const mailSubject = "oooooo you got bcc'd mannn";
+const mailText = "testing testicles";
 
 try {
   const info = await transporter.sendMail({
     from: '"DUMAN" <duman.masarean@gmail.com>',
-    to: `${mailSelf}, ${mailDevs}, ${mailTo}`,
+    bcc: `${mailSelf}, ${mailDevs}, ${mailTo}`,
     subject: mailSubject,
     text: mailText,
   });
