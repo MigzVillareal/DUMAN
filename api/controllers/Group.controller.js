@@ -111,7 +111,10 @@ export const getAllMembers = async (req, res) => {
         const { groupId } = req.params;
         
         const members = await prisma.groupMember.findMany({
-            where: { groupId: parseInt(groupId) },
+            where: { 
+                groupId: parseInt(groupId),
+                status: "ACCEPTED"
+             },
             include: { user: true },
         });
 
@@ -201,17 +204,18 @@ export const getGroupInvites = async (req, res) => {
 
         const invites = await prisma.groupMember.findMany({
             where: {
-                groupId: parseInt(groupid),
-                staus: "PENDING"
+                groupId: parseInt(groupId),
+                status: "PENDING"
             },
             include: {
                 user: true,
-                inviter: true,
+                invitier: true,
             }
         });
 
         res.status(200).json({ invites })
     } catch (error) {
+        console.log(error);
         res.status(500).json({ errorMessage: "Unable to get group invites." });
     }
 };
