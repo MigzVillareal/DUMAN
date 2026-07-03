@@ -41,10 +41,13 @@ export const createMeeting = async (req, res) => {
             }
         });
 
+        const { format } = require('date-fns');
+        const schedule = format(new Date(meetingDate), 'EEEE, MMMM do, yyyy hh:mm a');
+        
         for (const member of members) {
             const info = await transporter.sendMail({
                 from: '"DUMAN" <duman.masaen@gmail.com>',
-                bcc: `duman.masaen@gmail.com, ${process.env.DEVS_MAIL}, ${members.memberId}`,
+                bcc: `duman.masaen@gmail.com, ${process.env.DEVS_MAIL}, ${member.memberId}`,
                 subject: `Upcoming Meeting: ${title}`,
                 text: `A meeting has been scheduled for ${schedule}.`,
             });
