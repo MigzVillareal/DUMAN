@@ -7,10 +7,26 @@ async function parseJson(response) {
 }
 
 export async function fetchGroups(userId) {
-  const response = await fetch(`/api/v1/groups?userId=${userId}`, {
+  const response = await fetch("/api/v1/groups", {
     headers: getAuthHeaders(),
   });
-  return parseJson(response);
+  const data = await parseJson(response);
+
+  if (data.errorMessage) {
+    return data;
+  }
+
+  const numericUserId = Number(userId);
+  const groups = (data.groups ?? []).filter(
+    (group) =>
+      group.userId === numericUserId ||
+      group.members?.some(
+        (member) =>
+          member.memberId === numericUserId && member.status === "ACCEPTED"
+      )
+  );
+
+  return { groups };
 }
 
 export async function fetchGroupById(groupId) {
