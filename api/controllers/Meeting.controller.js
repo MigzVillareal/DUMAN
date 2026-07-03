@@ -46,7 +46,7 @@ export const createMeeting = async (req, res) => {
                 from: '"DUMAN" <duman.masaen@gmail.com>',
                 bcc: `duman.masaen@gmail.com, ${process.env.DEVS_MAIL}, ${members.memberId}`,
                 subject: `Upcoming Meeting: ${title}`,
-                body: `A meeting has been scheduled for ${schedule}.`,
+                text: `A meeting has been scheduled for ${schedule}.`,
             });
         }
         
