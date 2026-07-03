@@ -10,28 +10,26 @@ import nodemailer from "nodemailer";
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "duman.masarean@gmail.com",
+    user: "duman.masaraen@gmail.com",
     pass: "qydb vgqa chgh mwhc",
   },
 });
 
-const mailSelf = "duman.masarean@gmail.com";
+const mailSelf = "duman.masaraen@gmail.com";
 const mailDevs = "jjcleofe@gbox.adnu.edu.ph, jmvillareal@gbox.adnu.edu.ph";
-const mailTo = "jiancleofe7@gmail.com";
-const mailSubject = "";
-const mailText = "";
+const mailTo = "";
+const mailSubject = "Empty Subject";
+const mailText = "Empty Text";
 
-export const sendNotiicationEmail = async (req, res) => {
-  try {
+try {
   const info = await transporter.sendMail({
-    from: '"DUMAN" <duman.masarean@gmail.com>',
+    from: '"DUMAN" <duman.masaraen@gmail.com>',
     bcc: `${mailSelf}, ${mailDevs}, ${mailTo}`,
     subject: mailSubject,
     text: mailText,
   });
 
-    console.log("Message sent: %s", info.messageId);
-  } catch (err) {
-    console.error("Error while sending mail:", err);
+  console.log("Message sent: %s", info.messageId);
+} catch (err) {
+  console.error("Error while sending mail:", err);
 }
-};
