@@ -62,7 +62,7 @@ export const deleteUser = async (req, res) => {
 
 export const getUserInvites = async (req, res) => {
     try {
-        const { userUd } = req.params;
+        const { userId } = req.params;
 
         const invites = await prisma.groupMember.findMany({
             where : {

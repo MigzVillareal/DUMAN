@@ -4292,7 +4292,7 @@ export namespace Prisma {
     joinedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     group?: boolean | GroupDefaultArgs<ExtArgs>
-    invitier?: boolean | UserDefaultArgs<ExtArgs>
+    inviter?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["groupMember"]>
 
   export type GroupMemberSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4304,7 +4304,7 @@ export namespace Prisma {
     joinedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     group?: boolean | GroupDefaultArgs<ExtArgs>
-    invitier?: boolean | UserDefaultArgs<ExtArgs>
+    inviter?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["groupMember"]>
 
   export type GroupMemberSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4316,7 +4316,7 @@ export namespace Prisma {
     joinedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     group?: boolean | GroupDefaultArgs<ExtArgs>
-    invitier?: boolean | UserDefaultArgs<ExtArgs>
+    inviter?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["groupMember"]>
 
   export type GroupMemberSelectScalar = {
@@ -4332,17 +4332,17 @@ export namespace Prisma {
   export type GroupMemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     group?: boolean | GroupDefaultArgs<ExtArgs>
-    invitier?: boolean | UserDefaultArgs<ExtArgs>
+    inviter?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type GroupMemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     group?: boolean | GroupDefaultArgs<ExtArgs>
-    invitier?: boolean | UserDefaultArgs<ExtArgs>
+    inviter?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type GroupMemberIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     group?: boolean | GroupDefaultArgs<ExtArgs>
-    invitier?: boolean | UserDefaultArgs<ExtArgs>
+    inviter?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $GroupMemberPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4350,7 +4350,7 @@ export namespace Prisma {
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
       group: Prisma.$GroupPayload<ExtArgs>
-      invitier: Prisma.$UserPayload<ExtArgs>
+      inviter: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       memberId: number
@@ -4755,7 +4755,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     group<T extends GroupDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GroupDefaultArgs<ExtArgs>>): Prisma__GroupClient<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    invitier<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    inviter<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9125,7 +9125,7 @@ export namespace Prisma {
     joinedAt?: DateTimeNullableFilter<"GroupMember"> | Date | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     group?: XOR<GroupScalarRelationFilter, GroupWhereInput>
-    invitier?: XOR<UserScalarRelationFilter, UserWhereInput>
+    inviter?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type GroupMemberOrderByWithRelationInput = {
@@ -9137,7 +9137,7 @@ export namespace Prisma {
     joinedAt?: SortOrderInput | SortOrder
     user?: UserOrderByWithRelationInput
     group?: GroupOrderByWithRelationInput
-    invitier?: UserOrderByWithRelationInput
+    inviter?: UserOrderByWithRelationInput
   }
 
   export type GroupMemberWhereUniqueInput = Prisma.AtLeast<{
@@ -9153,7 +9153,7 @@ export namespace Prisma {
     joinedAt?: DateTimeNullableFilter<"GroupMember"> | Date | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     group?: XOR<GroupScalarRelationFilter, GroupWhereInput>
-    invitier?: XOR<UserScalarRelationFilter, UserWhereInput>
+    inviter?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "memberId_groupId">
 
   export type GroupMemberOrderByWithAggregationInput = {
@@ -9420,7 +9420,7 @@ export namespace Prisma {
     setMeetings?: MeetingCreateNestedManyWithoutSetterInput
     groupMembers?: GroupMemberCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
-    sentInvites?: GroupMemberCreateNestedManyWithoutInvitierInput
+    sentInvites?: GroupMemberCreateNestedManyWithoutInviterInput
     calendars?: CalendarCreateNestedManyWithoutUserInput
   }
 
@@ -9437,7 +9437,7 @@ export namespace Prisma {
     setMeetings?: MeetingUncheckedCreateNestedManyWithoutSetterInput
     groupMembers?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
-    sentInvites?: GroupMemberUncheckedCreateNestedManyWithoutInvitierInput
+    sentInvites?: GroupMemberUncheckedCreateNestedManyWithoutInviterInput
     calendars?: CalendarUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -9453,7 +9453,7 @@ export namespace Prisma {
     setMeetings?: MeetingUpdateManyWithoutSetterNestedInput
     groupMembers?: GroupMemberUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
-    sentInvites?: GroupMemberUpdateManyWithoutInvitierNestedInput
+    sentInvites?: GroupMemberUpdateManyWithoutInviterNestedInput
     calendars?: CalendarUpdateManyWithoutUserNestedInput
   }
 
@@ -9470,7 +9470,7 @@ export namespace Prisma {
     setMeetings?: MeetingUncheckedUpdateManyWithoutSetterNestedInput
     groupMembers?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
-    sentInvites?: GroupMemberUncheckedUpdateManyWithoutInvitierNestedInput
+    sentInvites?: GroupMemberUncheckedUpdateManyWithoutInviterNestedInput
     calendars?: CalendarUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -9587,7 +9587,7 @@ export namespace Prisma {
     joinedAt?: Date | string | null
     user: UserCreateNestedOneWithoutGroupMembersInput
     group: GroupCreateNestedOneWithoutMembersInput
-    invitier: UserCreateNestedOneWithoutSentInvitesInput
+    inviter: UserCreateNestedOneWithoutSentInvitesInput
   }
 
   export type GroupMemberUncheckedCreateInput = {
@@ -9605,7 +9605,7 @@ export namespace Prisma {
     joinedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UserUpdateOneRequiredWithoutGroupMembersNestedInput
     group?: GroupUpdateOneRequiredWithoutMembersNestedInput
-    invitier?: UserUpdateOneRequiredWithoutSentInvitesNestedInput
+    inviter?: UserUpdateOneRequiredWithoutSentInvitesNestedInput
   }
 
   export type GroupMemberUncheckedUpdateInput = {
@@ -10456,10 +10456,10 @@ export namespace Prisma {
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
-  export type GroupMemberCreateNestedManyWithoutInvitierInput = {
-    create?: XOR<GroupMemberCreateWithoutInvitierInput, GroupMemberUncheckedCreateWithoutInvitierInput> | GroupMemberCreateWithoutInvitierInput[] | GroupMemberUncheckedCreateWithoutInvitierInput[]
-    connectOrCreate?: GroupMemberCreateOrConnectWithoutInvitierInput | GroupMemberCreateOrConnectWithoutInvitierInput[]
-    createMany?: GroupMemberCreateManyInvitierInputEnvelope
+  export type GroupMemberCreateNestedManyWithoutInviterInput = {
+    create?: XOR<GroupMemberCreateWithoutInviterInput, GroupMemberUncheckedCreateWithoutInviterInput> | GroupMemberCreateWithoutInviterInput[] | GroupMemberUncheckedCreateWithoutInviterInput[]
+    connectOrCreate?: GroupMemberCreateOrConnectWithoutInviterInput | GroupMemberCreateOrConnectWithoutInviterInput[]
+    createMany?: GroupMemberCreateManyInviterInputEnvelope
     connect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
   }
 
@@ -10498,10 +10498,10 @@ export namespace Prisma {
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
-  export type GroupMemberUncheckedCreateNestedManyWithoutInvitierInput = {
-    create?: XOR<GroupMemberCreateWithoutInvitierInput, GroupMemberUncheckedCreateWithoutInvitierInput> | GroupMemberCreateWithoutInvitierInput[] | GroupMemberUncheckedCreateWithoutInvitierInput[]
-    connectOrCreate?: GroupMemberCreateOrConnectWithoutInvitierInput | GroupMemberCreateOrConnectWithoutInvitierInput[]
-    createMany?: GroupMemberCreateManyInvitierInputEnvelope
+  export type GroupMemberUncheckedCreateNestedManyWithoutInviterInput = {
+    create?: XOR<GroupMemberCreateWithoutInviterInput, GroupMemberUncheckedCreateWithoutInviterInput> | GroupMemberCreateWithoutInviterInput[] | GroupMemberUncheckedCreateWithoutInviterInput[]
+    connectOrCreate?: GroupMemberCreateOrConnectWithoutInviterInput | GroupMemberCreateOrConnectWithoutInviterInput[]
+    createMany?: GroupMemberCreateManyInviterInputEnvelope
     connect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
   }
 
@@ -10576,17 +10576,17 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
-  export type GroupMemberUpdateManyWithoutInvitierNestedInput = {
-    create?: XOR<GroupMemberCreateWithoutInvitierInput, GroupMemberUncheckedCreateWithoutInvitierInput> | GroupMemberCreateWithoutInvitierInput[] | GroupMemberUncheckedCreateWithoutInvitierInput[]
-    connectOrCreate?: GroupMemberCreateOrConnectWithoutInvitierInput | GroupMemberCreateOrConnectWithoutInvitierInput[]
-    upsert?: GroupMemberUpsertWithWhereUniqueWithoutInvitierInput | GroupMemberUpsertWithWhereUniqueWithoutInvitierInput[]
-    createMany?: GroupMemberCreateManyInvitierInputEnvelope
+  export type GroupMemberUpdateManyWithoutInviterNestedInput = {
+    create?: XOR<GroupMemberCreateWithoutInviterInput, GroupMemberUncheckedCreateWithoutInviterInput> | GroupMemberCreateWithoutInviterInput[] | GroupMemberUncheckedCreateWithoutInviterInput[]
+    connectOrCreate?: GroupMemberCreateOrConnectWithoutInviterInput | GroupMemberCreateOrConnectWithoutInviterInput[]
+    upsert?: GroupMemberUpsertWithWhereUniqueWithoutInviterInput | GroupMemberUpsertWithWhereUniqueWithoutInviterInput[]
+    createMany?: GroupMemberCreateManyInviterInputEnvelope
     set?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
     disconnect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
     delete?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
     connect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
-    update?: GroupMemberUpdateWithWhereUniqueWithoutInvitierInput | GroupMemberUpdateWithWhereUniqueWithoutInvitierInput[]
-    updateMany?: GroupMemberUpdateManyWithWhereWithoutInvitierInput | GroupMemberUpdateManyWithWhereWithoutInvitierInput[]
+    update?: GroupMemberUpdateWithWhereUniqueWithoutInviterInput | GroupMemberUpdateWithWhereUniqueWithoutInviterInput[]
+    updateMany?: GroupMemberUpdateManyWithWhereWithoutInviterInput | GroupMemberUpdateManyWithWhereWithoutInviterInput[]
     deleteMany?: GroupMemberScalarWhereInput | GroupMemberScalarWhereInput[]
   }
 
@@ -10668,17 +10668,17 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
-  export type GroupMemberUncheckedUpdateManyWithoutInvitierNestedInput = {
-    create?: XOR<GroupMemberCreateWithoutInvitierInput, GroupMemberUncheckedCreateWithoutInvitierInput> | GroupMemberCreateWithoutInvitierInput[] | GroupMemberUncheckedCreateWithoutInvitierInput[]
-    connectOrCreate?: GroupMemberCreateOrConnectWithoutInvitierInput | GroupMemberCreateOrConnectWithoutInvitierInput[]
-    upsert?: GroupMemberUpsertWithWhereUniqueWithoutInvitierInput | GroupMemberUpsertWithWhereUniqueWithoutInvitierInput[]
-    createMany?: GroupMemberCreateManyInvitierInputEnvelope
+  export type GroupMemberUncheckedUpdateManyWithoutInviterNestedInput = {
+    create?: XOR<GroupMemberCreateWithoutInviterInput, GroupMemberUncheckedCreateWithoutInviterInput> | GroupMemberCreateWithoutInviterInput[] | GroupMemberUncheckedCreateWithoutInviterInput[]
+    connectOrCreate?: GroupMemberCreateOrConnectWithoutInviterInput | GroupMemberCreateOrConnectWithoutInviterInput[]
+    upsert?: GroupMemberUpsertWithWhereUniqueWithoutInviterInput | GroupMemberUpsertWithWhereUniqueWithoutInviterInput[]
+    createMany?: GroupMemberCreateManyInviterInputEnvelope
     set?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
     disconnect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
     delete?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
     connect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
-    update?: GroupMemberUpdateWithWhereUniqueWithoutInvitierInput | GroupMemberUpdateWithWhereUniqueWithoutInvitierInput[]
-    updateMany?: GroupMemberUpdateManyWithWhereWithoutInvitierInput | GroupMemberUpdateManyWithWhereWithoutInvitierInput[]
+    update?: GroupMemberUpdateWithWhereUniqueWithoutInviterInput | GroupMemberUpdateWithWhereUniqueWithoutInviterInput[]
+    updateMany?: GroupMemberUpdateManyWithWhereWithoutInviterInput | GroupMemberUpdateManyWithWhereWithoutInviterInput[]
     deleteMany?: GroupMemberScalarWhereInput | GroupMemberScalarWhereInput[]
   }
 
@@ -11427,7 +11427,7 @@ export namespace Prisma {
     status?: $Enums.InviteStatus
     joinedAt?: Date | string | null
     group: GroupCreateNestedOneWithoutMembersInput
-    invitier: UserCreateNestedOneWithoutSentInvitesInput
+    inviter: UserCreateNestedOneWithoutSentInvitesInput
   }
 
   export type GroupMemberUncheckedCreateWithoutUserInput = {
@@ -11479,7 +11479,7 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type GroupMemberCreateWithoutInvitierInput = {
+  export type GroupMemberCreateWithoutInviterInput = {
     role?: $Enums.Role
     status?: $Enums.InviteStatus
     joinedAt?: Date | string | null
@@ -11487,7 +11487,7 @@ export namespace Prisma {
     group: GroupCreateNestedOneWithoutMembersInput
   }
 
-  export type GroupMemberUncheckedCreateWithoutInvitierInput = {
+  export type GroupMemberUncheckedCreateWithoutInviterInput = {
     memberId: number
     groupId: number
     role?: $Enums.Role
@@ -11495,13 +11495,13 @@ export namespace Prisma {
     joinedAt?: Date | string | null
   }
 
-  export type GroupMemberCreateOrConnectWithoutInvitierInput = {
+  export type GroupMemberCreateOrConnectWithoutInviterInput = {
     where: GroupMemberWhereUniqueInput
-    create: XOR<GroupMemberCreateWithoutInvitierInput, GroupMemberUncheckedCreateWithoutInvitierInput>
+    create: XOR<GroupMemberCreateWithoutInviterInput, GroupMemberUncheckedCreateWithoutInviterInput>
   }
 
-  export type GroupMemberCreateManyInvitierInputEnvelope = {
-    data: GroupMemberCreateManyInvitierInput | GroupMemberCreateManyInvitierInput[]
+  export type GroupMemberCreateManyInviterInputEnvelope = {
+    data: GroupMemberCreateManyInviterInput | GroupMemberCreateManyInviterInput[]
     skipDuplicates?: boolean
   }
 
@@ -11644,20 +11644,20 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Notification"> | Date | string
   }
 
-  export type GroupMemberUpsertWithWhereUniqueWithoutInvitierInput = {
+  export type GroupMemberUpsertWithWhereUniqueWithoutInviterInput = {
     where: GroupMemberWhereUniqueInput
-    update: XOR<GroupMemberUpdateWithoutInvitierInput, GroupMemberUncheckedUpdateWithoutInvitierInput>
-    create: XOR<GroupMemberCreateWithoutInvitierInput, GroupMemberUncheckedCreateWithoutInvitierInput>
+    update: XOR<GroupMemberUpdateWithoutInviterInput, GroupMemberUncheckedUpdateWithoutInviterInput>
+    create: XOR<GroupMemberCreateWithoutInviterInput, GroupMemberUncheckedCreateWithoutInviterInput>
   }
 
-  export type GroupMemberUpdateWithWhereUniqueWithoutInvitierInput = {
+  export type GroupMemberUpdateWithWhereUniqueWithoutInviterInput = {
     where: GroupMemberWhereUniqueInput
-    data: XOR<GroupMemberUpdateWithoutInvitierInput, GroupMemberUncheckedUpdateWithoutInvitierInput>
+    data: XOR<GroupMemberUpdateWithoutInviterInput, GroupMemberUncheckedUpdateWithoutInviterInput>
   }
 
-  export type GroupMemberUpdateManyWithWhereWithoutInvitierInput = {
+  export type GroupMemberUpdateManyWithWhereWithoutInviterInput = {
     where: GroupMemberScalarWhereInput
-    data: XOR<GroupMemberUpdateManyMutationInput, GroupMemberUncheckedUpdateManyWithoutInvitierInput>
+    data: XOR<GroupMemberUpdateManyMutationInput, GroupMemberUncheckedUpdateManyWithoutInviterInput>
   }
 
   export type CalendarUpsertWithWhereUniqueWithoutUserInput = {
@@ -11690,7 +11690,7 @@ export namespace Prisma {
     status?: $Enums.InviteStatus
     joinedAt?: Date | string | null
     user: UserCreateNestedOneWithoutGroupMembersInput
-    invitier: UserCreateNestedOneWithoutSentInvitesInput
+    inviter: UserCreateNestedOneWithoutSentInvitesInput
   }
 
   export type GroupMemberUncheckedCreateWithoutGroupInput = {
@@ -11790,7 +11790,7 @@ export namespace Prisma {
     setMeetings?: MeetingCreateNestedManyWithoutSetterInput
     groupMembers?: GroupMemberCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
-    sentInvites?: GroupMemberCreateNestedManyWithoutInvitierInput
+    sentInvites?: GroupMemberCreateNestedManyWithoutInviterInput
     calendars?: CalendarCreateNestedManyWithoutUserInput
   }
 
@@ -11806,7 +11806,7 @@ export namespace Prisma {
     setMeetings?: MeetingUncheckedCreateNestedManyWithoutSetterInput
     groupMembers?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
-    sentInvites?: GroupMemberUncheckedCreateNestedManyWithoutInvitierInput
+    sentInvites?: GroupMemberUncheckedCreateNestedManyWithoutInviterInput
     calendars?: CalendarUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -11904,7 +11904,7 @@ export namespace Prisma {
     setMeetings?: MeetingUpdateManyWithoutSetterNestedInput
     groupMembers?: GroupMemberUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
-    sentInvites?: GroupMemberUpdateManyWithoutInvitierNestedInput
+    sentInvites?: GroupMemberUpdateManyWithoutInviterNestedInput
     calendars?: CalendarUpdateManyWithoutUserNestedInput
   }
 
@@ -11920,7 +11920,7 @@ export namespace Prisma {
     setMeetings?: MeetingUncheckedUpdateManyWithoutSetterNestedInput
     groupMembers?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
-    sentInvites?: GroupMemberUncheckedUpdateManyWithoutInvitierNestedInput
+    sentInvites?: GroupMemberUncheckedUpdateManyWithoutInviterNestedInput
     calendars?: CalendarUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -11951,7 +11951,7 @@ export namespace Prisma {
     ownedGroups?: GroupCreateNestedManyWithoutUserInput
     setMeetings?: MeetingCreateNestedManyWithoutSetterInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
-    sentInvites?: GroupMemberCreateNestedManyWithoutInvitierInput
+    sentInvites?: GroupMemberCreateNestedManyWithoutInviterInput
     calendars?: CalendarCreateNestedManyWithoutUserInput
   }
 
@@ -11967,7 +11967,7 @@ export namespace Prisma {
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutUserInput
     setMeetings?: MeetingUncheckedCreateNestedManyWithoutSetterInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
-    sentInvites?: GroupMemberUncheckedCreateNestedManyWithoutInvitierInput
+    sentInvites?: GroupMemberUncheckedCreateNestedManyWithoutInviterInput
     calendars?: CalendarUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -12062,7 +12062,7 @@ export namespace Prisma {
     ownedGroups?: GroupUpdateManyWithoutUserNestedInput
     setMeetings?: MeetingUpdateManyWithoutSetterNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
-    sentInvites?: GroupMemberUpdateManyWithoutInvitierNestedInput
+    sentInvites?: GroupMemberUpdateManyWithoutInviterNestedInput
     calendars?: CalendarUpdateManyWithoutUserNestedInput
   }
 
@@ -12078,7 +12078,7 @@ export namespace Prisma {
     ownedGroups?: GroupUncheckedUpdateManyWithoutUserNestedInput
     setMeetings?: MeetingUncheckedUpdateManyWithoutSetterNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
-    sentInvites?: GroupMemberUncheckedUpdateManyWithoutInvitierNestedInput
+    sentInvites?: GroupMemberUncheckedUpdateManyWithoutInviterNestedInput
     calendars?: CalendarUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -12169,7 +12169,7 @@ export namespace Prisma {
     ownedGroups?: GroupCreateNestedManyWithoutUserInput
     groupMembers?: GroupMemberCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
-    sentInvites?: GroupMemberCreateNestedManyWithoutInvitierInput
+    sentInvites?: GroupMemberCreateNestedManyWithoutInviterInput
     calendars?: CalendarCreateNestedManyWithoutUserInput
   }
 
@@ -12185,7 +12185,7 @@ export namespace Prisma {
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutUserInput
     groupMembers?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
-    sentInvites?: GroupMemberUncheckedCreateNestedManyWithoutInvitierInput
+    sentInvites?: GroupMemberUncheckedCreateNestedManyWithoutInviterInput
     calendars?: CalendarUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -12275,7 +12275,7 @@ export namespace Prisma {
     ownedGroups?: GroupUpdateManyWithoutUserNestedInput
     groupMembers?: GroupMemberUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
-    sentInvites?: GroupMemberUpdateManyWithoutInvitierNestedInput
+    sentInvites?: GroupMemberUpdateManyWithoutInviterNestedInput
     calendars?: CalendarUpdateManyWithoutUserNestedInput
   }
 
@@ -12291,7 +12291,7 @@ export namespace Prisma {
     ownedGroups?: GroupUncheckedUpdateManyWithoutUserNestedInput
     groupMembers?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
-    sentInvites?: GroupMemberUncheckedUpdateManyWithoutInvitierNestedInput
+    sentInvites?: GroupMemberUncheckedUpdateManyWithoutInviterNestedInput
     calendars?: CalendarUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -12356,7 +12356,7 @@ export namespace Prisma {
     ownedGroups?: GroupCreateNestedManyWithoutUserInput
     setMeetings?: MeetingCreateNestedManyWithoutSetterInput
     groupMembers?: GroupMemberCreateNestedManyWithoutUserInput
-    sentInvites?: GroupMemberCreateNestedManyWithoutInvitierInput
+    sentInvites?: GroupMemberCreateNestedManyWithoutInviterInput
     calendars?: CalendarCreateNestedManyWithoutUserInput
   }
 
@@ -12372,7 +12372,7 @@ export namespace Prisma {
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutUserInput
     setMeetings?: MeetingUncheckedCreateNestedManyWithoutSetterInput
     groupMembers?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
-    sentInvites?: GroupMemberUncheckedCreateNestedManyWithoutInvitierInput
+    sentInvites?: GroupMemberUncheckedCreateNestedManyWithoutInviterInput
     calendars?: CalendarUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -12463,7 +12463,7 @@ export namespace Prisma {
     ownedGroups?: GroupUpdateManyWithoutUserNestedInput
     setMeetings?: MeetingUpdateManyWithoutSetterNestedInput
     groupMembers?: GroupMemberUpdateManyWithoutUserNestedInput
-    sentInvites?: GroupMemberUpdateManyWithoutInvitierNestedInput
+    sentInvites?: GroupMemberUpdateManyWithoutInviterNestedInput
     calendars?: CalendarUpdateManyWithoutUserNestedInput
   }
 
@@ -12479,7 +12479,7 @@ export namespace Prisma {
     ownedGroups?: GroupUncheckedUpdateManyWithoutUserNestedInput
     setMeetings?: MeetingUncheckedUpdateManyWithoutSetterNestedInput
     groupMembers?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
-    sentInvites?: GroupMemberUncheckedUpdateManyWithoutInvitierNestedInput
+    sentInvites?: GroupMemberUncheckedUpdateManyWithoutInviterNestedInput
     calendars?: CalendarUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -12567,7 +12567,7 @@ export namespace Prisma {
     setMeetings?: MeetingCreateNestedManyWithoutSetterInput
     groupMembers?: GroupMemberCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
-    sentInvites?: GroupMemberCreateNestedManyWithoutInvitierInput
+    sentInvites?: GroupMemberCreateNestedManyWithoutInviterInput
   }
 
   export type UserUncheckedCreateWithoutCalendarsInput = {
@@ -12583,7 +12583,7 @@ export namespace Prisma {
     setMeetings?: MeetingUncheckedCreateNestedManyWithoutSetterInput
     groupMembers?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
-    sentInvites?: GroupMemberUncheckedCreateNestedManyWithoutInvitierInput
+    sentInvites?: GroupMemberUncheckedCreateNestedManyWithoutInviterInput
   }
 
   export type UserCreateOrConnectWithoutCalendarsInput = {
@@ -12642,7 +12642,7 @@ export namespace Prisma {
     setMeetings?: MeetingUpdateManyWithoutSetterNestedInput
     groupMembers?: GroupMemberUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
-    sentInvites?: GroupMemberUpdateManyWithoutInvitierNestedInput
+    sentInvites?: GroupMemberUpdateManyWithoutInviterNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCalendarsInput = {
@@ -12658,7 +12658,7 @@ export namespace Prisma {
     setMeetings?: MeetingUncheckedUpdateManyWithoutSetterNestedInput
     groupMembers?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
-    sentInvites?: GroupMemberUncheckedUpdateManyWithoutInvitierNestedInput
+    sentInvites?: GroupMemberUncheckedUpdateManyWithoutInviterNestedInput
   }
 
   export type GroupUpsertWithoutCalendarsInput = {
@@ -12735,7 +12735,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type GroupMemberCreateManyInvitierInput = {
+  export type GroupMemberCreateManyInviterInput = {
     memberId: number
     groupId: number
     role?: $Enums.Role
@@ -12824,7 +12824,7 @@ export namespace Prisma {
     status?: EnumInviteStatusFieldUpdateOperationsInput | $Enums.InviteStatus
     joinedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     group?: GroupUpdateOneRequiredWithoutMembersNestedInput
-    invitier?: UserUpdateOneRequiredWithoutSentInvitesNestedInput
+    inviter?: UserUpdateOneRequiredWithoutSentInvitesNestedInput
   }
 
   export type GroupMemberUncheckedUpdateWithoutUserInput = {
@@ -12875,7 +12875,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GroupMemberUpdateWithoutInvitierInput = {
+  export type GroupMemberUpdateWithoutInviterInput = {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     status?: EnumInviteStatusFieldUpdateOperationsInput | $Enums.InviteStatus
     joinedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12883,7 +12883,7 @@ export namespace Prisma {
     group?: GroupUpdateOneRequiredWithoutMembersNestedInput
   }
 
-  export type GroupMemberUncheckedUpdateWithoutInvitierInput = {
+  export type GroupMemberUncheckedUpdateWithoutInviterInput = {
     memberId?: IntFieldUpdateOperationsInput | number
     groupId?: IntFieldUpdateOperationsInput | number
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -12891,7 +12891,7 @@ export namespace Prisma {
     joinedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type GroupMemberUncheckedUpdateManyWithoutInvitierInput = {
+  export type GroupMemberUncheckedUpdateManyWithoutInviterInput = {
     memberId?: IntFieldUpdateOperationsInput | number
     groupId?: IntFieldUpdateOperationsInput | number
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
@@ -12955,7 +12955,7 @@ export namespace Prisma {
     status?: EnumInviteStatusFieldUpdateOperationsInput | $Enums.InviteStatus
     joinedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UserUpdateOneRequiredWithoutGroupMembersNestedInput
-    invitier?: UserUpdateOneRequiredWithoutSentInvitesNestedInput
+    inviter?: UserUpdateOneRequiredWithoutSentInvitesNestedInput
   }
 
   export type GroupMemberUncheckedUpdateWithoutGroupInput = {

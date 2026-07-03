@@ -85,9 +85,9 @@ model GroupMember {
   invitedBy Int
   joinedAt  DateTime?
 
-  user     User  @relation(fields: [memberId], references: [userId], onDelete: Cascade)
-  group    Group @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
-  invitier User  @relation("invitedBy", fields: [invitedBy], references: [userId])
+  user    User  @relation(fields: [memberId], references: [userId], onDelete: Cascade)
+  group   Group @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
+  inviter User  @relation("invitedBy", fields: [invitedBy], references: [userId])
 
   @@id([memberId, groupId])
   @@map("members")

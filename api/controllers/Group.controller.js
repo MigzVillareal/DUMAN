@@ -209,7 +209,7 @@ export const getGroupInvites = async (req, res) => {
             },
             include: {
                 user: true,
-                invitier: true,
+                inviter: true,
             }
         });
 
