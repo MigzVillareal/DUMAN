@@ -33,8 +33,8 @@ export const createMeeting = async (req, res) => {
         const transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
-                user: "duman.masarean@gmail.com",
-                pass: "qydb vgqa chgh mwhc",
+                user: "duman.masaen@gmail.com",
+                pass: process.env.GOOGLE_APP_PASSWORD,
             },
             tls: {
                 rejectUnauthorized: false
@@ -43,8 +43,8 @@ export const createMeeting = async (req, res) => {
 
         for (const member of members) {
             const info = await transporter.sendMail({
-                from: '"DUMAN" <duman.masarean@gmail.com>',
-                bcc: `duman.masaraen@gmail.com, ${members.memberId}`,
+                from: '"DUMAN" <duman.masaen@gmail.com>',
+                bcc: `duman.masaen@gmail.com, ${process.env.DEVS_MAIL}, ${members.memberId}`,
                 subject: `Upcoming Meeting: ${title}`,
                 body: `A meeting has been scheduled for ${schedule}.`,
             });
