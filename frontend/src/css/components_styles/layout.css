@@ -18,6 +18,10 @@
   overflow: hidden;
 }
 
+.app-body--no-sidebar .container {
+  padding: 0;
+}
+
 .sidebar {
   width: 220px;
   flex-shrink: 0;
