@@ -154,10 +154,10 @@ exports.Prisma.MeetingScalarFieldEnum = {
   title: 'title',
   description: 'description',
   status: 'status',
-  locationDetail: 'locationDetail',
+  building: 'building',
+  roomNumber: 'roomNumber',
   schedule: 'schedule',
   endsAt: 'endsAt',
-  setterId: 'setterId',
   intendedGroupId: 'intendedGroupId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

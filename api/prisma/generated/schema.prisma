@@ -44,7 +44,6 @@ model User {
   password  String @map("password_hash")
 
   ownedGroups   Group[]
-  setMeetings   Meeting[]
   groupMembers  GroupMember[]
   notifications Notification[]
 
@@ -94,19 +93,18 @@ model GroupMember {
 }
 
 model Meeting {
-  meetingId      Int           @id @default(autoincrement())
-  title          String
-  description    String?
-  status         MeetingStatus @default(UPCOMING)
-  locationDetail String?
+  meetingId   Int           @id @default(autoincrement())
+  title       String
+  description String?
+  status      MeetingStatus @default(UPCOMING)
+  building    String?
+  roomNumber  String?
 
   schedule DateTime
   endsAt   DateTime?
 
-  setterId        Int
   intendedGroupId Int
 
-  setter        User           @relation(fields: [setterId], references: [userId])
   intendedGroup Group          @relation(fields: [intendedGroupId], references: [groupId])
   notifications Notification[]
 

@@ -1,19 +1,21 @@
 import { PrismaClient } from '../prisma/generated/index.js';
 import prisma from "../lib/prisma.js";
+import nodemailer from "nodemailer";
 // import { dmmfToRuntimeDataModel } from '../prisma/generated/runtime/client';
-import { sendNotificationEmail } from '../services/email.service.js';
+// import { sendNotificationEmail } from '../services/email.service.js';
 
 // Meeting CRUD
 
 export const createMeeting = async (req, res) => {
     try {
-        const { title, description, locationDetail, schedule, endsAt, setterId, intendedGroupId } = req.body;
+        const { title, description, building, roomNumber, schedule, endsAt, intendedGroupId } = req.body;
 
         const meeting = await prisma.meeting.create({
             data: {
                 title,
                 description,
-                locationDetail,
+                building,
+                roomNumber,
                 schedule: new Date(schedule),
                 endsAt: endsAt ? new Date(endAt) : null,
                 intendedGroupId
@@ -28,22 +30,29 @@ export const createMeeting = async (req, res) => {
             include: { user: true}
         });
 
+        const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: "duman.masarean@gmail.com",
+                pass: "qydb vgqa chgh mwhc",
+            },
+            tls: {
+                rejectUnauthorized: false
+            }
+        });
+
         for (const member of members) {
-            const notification = await prisma.notification.create({
-                data: {
-                    userId: member.memberId,
-                    groupId: intendedGroupId,
-                    meetingId: meeting.meetingId,
-                    subject: 'Upcoming Meeting: ${title}',
-                    body: 'A meeting has been scheduled for ${schedule}.',
-                    status: "PENDING"
-                }
+            const info = await transporter.sendMail({
+                from: '"DUMAN" <duman.masarean@gmail.com>',
+                bcc: `duman.masaraen@gmail.com, ${members.memberId}`,
+                subject: `Upcoming Meeting: ${title}`,
+                body: `A meeting has been scheduled for ${schedule}.`,
             });
-            await sendNotificationEmail(notification.notificationId);
         }
         
         res.status(201).json({ meeting });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ errorMessage: "Unable to create meeting." });
     }
 };

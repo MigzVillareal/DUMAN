@@ -21,15 +21,17 @@ const mailTo = "";
 const mailSubject = "Empty Subject";
 const mailText = "Empty Text";
 
-try {
-  const info = await transporter.sendMail({
-    from: '"DUMAN" <duman.masarean@gmail.com>',
-    to: `${mailSelf}, ${mailDevs}, ${mailTo}`,
-    subject: mailSubject,
-    text: mailText,
-  });
+export const sendNotiicationEmail = async (req, res) => {
+  try {
+    const info = await transporter.sendMail({
+      from: '"DUMAN" <duman.masarean@gmail.com>',
+      to: `${mailSelf}, ${mailDevs}, ${mailTo}`,
+      subject: mailSubject,
+      text: mailText,
+    });
 
-  console.log("Message sent: %s", info.messageId);
-} catch (err) {
-  console.error("Error while sending mail:", err);
+    console.log("Message sent: %s", info.messageId);
+  } catch (err) {
+    console.error("Error while sending mail:", err);
 }
+};

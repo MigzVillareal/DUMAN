@@ -126,19 +126,20 @@ export const getAllMembers = async (req, res) => {
 
 export const removeMember = async (req, res) => {
     try {
-        const { groupId, userId } = req.params;
+        const { groupId, memberId } = req.params;
         
         await prisma.groupMember.delete({
             where: {
-                groupId_userId: {
+                memberId_groupId: {
                     groupId: parseInt(groupId),
-                    userId: parseInt(userId),
+                    memberId: parseInt(memberId),
                 },
             },
         });
         
         res.status(200).json({ message: "Member removed successfully." });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ errorMessage: "Unable to remove member." });
     }
 };
