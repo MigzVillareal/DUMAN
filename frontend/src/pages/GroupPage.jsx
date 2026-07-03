@@ -83,7 +83,6 @@ export default function GroupPage() {
 
   const mockDetails = getGroupDetails(groupId);
   const { meetings } = mockDetails;
-  const fallbackMembers = mockDetails.members ?? [];
 
   useEffect(() => {
     if (!group) {
@@ -93,6 +92,7 @@ export default function GroupPage() {
     }
 
     if (USE_MOCK_GROUPS) {
+      const fallbackMembers = mockDetails.members ?? [];
       if (group.members != null) {
         setMembers(group.members);
       } else {
@@ -102,13 +102,21 @@ export default function GroupPage() {
       return;
     }
 
+    if (group.groupId == null) {
+      setMembers([]);
+      setMembersLoading(false);
+      return;
+    }
+
     let cancelled = false;
+    const apiGroupId = group.groupId;
+    const ownerId = group.userId;
 
     async function loadMembers() {
       setMembersLoading(true);
 
       try {
-        const data = await fetchGroupMembers(group.groupId);
+        const data = await fetchGroupMembers(apiGroupId);
 
         if (cancelled) return;
 
@@ -118,12 +126,10 @@ export default function GroupPage() {
         }
 
         const mapped = (data.members ?? []).map((record) =>
-          mapApiMember(record, group.userId)
+          mapApiMember(record, ownerId)
         );
 
-        const nextMembers = ensureOwnerAsLeader(mapped, user, group.userId);
-        setMembers(nextMembers);
-        setGroupMembers(groupId, nextMembers);
+        setMembers(ensureOwnerAsLeader(mapped, user, ownerId));
       } catch {
         if (!cancelled) {
           setMembers([]);
@@ -140,7 +146,7 @@ export default function GroupPage() {
     return () => {
       cancelled = true;
     };
-  }, [group, fallbackMembers, groupId, setGroupMembers, user]);
+  }, [group?.id, group?.groupId, group?.userId, groupId, user?.userId]);
 
   if (loading) {
     return (

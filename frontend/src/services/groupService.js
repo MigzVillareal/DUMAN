@@ -1,6 +1,6 @@
 import { getAuthHeaders } from "../utils/authStorage.js";
 
-export const USE_MOCK_GROUPS = true;
+export const USE_MOCK_GROUPS = false;
 
 async function parseJson(response) {
   return response.json();
@@ -65,6 +65,32 @@ export async function fetchUsers() {
 export async function removeGroupMember(groupId, memberId) {
   const response = await fetch(`/api/v1/groups/${groupId}/members/${memberId}`, {
     method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+
+  return parseJson(response);
+}
+
+export async function fetchUserInvites(userId) {
+  const response = await fetch(`/api/v1/users/${userId}/invites`, {
+    headers: getAuthHeaders(),
+  });
+
+  return parseJson(response);
+}
+
+export async function acceptGroupInvite(groupId) {
+  const response = await fetch(`/api/v1/groups/${groupId}/invites/accept`, {
+    method: "PATCH",
+    headers: getAuthHeaders(),
+  });
+
+  return parseJson(response);
+}
+
+export async function declineGroupInvite(groupId) {
+  const response = await fetch(`/api/v1/groups/${groupId}/invites/decline`, {
+    method: "PATCH",
     headers: getAuthHeaders(),
   });
 

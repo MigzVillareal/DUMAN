@@ -1,10 +1,17 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "../css/pages/Login.css";
 import "../css/pages/Dashboard.css";
 import Icon from "../components/Icon.jsx";
 import PageHeader from "../components/PageHeader.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
+import { useGroups } from "../context/GroupsContext.jsx";
+import {
+  acceptGroupInvite,
+  declineGroupInvite,
+  fetchUserInvites,
+} from "../services/groupService.js";
 import { isToday } from "../utils/date.js";
+import { mapApiInvite } from "../utils/groups.js";
 
 const UNIVERSITY_NAME = "Ateneo de Naga University";
 
@@ -65,19 +72,84 @@ function MeetingCard({ meeting }) {
 
 function Dashboard() {
   const { user } = useAuth();
+  const { loadGroups } = useGroups();
   const [meetings] = useState([]);
   const [invitations, setInvitations] = useState([]);
+  const [invitesLoading, setInvitesLoading] = useState(true);
+  const [inviteError, setInviteError] = useState("");
+  const [actioningInviteId, setActioningInviteId] = useState(null);
 
   const firstName = user?.firstname ?? "blank";
   const meetingsToday = meetings.filter((m) => isToday(m.date)).length;
   const pendingInvitations = invitations.length;
 
-  const handleDeclineInvite = (id) => {
-    setInvitations((prev) => prev.filter((invite) => invite.id !== id));
+  const loadInvites = useCallback(async () => {
+    if (!user?.userId) {
+      setInvitations([]);
+      setInvitesLoading(false);
+      return;
+    }
+
+    setInvitesLoading(true);
+    setInviteError("");
+
+    try {
+      const data = await fetchUserInvites(user.userId);
+
+      if (data.errorMessage) {
+        throw new Error(data.errorMessage);
+      }
+
+      setInvitations((data.invites ?? []).map(mapApiInvite));
+    } catch (err) {
+      setInviteError(err.message || "Unable to load invitations.");
+      setInvitations([]);
+    } finally {
+      setInvitesLoading(false);
+    }
+  }, [user?.userId]);
+
+  useEffect(() => {
+    loadInvites();
+  }, [loadInvites]);
+
+  const handleDeclineInvite = async (invite) => {
+    setActioningInviteId(invite.id);
+    setInviteError("");
+
+    try {
+      const data = await declineGroupInvite(invite.groupId);
+
+      if (data.errorMessage) {
+        throw new Error(data.errorMessage);
+      }
+
+      setInvitations((prev) => prev.filter((entry) => entry.id !== invite.id));
+    } catch (err) {
+      setInviteError(err.message || "Unable to decline invitation.");
+    } finally {
+      setActioningInviteId(null);
+    }
   };
 
-  const handleAcceptInvite = (id) => {
-    setInvitations((prev) => prev.filter((invite) => invite.id !== id));
+  const handleAcceptInvite = async (invite) => {
+    setActioningInviteId(invite.id);
+    setInviteError("");
+
+    try {
+      const data = await acceptGroupInvite(invite.groupId);
+
+      if (data.errorMessage) {
+        throw new Error(data.errorMessage);
+      }
+
+      setInvitations((prev) => prev.filter((entry) => entry.id !== invite.id));
+      loadGroups();
+    } catch (err) {
+      setInviteError(err.message || "Unable to accept invitation.");
+    } finally {
+      setActioningInviteId(null);
+    }
   };
 
   return (
@@ -115,32 +187,43 @@ function Dashboard() {
 
         <section className="dashboard-panel dashboard-panel--side">
           <h2 className="dashboard-panel__title">Pending Invitations</h2>
-          {invitations.length === 0 ? (
+          {inviteError && (
+            <p className="dashboard-invite-card__meta dashboard-invite-card__error" role="alert">
+              {inviteError}
+            </p>
+          )}
+          {invitesLoading ? (
+            <p className="dashboard-invite-card__meta">Loading invitations...</p>
+          ) : invitations.length === 0 ? (
             <p className="dashboard-invite-card__meta">No pending invitations.</p>
           ) : (
-            invitations.map((invite) => (
-            <article key={invite.id} className="auth-card dashboard-invite-card">
-              <h3 className="dashboard-invite-card__title">{invite.group}</h3>
-              <p className="dashboard-invite-card__meta">Invited by: {invite.invitedBy}</p>
-              <p className="dashboard-invite-card__meta">Role: {invite.role}</p>
-              <div className="dashboard-invite-card__actions">
-                <button
-                  type="button"
-                  className="btn-primary dashboard-btn-pill dashboard-btn-pill--soft"
-                  onClick={() => handleAcceptInvite(invite.id)}
-                >
-                  Accept
-                </button>
-                <button
-                  type="button"
-                  className="btn-primary dashboard-btn-pill dashboard-btn-pill--outline"
-                  onClick={() => handleDeclineInvite(invite.id)}
-                >
-                  Decline
-                </button>
-              </div>
-            </article>
-            ))
+            <div className="dashboard-panel__list">
+              {invitations.map((invite) => (
+                <article key={invite.id} className="auth-card dashboard-invite-card">
+                  <h3 className="dashboard-invite-card__title">{invite.group}</h3>
+                  <p className="dashboard-invite-card__meta">Invited by: {invite.invitedBy}</p>
+                  <p className="dashboard-invite-card__meta">Role: {invite.role}</p>
+                  <div className="dashboard-invite-card__actions">
+                    <button
+                      type="button"
+                      className="btn-primary dashboard-btn-pill dashboard-btn-pill--soft"
+                      onClick={() => handleAcceptInvite(invite)}
+                      disabled={actioningInviteId === invite.id}
+                    >
+                      {actioningInviteId === invite.id ? "Accepting..." : "Accept"}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn-primary dashboard-btn-pill dashboard-btn-pill--outline"
+                      onClick={() => handleDeclineInvite(invite)}
+                      disabled={actioningInviteId === invite.id}
+                    >
+                      {actioningInviteId === invite.id ? "Declining..." : "Decline"}
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
           )}
         </section>
       </div>

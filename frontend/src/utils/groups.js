@@ -82,6 +82,21 @@ export function buildGroupMembers(user, invitedMembers = []) {
   return [creator, ...others];
 }
 
+export function mapApiInvite(record) {
+  const inviter = record.invitier ?? record.inviter;
+  const inviterName = inviter
+    ? `${inviter.firstname} ${inviter.lastname}`.trim()
+    : `User ${record.invitedBy}`;
+
+  return {
+    id: `${record.groupId}-${record.memberId}`,
+    groupId: record.groupId,
+    group: record.group?.name ?? `Group ${record.groupId}`,
+    invitedBy: inviterName,
+    role: record.role === "ADMIN" ? "Leader" : "Member",
+  };
+}
+
 export function isGroupLeader(authUser, group, members = []) {
   if (!authUser || !group) return false;
 

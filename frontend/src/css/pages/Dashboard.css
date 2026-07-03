@@ -143,6 +143,11 @@
   margin-bottom: 0.75rem;
 }
 
+.dashboard-invite-card__error {
+  color: var(--color-destructive);
+  margin-bottom: 0.75rem;
+}
+
 .dashboard-invite-card__actions {
   display: flex;
   gap: 0.625rem;
