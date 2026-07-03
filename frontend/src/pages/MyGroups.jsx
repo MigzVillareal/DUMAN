@@ -10,7 +10,7 @@ export default function MyGroups() {
     <div className="my-groups-page">
       <PageHeader
         title="My Groups"
-        subtitle="Select a group from the sidebar or create a new one to get started."
+        subtitle="Select a group or create a new one to get started."
       />
 
       {loading && (
