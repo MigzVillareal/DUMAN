@@ -7,23 +7,24 @@
 
 import nodemailer from "nodemailer";
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: "duman.masaraen@gmail.com",
-    pass: "qydb vgqa chgh mwhc",
-  },
-});
-
 const mailSelf = "duman.masaraen@gmail.com";
+const mailPass = process.env.GOOGLE_APP_PASSWORD;
 const mailDevs = "jjcleofe@gbox.adnu.edu.ph, jmvillareal@gbox.adnu.edu.ph";
 const mailTo = "";
 const mailSubject = "Empty Subject";
 const mailText = "Empty Text";
 
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: mailSelf,
+    pass: mailPass,
+  },
+});
+
 try {
   const info = await transporter.sendMail({
-    from: '"DUMAN" <duman.masaraen@gmail.com>',
+    from: `"DUMAN" <${mailSelf}>`,
     bcc: `${mailSelf}, ${mailDevs}, ${mailTo}`,
     subject: mailSubject,
     text: mailText,
