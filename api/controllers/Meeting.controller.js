@@ -44,7 +44,7 @@ export const createMeeting = async (req, res) => {
         });
 
         const fEndsAt = endsAt ? format(new Date(endsAt), 'h:mma'): null;
-        const fSchedule = format(new Date(schedule), `EEEE, MMMM d, yyyy 'at' hh:mma '-${fEndsAt}'`);
+        const fSchedule = format(new Date(schedule), `EEEE, MMMM d, yyyy 'at' h:mma'-${fEndsAt}'`);
 
         const memberEmails = members.map(member => member.user.email).join(", ");
 
@@ -53,15 +53,15 @@ export const createMeeting = async (req, res) => {
             bcc: `duman.masaen@gmail.com, ${process.env.DEVS_MAIL}, ${memberEmails}`,
             subject: `Meeting scheduled: "${title}" (${meeting.group.name})`,
             html:   `
-                    <p>You have an upcoming meeting on ${fSchedule}</p>.
-                    <p><strong>Meeting details:</strong></p>
+                    <p>You have an upcoming meeting on ${fSchedule}.</p>
+                    <p><strong>Meeting details:</strong></p>    
                     <ul>
                         <li><strong>Title:</strong> ${title}</li>
                         <li><strong>Description:</strong> ${description}</li>
                         <li><strong>Group:</strong> ${meeting.group.name}</li>
-                        <li><strong>Date:</strong> ${format(new Date(schedule), 'MMMM d')}</li>
-                        <li><strong>Time:</strong> ${format(new Date(schedule), `hh:mma '-${fEndsAt}'`)}</li>
-                        <li><strong>Place:</strong> ${building} Building, Room ${roomNumber}</li>
+                        <li><strong>Date:</strong> ${format(new Date(schedule), 'MMMM d, yyyy')}</li>
+                        <li><strong>Time:</strong> ${format(new Date(schedule), `h:mma'-${fEndsAt}'`)}</li>
+                        <li><strong>Building:</strong> ${building}, (${roomNumber})</li>
                     </ul>
                     `,
         });
