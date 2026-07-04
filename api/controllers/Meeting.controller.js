@@ -1,6 +1,7 @@
 import { PrismaClient } from '../prisma/generated/index.js';
 import prisma from "../lib/prisma.js";
 import nodemailer from "nodemailer";
+import { format } from 'date-fns';
 // import { dmmfToRuntimeDataModel } from '../prisma/generated/runtime/client';
 // import { sendNotificationEmail } from '../services/email.service.js';
 
@@ -41,7 +42,7 @@ export const createMeeting = async (req, res) => {
             }
         });
 
-        const { format } = require('date-fns');
+        // const { format } = require('date-fns');
         const fschedule = format(new Date(schedule), 'EEEE, MMMM do, yyyy hh:mm a');
         
         for (const member of members) {
