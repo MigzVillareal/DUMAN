@@ -9,7 +9,7 @@ import { format } from 'date-fns';
 
 export const createMeeting = async (req, res) => {
     try {
-        const { title, description, building, roomNumber, schedule, endsAt, intendedGroupId } = req.body;
+        const { title, description, building, roomNumber, schedule, endsAt, groupId } = req.body;
 
         const meeting = await prisma.meeting.create({
             data: {
@@ -19,13 +19,14 @@ export const createMeeting = async (req, res) => {
                 roomNumber,
                 schedule: new Date(schedule),
                 endsAt: endsAt ? new Date(endsAt) : null,
-                intendedGroupId
-            }
+                groupId: parseInt(groupId)
+            },
+            include: { group: true}
         });
 
         const members = await prisma.groupMember.findMany({
             where: { 
-                groupId: intendedGroupId,
+                groupId: parseInt(groupId),
                 status: "ACCEPTED"
              },
             include: { user: true}
@@ -42,7 +43,7 @@ export const createMeeting = async (req, res) => {
             }
         });
 
-        const fEndsAt = format(new Date(endsAt), 'h:mma');
+        const fEndsAt = endsAt ? format(new Date(endsAt), 'h:mma'): null;
         const fSchedule = format(new Date(schedule), `EEEE, MMMM d, yyyy 'at' hh:mma '-${fEndsAt}'`);
 
         const memberEmails = members.map(member => member.user.email).join(", ");
@@ -50,14 +51,14 @@ export const createMeeting = async (req, res) => {
         const info = await transporter.sendMail({
             from: '"DUMAN" <duman.masaen@gmail.com>',
             bcc: `duman.masaen@gmail.com, ${process.env.DEVS_MAIL}, ${memberEmails}`,
-            subject: `Meeting scheduled: "${title}" (${meeting.intendedGroup.name})`,
+            subject: `Meeting scheduled: "${title}" (${meeting.group.name})`,
             html:   `
                     <p>You have an upcoming meeting on ${fSchedule}</p>.
                     <p><strong>Meeting details:</strong></p>
                     <ul>
                         <li><strong>Title:</strong> ${title}</li>
                         <li><strong>Description:</strong> ${description}</li>
-                        <li><strong>Group:</strong> ${meeting.intendedGroup.name}</li>
+                        <li><strong>Group:</strong> ${meeting.group.name}</li>
                         <li><strong>Date:</strong> ${format(new Date(schedule), 'MMMM d')}</li>
                         <li><strong>Time:</strong> ${format(new Date(schedule), `hh:mma '-${fEndsAt}'`)}</li>
                         <li><strong>Place:</strong> ${building} Building, Room ${roomNumber}</li>
@@ -80,7 +81,7 @@ export const getMeetingById = async (req, res) => {
             where: { meetingId: parseInt(meetingId) },
             include: {
                 setter: true,
-                intendedGroup: true,
+                groupId: true,
                 notifications: true,
             },
         });

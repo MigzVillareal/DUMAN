@@ -94,6 +94,7 @@ model GroupMember {
 
 model Meeting {
   meetingId   Int           @id @default(autoincrement())
+  groupId     Int
   title       String
   description String?
   status      MeetingStatus @default(UPCOMING)
@@ -103,9 +104,7 @@ model Meeting {
   schedule DateTime
   endsAt   DateTime?
 
-  intendedGroupId Int
-
-  intendedGroup Group          @relation(fields: [intendedGroupId], references: [groupId])
+  group         Group          @relation(fields: [groupId], references: [groupId])
   notifications Notification[]
 
   createdAt DateTime @default(now())

@@ -151,6 +151,7 @@ exports.Prisma.GroupMemberScalarFieldEnum = {
 
 exports.Prisma.MeetingScalarFieldEnum = {
   meetingId: 'meetingId',
+  groupId: 'groupId',
   title: 'title',
   description: 'description',
   status: 'status',
@@ -158,7 +159,6 @@ exports.Prisma.MeetingScalarFieldEnum = {
   roomNumber: 'roomNumber',
   schedule: 'schedule',
   endsAt: 'endsAt',
-  intendedGroupId: 'intendedGroupId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
