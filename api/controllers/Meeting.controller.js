@@ -18,7 +18,7 @@ export const createMeeting = async (req, res) => {
                 building,
                 roomNumber,
                 schedule: new Date(schedule),
-                endsAt: endsAt ? new Date(endAt) : null,
+                endsAt: endsAt ? new Date(endsAt) : null,
                 intendedGroupId
             }
         });
@@ -42,17 +42,16 @@ export const createMeeting = async (req, res) => {
             }
         });
 
-        // const { format } = require('date-fns');
         const fschedule = format(new Date(schedule), 'EEEE, MMMM do, yyyy hh:mm a');
-        
-        for (const member of members) {
-            const info = await transporter.sendMail({
-                from: '"DUMAN" <duman.masaen@gmail.com>',
-                bcc: `duman.masaen@gmail.com, ${process.env.DEVS_MAIL}, ${member.memberId}`,
-                subject: `Upcoming Meeting: ${title}`,
-                text: `A meeting has been scheduled for ${fschedule}.`,
-            });
-        }
+
+        const memberEmails = members.map(member => member.user.email).join(", ");
+
+        const info = await transporter.sendMail({
+            from: '"DUMAN" <duman.masaen@gmail.com>',
+            bcc: `duman.masaen@gmail.com, ${process.env.DEVS_MAIL}, ${memberEmails}`,
+            subject: `Upcoming Meeting: ${title}`,
+            text: `A meeting has been scheduled for ${fschedule}.`,
+        });
         
         res.status(201).json({ meeting });
     } catch (error) {
