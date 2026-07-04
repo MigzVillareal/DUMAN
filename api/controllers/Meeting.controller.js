@@ -42,15 +42,27 @@ export const createMeeting = async (req, res) => {
             }
         });
 
-        const fschedule = format(new Date(schedule), 'EEEE, MMMM do, yyyy hh:mm a');
+        const fEndsAt = format(new Date(endsAt), 'h:mma');
+        const fSchedule = format(new Date(schedule), `EEEE, MMMM d, yyyy 'at' hh:mma '-${fEndsAt}'`);
 
         const memberEmails = members.map(member => member.user.email).join(", ");
 
         const info = await transporter.sendMail({
             from: '"DUMAN" <duman.masaen@gmail.com>',
             bcc: `duman.masaen@gmail.com, ${process.env.DEVS_MAIL}, ${memberEmails}`,
-            subject: `Upcoming Meeting: ${title}`,
-            text: `A meeting has been scheduled for ${fschedule}.`,
+            subject: `Meeting scheduled: "${title}" (${meeting.intendedGroup.name})`,
+            html:   `
+                    <p>You have an upcoming meeting on ${fSchedule}</p>.
+                    <p><strong>Meeting details:</strong></p>
+                    <ul>
+                        <li><strong>Title:</strong> ${title}</li>
+                        <li><strong>Description:</strong> ${description}</li>
+                        <li><strong>Group:</strong> ${meeting.intendedGroup.name}</li>
+                        <li><strong>Date:</strong> ${format(new Date(schedule), 'MMMM d')}</li>
+                        <li><strong>Time:</strong> ${format(new Date(schedule), `hh:mma '-${fEndsAt}'`)}</li>
+                        <li><strong>Place:</strong> ${building} Building, Room ${roomNumber}</li>
+                    </ul>
+                    `,
         });
         
         res.status(201).json({ meeting });
