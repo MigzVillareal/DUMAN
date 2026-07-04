@@ -19,7 +19,7 @@
 }
 
 .app-body--no-sidebar .container {
-  padding: 0;
+  padding: 1.5rem;
 }
 
 .sidebar {
