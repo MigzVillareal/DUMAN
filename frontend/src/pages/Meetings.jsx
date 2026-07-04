@@ -36,7 +36,7 @@ function MeetingListItem({ meeting, isSelected, onClick }) {
 }
 
 // ── Meeting detail panel ──────────────────────────────────────────────────────
-function MeetingDetailPanel({ meeting }) {
+function MeetingDetailPanel({ meeting, onFinalize }) {
   if (!meeting) {
     return (
       <div className="meetings-detail meetings-detail--empty">
@@ -48,7 +48,8 @@ function MeetingDetailPanel({ meeting }) {
   }
 
   return (
-    <div className="meetings-detail">
+    <div className="meetings-detail-wrap">
+      <div className="meetings-detail">
       <div className="meetings-detail__header">
         <div>
           <h2 className="meetings-detail__title">{meeting.title}</h2>
@@ -81,6 +82,19 @@ function MeetingDetailPanel({ meeting }) {
           </ul>
         </div>
       </div>
+      </div>
+
+      {meeting.status === "voting" && (
+        <div className="meetings-detail__footer">
+          <button
+            type="button"
+            className="meetings-btn meetings-btn--primary meetings-detail__finalize-btn"
+            onClick={() => onFinalize(meeting)}
+          >
+            Finalized Meeting
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -216,9 +230,9 @@ function FinalizeStep2({ meeting, onConfirm, onBack }) {
 }
 
 // ── Finalize Modal Wrapper ────────────────────────────────────────────────────
-function FinalizeModal({ onClose, onFinalized }) {
-  const [step, setStep] = useState(1);
-  const [selectedMeeting, setSelectedMeeting] = useState(null);
+function FinalizeModal({ onClose, onFinalized, initialMeeting = null }) {
+  const [step, setStep] = useState(initialMeeting ? 2 : 1);
+  const [selectedMeeting, setSelectedMeeting] = useState(initialMeeting);
   const overlayRef = useRef(null);
 
   // Close on backdrop click
@@ -288,6 +302,17 @@ function Meetings() {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [modalMeeting, setModalMeeting] = useState(null);
+
+  const openFinalizeModal = (meeting = null) => {
+    setModalMeeting(meeting);
+    setShowModal(true);
+  };
+
+  const closeFinalizeModal = () => {
+    setShowModal(false);
+    setModalMeeting(null);
+  };
 
   const filtered = meetings.filter((m) => {
     const matchFilter = filter === "all" || m.status === filter;
@@ -338,7 +363,7 @@ function Meetings() {
             type="button"
             id="finalize-meeting-btn"
             className="meetings-btn meetings-btn--primary"
-            onClick={() => setShowModal(true)}
+            onClick={() => openFinalizeModal()}
           >
             Finalize Meeting
           </button>
@@ -396,14 +421,15 @@ function Meetings() {
 
         {/* Right: Detail Panel */}
         <div className="meetings-detail-panel">
-          <MeetingDetailPanel meeting={selected} />
+          <MeetingDetailPanel meeting={selected} onFinalize={openFinalizeModal} />
         </div>
       </div>
 
       {/* ── Finalize Modal ── */}
       {showModal && (
         <FinalizeModal
-          onClose={() => setShowModal(false)}
+          initialMeeting={modalMeeting}
+          onClose={closeFinalizeModal}
           onFinalized={handleFinalized}
         />
       )}
