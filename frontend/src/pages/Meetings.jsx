@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import "../css/pages/Login.css";
 import "../css/pages/Meetings.css";
 import Icon from "../components/Icon.jsx";
 import PageHeader from "../components/PageHeader.jsx";
+import FinalizeMeetingModal from "../components/FinalizeMeetingModal.jsx";
 import { MEETINGS_LIST, UNFINALIZED_MEETINGS } from "../data/meetingsMock.js";
 import { USE_MOCK_MEETINGS } from "../data/mock.js";
 
@@ -74,14 +75,6 @@ function MeetingDetailPanel({ meeting, onFinalize }) {
             {meeting.description}
           </p>
         </div>
-        <div className="meetings-detail__field meetings-detail__field--block">
-          <span className="meetings-detail__label">Agenda</span>
-          <ul className="meetings-detail__agenda">
-            {meeting.agenda.map((item, i) => (
-              <li key={i}>{item}</li>
-            ))}
-          </ul>
-        </div>
       </div>
       </div>
 
@@ -96,194 +89,6 @@ function MeetingDetailPanel({ meeting, onFinalize }) {
           </button>
         </div>
       )}
-    </div>
-  );
-}
-
-// ── Finalize Modal — Step 1: pick a meeting ───────────────────────────────────
-function FinalizeStep1({ meetings, onSelect, onClose }) {
-  return (
-    <div className="finalize-modal__content">
-      <h2 className="finalize-modal__title">Proposed Schedules</h2>
-      <p className="finalize-modal__subtitle">
-        Select a proposal to finalize as a confirmed meeting
-      </p>
-      <div className="finalize-modal__list">
-        {meetings.length === 0 ? (
-          <p className="finalize-modal__empty">
-            No meetings awaiting finalization.
-          </p>
-        ) : (
-          meetings.map((m) => (
-            <button
-              key={m.id}
-              type="button"
-              className="finalize-proposal-card"
-              onClick={() => onSelect(m)}
-            >
-              <span className="finalize-proposal-card__title">{m.title}</span>
-              <span className="finalize-proposal-card__group">{m.group}</span>
-            </button>
-          ))
-        )}
-      </div>
-      <div className="finalize-modal__actions finalize-modal__actions--right">
-        <button
-          type="button"
-          className="btn-primary meetings-btn meetings-btn--outline"
-          onClick={onClose}
-        >
-          Cancel
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// ── Finalize Modal — Step 2: show votes & confirm ─────────────────────────────
-function FinalizeStep2({ meeting, onConfirm, onBack }) {
-  const [selectedTime, setSelectedTime] = useState(null);
-
-  return (
-    <div className="finalize-modal__content">
-      <h2 className="finalize-modal__title">Finalized Meeting</h2>
-
-      <div className="finalize-modal__section">
-        <p className="finalize-modal__field-label">Meeting Title</p>
-        <p className="finalize-modal__field-value">{meeting.title}</p>
-        <p className="finalize-modal__field-label finalize-modal__field-label--sub">
-          Group Name
-        </p>
-        <p className="finalize-modal__field-value finalize-modal__field-value--sub">
-          {meeting.group}
-        </p>
-      </div>
-
-      <div className="finalize-modal__section">
-        <p className="finalize-modal__field-label">Winning Time Slot</p>
-        <div className="finalize-vote-list">
-          {meeting.proposedTimes.map((slot) => {
-            const pct = Math.round((slot.votes / slot.total) * 100);
-            const isSelected = selectedTime?.id === slot.id;
-            return (
-              <button
-                key={slot.id}
-                type="button"
-                className={`finalize-vote-row${isSelected ? " finalize-vote-row--selected" : ""}`}
-                onClick={() => setSelectedTime(slot)}
-              >
-                <span className="finalize-vote-row__label">{slot.label}</span>
-                <div className="finalize-vote-row__bar-wrap">
-                  <div
-                    className="finalize-vote-row__bar"
-                    style={{ width: `${pct}%` }}
-                  />
-                </div>
-                <span className="finalize-vote-row__count">
-                  {slot.votes}/{slot.total}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="finalize-modal__section finalize-modal__meta-grid">
-        <div className="finalize-modal__meta-item">
-          <p className="finalize-modal__field-label">Location</p>
-          <p className="finalize-modal__field-value">{meeting.location}</p>
-        </div>
-        <div className="finalize-modal__meta-item">
-          <p className="finalize-modal__field-label">Time</p>
-          <p className="finalize-modal__field-value">
-            {selectedTime ? selectedTime.label : "—"}
-          </p>
-        </div>
-        <div className="finalize-modal__meta-item finalize-modal__meta-item--full">
-          <p className="finalize-modal__field-label">Agenda</p>
-          <ul className="finalize-modal__agenda">
-            {meeting.agenda.map((item, i) => (
-              <li key={i}>{item}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      <div className="finalize-modal__actions">
-        <button
-          type="button"
-          className="btn-primary meetings-btn meetings-btn--outline"
-          onClick={onBack}
-        >
-          Cancel
-        </button>
-        <button
-          type="button"
-          className="btn-primary meetings-btn meetings-btn--primary"
-          disabled={!selectedTime}
-          onClick={() => onConfirm(meeting, selectedTime)}
-        >
-          Confirm &amp; Finalize
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// ── Finalize Modal Wrapper ────────────────────────────────────────────────────
-function FinalizeModal({ onClose, onFinalized, initialMeeting = null }) {
-  const [step, setStep] = useState(initialMeeting ? 2 : 1);
-  const [selectedMeeting, setSelectedMeeting] = useState(initialMeeting);
-  const overlayRef = useRef(null);
-
-  // Close on backdrop click
-  const handleOverlayClick = (e) => {
-    if (e.target === overlayRef.current) onClose();
-  };
-
-  // Trap escape
-  useEffect(() => {
-    const handleKey = (e) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, [onClose]);
-
-  const handleSelect = (meeting) => {
-    setSelectedMeeting(meeting);
-    setStep(2);
-  };
-
-  const handleConfirm = (meeting, time) => {
-    onFinalized(meeting, time);
-    onClose();
-  };
-
-  return (
-    <div
-      className="finalize-overlay"
-      ref={overlayRef}
-      onClick={handleOverlayClick}
-      role="dialog"
-      aria-modal="true"
-      aria-label={step === 1 ? "Proposed Schedules" : "Finalized Meeting"}
-    >
-      <div className="finalize-modal">
-        {step === 1 ? (
-          <FinalizeStep1
-            meetings={USE_MOCK_MEETINGS ? UNFINALIZED_MEETINGS : []}
-            onSelect={handleSelect}
-            onClose={onClose}
-          />
-        ) : (
-          <FinalizeStep2
-            meeting={selectedMeeting}
-            onConfirm={handleConfirm}
-            onBack={() => setStep(1)}
-          />
-        )}
-      </div>
     </div>
   );
 }
@@ -428,8 +233,9 @@ function Meetings() {
 
       {/* ── Finalize Modal ── */}
       {showModal && (
-        <FinalizeModal
+        <FinalizeMeetingModal
           initialMeeting={modalMeeting}
+          meetings={USE_MOCK_MEETINGS ? UNFINALIZED_MEETINGS : []}
           onClose={closeFinalizeModal}
           onFinalized={handleFinalized}
         />
