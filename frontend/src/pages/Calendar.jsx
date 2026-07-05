@@ -6,6 +6,7 @@ import PageHeader from "../components/PageHeader.jsx";
 import CalendarGroupFilters from "../components/calendar/CalendarGroupFilters.jsx";
 import CalendarMonthView from "../components/calendar/CalendarMonthView.jsx";
 import CalendarEventPanel from "../components/calendar/CalendarEventPanel.jsx";
+import CreateMeetingModal from "../components/CreateMeetingModal.jsx";
 import { useGroups } from "../context/GroupsContext.jsx";
 import {
   fetchCalendarEvents,
@@ -31,6 +32,7 @@ function Calendar() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [updatingMeetingId, setUpdatingMeetingId] = useState(null);
+  const [showCreateMeetingModal, setShowCreateMeetingModal] = useState(false);
 
   const monthRange = useMemo(
     () => getMonthRange(visibleYear, visibleMonth),
@@ -111,10 +113,10 @@ function Calendar() {
           <button
             type="button"
             className="calendar-btn calendar-btn--primary"
-            onClick={() => {}}
+            onClick={() => setShowCreateMeetingModal(true)}
           >
             <Icon icon="plus" size="sm" />
-            Propose Schedule
+            Create Meeting
           </button>
         }
       />
@@ -155,6 +157,16 @@ function Calendar() {
           updatingMeetingId={updatingMeetingId}
         />
       </div>
+
+      {showCreateMeetingModal && (
+        <CreateMeetingModal
+          onClose={() => setShowCreateMeetingModal(false)}
+          onSubmit={async (data) => {
+            // TODO: wire to API when ready
+            console.log("Create Meeting submitted:", data);
+          }}
+        />
+      )}
     </div>
   );
 }
