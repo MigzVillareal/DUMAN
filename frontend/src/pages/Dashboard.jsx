@@ -81,8 +81,6 @@ function Dashboard() {
   const [actioningInviteId, setActioningInviteId] = useState(null);
 
   const firstName = user?.firstname ?? "blank";
-  const meetingsToday = meetings.filter((m) => isToday(m.date)).length;
-  const pendingInvitations = invitations.length;
 
   const loadInvites = useCallback(async () => {
     if (!user?.userId) {
@@ -164,19 +162,7 @@ function Dashboard() {
       <PageHeader
         title={`Welcome Back, ${firstName}!`}
         subtitle={`${formatWelcomeDate()} — ${UNIVERSITY_NAME}`}
-      >
-        <p className="page-header__summary">
-          You have{" "}
-          <span className="page-header__highlight page-header__highlight--primary">
-            {meetingsToday} meeting{meetingsToday !== 1 ? "s" : ""}
-          </span>{" "}
-          scheduled for today and{" "}
-          <span className="page-header__highlight page-header__highlight--accent">
-            {pendingInvitations} pending invitation{pendingInvitations !== 1 ? "s" : ""}
-          </span>{" "}
-          awaiting your review.
-        </p>
-      </PageHeader>
+      />
 
       <div className="dashboard-grid">
         <section className="dashboard-panel">
