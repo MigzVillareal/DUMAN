@@ -4,6 +4,7 @@ import nodemailer from "nodemailer";
 import { format } from 'date-fns';
 // import { dmmfToRuntimeDataModel } from '../prisma/generated/runtime/client';
 // import { sendNotificationEmail } from '../services/email.service.js';
+import supabase from "../lib/supabase.js";
 
 // Meeting CRUD
 

@@ -1,5 +1,6 @@
 import { PrismaClient } from '../prisma/generated/index.js';
 import prisma from "../lib/prisma.js";
+import supabase from "../lib/supabase.js";
 
 // Group CRUD
 

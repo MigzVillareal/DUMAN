@@ -2,6 +2,7 @@ import { PrismaClient } from '../prisma/generated/index.js';
 import bcrypt from "bcrypt";
 import prisma from "../lib/prisma.js";
 import jwt from "jsonwebtoken";
+import supabase from "../lib/supabase.js";
 
 export const registerUser = async (req, res) => {
     try {
