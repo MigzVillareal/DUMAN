@@ -1,7 +1,6 @@
 import { CALENDAR_MOCK_EVENTS } from "../data/calendarMock.js";
 import { getDateKey } from "../utils/calendar.js";
-
-const USE_MOCK = true;
+import { USE_MOCK_CALENDAR } from "../data/mock.js";
 
 /**
  * Maps a Prisma Meeting (with includes) to the calendar event shape.
@@ -43,7 +42,7 @@ export async function fetchCalendarEvents({
   to,
   groupFilter = "all",
 } = {}) {
-  if (USE_MOCK) {
+  if (USE_MOCK_CALENDAR) {
     return {
       events: filterMockEvents({ from, to, groupFilter }),
     };
@@ -78,7 +77,7 @@ export async function fetchCalendarEvents({
  * @returns {Promise<{ meetingId: number, status: string }>}
  */
 export async function updateMeetingRsvp(meetingId, status) {
-  if (USE_MOCK) {
+  if (USE_MOCK_CALENDAR) {
     return { meetingId, status };
   }
 

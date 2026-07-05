@@ -4,6 +4,7 @@ import "../css/pages/Meetings.css";
 import Icon from "../components/Icon.jsx";
 import PageHeader from "../components/PageHeader.jsx";
 import { MEETINGS_LIST, UNFINALIZED_MEETINGS } from "../data/meetingsMock.js";
+import { USE_MOCK_MEETINGS } from "../data/mock.js";
 
 // ── Status badge ──────────────────────────────────────────────────────────────
 function StatusBadge({ status }) {
@@ -271,7 +272,7 @@ function FinalizeModal({ onClose, onFinalized, initialMeeting = null }) {
       <div className="finalize-modal">
         {step === 1 ? (
           <FinalizeStep1
-            meetings={UNFINALIZED_MEETINGS}
+            meetings={USE_MOCK_MEETINGS ? UNFINALIZED_MEETINGS : []}
             onSelect={handleSelect}
             onClose={onClose}
           />
@@ -297,7 +298,7 @@ const FILTERS = [
 
 // ── Main Page ─────────────────────────────────────────────────────────────────
 function Meetings() {
-  const [meetings, setMeetings] = useState(MEETINGS_LIST);
+  const [meetings, setMeetings] = useState(USE_MOCK_MEETINGS ? MEETINGS_LIST : []);
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState(null);

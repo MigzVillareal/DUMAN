@@ -82,7 +82,7 @@ export default function GroupPage() {
   const [memberToRemove, setMemberToRemove] = useState(null);
 
   const mockDetails = getGroupDetails(groupId);
-  const { meetings } = mockDetails;
+  const meetings = USE_MOCK_GROUPS ? mockDetails.meetings : [];
 
   useEffect(() => {
     if (!group) {

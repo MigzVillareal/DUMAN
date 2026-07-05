@@ -1,6 +1,6 @@
 import { getAuthHeaders } from "../utils/authStorage.js";
 
-export const USE_MOCK_GROUPS = false;
+export { USE_MOCK_GROUPS } from "../data/mock.js";
 
 async function parseJson(response) {
   return response.json();
