@@ -291,8 +291,8 @@ function FinalizeModal({ onClose, onFinalized, initialMeeting = null }) {
 const FILTERS = [
   { key: "all", label: "All Meetings" },
   { key: "upcoming", label: "Upcoming" },
-  { key: "past", label: "Past" },
   { key: "voting", label: "Voting" },
+  { key: "past", label: "Past" },
 ];
 
 // ── Main Page ─────────────────────────────────────────────────────────────────
