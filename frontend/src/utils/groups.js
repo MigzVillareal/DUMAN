@@ -3,6 +3,36 @@ export function getAuthUserDisplayName(authUser) {
   return `${authUser.firstname ?? ""} ${authUser.lastname ?? ""}`.trim();
 }
 
+export function userMatchesInvitableSearch(user, query) {
+  const normalized = query.trim().toLowerCase();
+  if (!normalized) return false;
+
+  const name = user.name?.trim().toLowerCase() ?? "";
+  const email = user.email?.trim().toLowerCase() ?? "";
+
+  return name.startsWith(normalized) || email.includes(normalized);
+}
+
+export function findInvitableUserByQuery(query, users, excludedIds = []) {
+  const normalized = query.trim().toLowerCase();
+  if (!normalized) return null;
+
+  const blockedIds = new Set(excludedIds);
+  const matches = users.filter(
+    (user) => !blockedIds.has(user.id) && userMatchesInvitableSearch(user, normalized)
+  );
+
+  if (matches.length === 1) return matches[0];
+
+  return (
+    matches.find(
+      (user) =>
+        user.name?.trim().toLowerCase() === normalized ||
+        user.email?.trim().toLowerCase() === normalized
+    ) ?? null
+  );
+}
+
 export function isSameAsAuthUser(candidate, authUser) {
   if (!authUser || !candidate) return false;
 
@@ -17,12 +47,6 @@ export function isSameAsAuthUser(candidate, authUser) {
   const authEmail = authUser.email?.trim().toLowerCase();
   const candidateEmail = candidate.email?.trim().toLowerCase();
   if (authEmail && candidateEmail && authEmail === candidateEmail) {
-    return true;
-  }
-
-  const authName = getAuthUserDisplayName(authUser).toLowerCase();
-  const candidateName = candidate.name?.trim().toLowerCase();
-  if (authName && candidateName && authName === candidateName) {
     return true;
   }
 

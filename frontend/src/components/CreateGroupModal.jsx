@@ -1,16 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { fetchUsers, USE_MOCK_GROUPS } from "../services/groupService.js";
-import { mapApiUserToInvitable, isSameAsAuthUser } from "../utils/groups.js";
+import {
+  findInvitableUserByQuery,
+  mapApiUserToInvitable,
+  isSameAsAuthUser,
+  userMatchesInvitableSearch,
+} from "../utils/groups.js";
 import { INVITABLE_USERS } from "../data/groupsMock.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import Icon from "./Icon.jsx";
 import "../css/components_styles/CreateGroupModal.css";
-
-function userMatchesSearch(user, normalized) {
-  const name = user.name.toLowerCase();
-  const email = user.email.toLowerCase();
-  return name.startsWith(normalized) || email.startsWith(normalized);
-}
 
 function getMemberSuggestions(query, addedMembers, authUser, invitableUsers) {
   const normalized = query.trim().toLowerCase();
@@ -22,26 +21,20 @@ function getMemberSuggestions(query, addedMembers, authUser, invitableUsers) {
     (user) =>
       !isSameAsAuthUser(user, authUser) &&
       !addedIds.has(user.id) &&
-      userMatchesSearch(user, normalized)
+      userMatchesInvitableSearch(user, normalized)
   );
 }
 
 function findInvitableUser(query, addedMembers, authUser, invitableUsers) {
-  const suggestions = getMemberSuggestions(
-    query,
-    addedMembers,
-    authUser,
-    invitableUsers
-  );
-  if (suggestions.length === 1) return suggestions[0];
+  const excludedIds = addedMembers.map((member) => member.id);
+  if (authUser?.userId != null) {
+    excludedIds.push(authUser.userId);
+  }
 
-  const normalized = query.trim().toLowerCase();
-  return (
-    suggestions.find(
-      (user) =>
-        user.name.toLowerCase() === normalized ||
-        user.email.toLowerCase() === normalized
-    ) ?? null
+  return findInvitableUserByQuery(
+    query,
+    invitableUsers.filter((user) => !isSameAsAuthUser(user, authUser)),
+    excludedIds
   );
 }
 
@@ -49,9 +42,8 @@ function isSelfSearch(query, authUser, invitableUsers) {
   const normalized = query.trim().toLowerCase();
   if (!normalized || !authUser) return false;
 
-  return invitableUsers.some(
-    (user) => isSameAsAuthUser(user, authUser) && userMatchesSearch(user, normalized)
-  );
+  const selfEntry = invitableUsers.find((user) => isSameAsAuthUser(user, authUser));
+  return selfEntry ? userMatchesInvitableSearch(selfEntry, normalized) : false;
 }
 
 export default function CreateGroupModal({

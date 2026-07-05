@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { fetchUsers, USE_MOCK_GROUPS } from "../services/groupService.js";
-import { mapApiUserToInvitable } from "../utils/groups.js";
-import { INVITABLE_USERS } from "../data/groupsMock.js";
+import {
+  findInvitableUserByQuery,
+  mapApiUserToInvitable,
+  userMatchesInvitableSearch,
+} from "../utils/groups.js";import { INVITABLE_USERS } from "../data/groupsMock.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import Icon from "./Icon.jsx";
 import "../css/components_styles/CreateGroupModal.css";
@@ -23,22 +26,15 @@ function getMemberSuggestions(
   return invitableUsers.filter(
     (user) =>
       !blockedIds.has(user.id) &&
-      user.name.toLowerCase().startsWith(normalized)
+      userMatchesInvitableSearch(user, normalized)
   );
 }
 
 function findInvitableUser(query, addedMembers, excludedIds, invitableUsers) {
-  const suggestions = getMemberSuggestions(
+  return findInvitableUserByQuery(
     query,
-    addedMembers,
-    excludedIds,
-    invitableUsers
-  );
-  if (suggestions.length === 1) return suggestions[0];
-
-  const normalized = query.trim().toLowerCase();
-  return (
-    suggestions.find((user) => user.name.toLowerCase() === normalized) ?? null
+    invitableUsers,
+    [...addedMembers.map((member) => member.id), ...excludedIds]
   );
 }
 
@@ -191,7 +187,7 @@ export default function InviteMembersModal({
                   id="invite-member-search"
                   className="create-group-modal__input create-group-modal__input--search"
                   type="text"
-                  placeholder="Search members..."
+                  placeholder="Search by name or email..."
                   value={memberSearch}
                   onChange={(event) => {
                     setMemberSearch(event.target.value);
