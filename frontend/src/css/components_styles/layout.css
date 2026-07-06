@@ -20,6 +20,10 @@
 
 .app-body--no-sidebar .container {
   padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .sidebar {

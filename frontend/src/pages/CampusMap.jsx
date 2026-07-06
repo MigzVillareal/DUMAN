@@ -1,12 +1,4 @@
-import "../css/pages/Login.css";
 import "../css/pages/CampusMap.css";
-
-const MAP_AVAILABILITY_FILTERS = [
-  { filterKey: "all", label: "All locations" },
-  { filterKey: "available", label: "Available" },
-  { filterKey: "booked", label: "Booked" },
-];
-
 const SELECTED_ROOM_PLACEHOLDER = {
   roomCode: "AL212",
   roomType: "Classroom",
@@ -20,26 +12,13 @@ function CampusMap() {
           className="campus-map-view-container"
           aria-label="Campus map"
         >
-          <nav
-            className="campus-map-filter-group"
-            aria-label="Location availability filters"
-          >
-            {MAP_AVAILABILITY_FILTERS.map((filterOption) => (
-              <button
-                key={filterOption.filterKey}
-                type="button"
-                className={`campus-map-filter-tab${
-                  filterOption.filterKey === "all"
-                    ? " campus-map-filter-tab--active"
-                    : ""
-                }`}
-              >
-                {filterOption.label}
-              </button>
-            ))}
-          </nav>
-
-          <div className="campus-map-canvas" />
+          <div className="campus-map-canvas">
+            <img
+              src="/adnu-campus-map.png"
+              alt="ADNU campus map"
+              className="campus-map-image"
+            />
+          </div>
         </section>
 
         <aside
