@@ -20,7 +20,6 @@ app.use("/api/v1/users", UserRoute);
 app.use("/api/v1/auths", AuthRoute);
 app.use("/api/v1/groups", GroupRoute);
 app.use("/api/v1/meetings", MeetingRoute);
-app.use("/api/v1/calendars", CalendarRoute);
 app.use("/api/v1/notifications", NotificationRoute);
 
 app.listen(PORT, () => {
