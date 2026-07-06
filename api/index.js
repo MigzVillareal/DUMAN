@@ -4,7 +4,6 @@ import UserRoute from "./routes/User.routes.js";
 import AuthRoute from "./routes/Auth.routes.js";
 import GroupRoute from "./routes/Group.routes.js";
 import MeetingRoute from "./routes/Meeting.routes.js";
-import CalendarRoute from "./routes/Calendar.routes.js";
 import NotificationRoute from "./routes/Notification.routes.js";
 
 const app = express();
