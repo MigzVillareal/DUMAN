@@ -22,94 +22,11 @@ function StepIndicator({ currentStep }) {
   );
 }
 
-/* ── Time slot row ───────────────────────────────────────────────── */
-function TimeSlotRow({ slot, index, onChange, onRemove }) {
-  return (
-    <div className="cmm-slot-row">
-      <input
-        id={`cmm-slot-date-${index}`}
-        className="cmm-input cmm-slot-date"
-        type="date"
-        value={slot.date}
-        onChange={(e) => onChange(index, "date", e.target.value)}
-        aria-label={`Slot ${index + 1} date`}
-      />
-      <input
-        id={`cmm-slot-start-${index}`}
-        className="cmm-input cmm-slot-time"
-        type="time"
-        value={slot.start}
-        onChange={(e) => onChange(index, "start", e.target.value)}
-        aria-label={`Slot ${index + 1} start time`}
-      />
-      <span className="cmm-slot-sep">–</span>
-      <input
-        id={`cmm-slot-end-${index}`}
-        className="cmm-input cmm-slot-time"
-        type="time"
-        value={slot.end}
-        onChange={(e) => onChange(index, "end", e.target.value)}
-        aria-label={`Slot ${index + 1} end time`}
-      />
-      <button
-        type="button"
-        className="cmm-slot-remove"
-        onClick={() => onRemove(index)}
-        aria-label={`Remove slot ${index + 1}`}
-      >
-        <Icon icon="xmark" size="xs" />
-      </button>
-    </div>
-  );
-}
-
 /* ── Step 1 — Details ────────────────────────────────────────────── */
-function StepDetails({ form, onChange }) {
-  const handleSlotChange = (index, field, value) => {
-    const updated = form.timeSlots.map((s, i) =>
-      i === index ? { ...s, [field]: value } : s
-    );
-    onChange("timeSlots", updated);
-  };
-
-  const handleAddSlot = () => {
-    onChange("timeSlots", [
-      ...form.timeSlots,
-      { date: "", start: "", end: "" },
-    ]);
-  };
-
-  const handleRemoveSlot = (index) => {
-    onChange(
-      "timeSlots",
-      form.timeSlots.filter((_, i) => i !== index)
-    );
-  };
-
+function StepDetails({ form, onChange, fixedGroup }) {
   return (
     <div className="cmm-step-body">
-      {/* Group & Meeting Title */}
-      <div className="cmm-row cmm-row--two">
-        <div className="cmm-field">
-          <label className="cmm-label" htmlFor="cmm-group">
-            Group
-          </label>
-          <div className="cmm-select-wrap">
-            <select
-              id="cmm-group"
-              className="cmm-input cmm-select"
-              value={form.group}
-              onChange={(e) => onChange("group", e.target.value)}
-            >
-              <option value="">Select group…</option>
-              <option value="research">Research</option>
-              <option value="volunteer">Volunteer</option>
-              <option value="study">Study Group</option>
-            </select>
-            <span className="cmm-select-arrow" aria-hidden="true">&#8964;</span>
-          </div>
-        </div>
-
+      {fixedGroup ? (
         <div className="cmm-field">
           <label className="cmm-label" htmlFor="cmm-title">
             Meeting Title
@@ -124,7 +41,44 @@ function StepDetails({ form, onChange }) {
             maxLength={120}
           />
         </div>
-      </div>
+      ) : (
+        <div className="cmm-row cmm-row--two">
+          <div className="cmm-field">
+            <label className="cmm-label" htmlFor="cmm-group">
+              Group
+            </label>
+            <div className="cmm-select-wrap">
+              <select
+                id="cmm-group"
+                className="cmm-input cmm-select"
+                value={form.group}
+                onChange={(e) => onChange("group", e.target.value)}
+              >
+                <option value="">Select group…</option>
+                <option value="research">Research</option>
+                <option value="volunteer">Volunteer</option>
+                <option value="study">Study Group</option>
+              </select>
+              <span className="cmm-select-arrow" aria-hidden="true">&#8964;</span>
+            </div>
+          </div>
+
+          <div className="cmm-field">
+            <label className="cmm-label" htmlFor="cmm-title">
+              Meeting Title
+            </label>
+            <input
+              id="cmm-title"
+              className="cmm-input"
+              type="text"
+              placeholder="e.g. Weekly Sync"
+              value={form.title}
+              onChange={(e) => onChange("title", e.target.value)}
+              maxLength={120}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Description */}
       <div className="cmm-field">
@@ -156,33 +110,36 @@ function StepDetails({ form, onChange }) {
         />
       </div>
 
-      {/* Proposed Time Slots */}
+      {/* Meeting Time */}
       <div className="cmm-field">
-        <span className="cmm-label">Proposed Time Slots</span>
-
-        <div className="cmm-slot-list">
-          {form.timeSlots.length === 0 ? (
-            <p className="cmm-slot-empty">No time slots added yet.</p>
-          ) : (
-            form.timeSlots.map((slot, i) => (
-              <TimeSlotRow
-                key={i}
-                slot={slot}
-                index={i}
-                onChange={handleSlotChange}
-                onRemove={handleRemoveSlot}
-              />
-            ))
-          )}
+        <span className="cmm-label">Meeting Time</span>
+        <div className="cmm-slot-row">
+          <input
+            id="cmm-date"
+            className="cmm-input cmm-slot-date"
+            type="date"
+            value={form.date}
+            onChange={(e) => onChange("date", e.target.value)}
+            aria-label="Meeting date"
+          />
+          <input
+            id="cmm-start"
+            className="cmm-input cmm-slot-time"
+            type="time"
+            value={form.start}
+            onChange={(e) => onChange("start", e.target.value)}
+            aria-label="Meeting start time"
+          />
+          <span className="cmm-slot-sep">–</span>
+          <input
+            id="cmm-end"
+            className="cmm-input cmm-slot-time"
+            type="time"
+            value={form.end}
+            onChange={(e) => onChange("end", e.target.value)}
+            aria-label="Meeting end time"
+          />
         </div>
-
-        <button
-          type="button"
-          className="cmm-add-slot-btn"
-          onClick={handleAddSlot}
-        >
-          + Add Slot
-        </button>
       </div>
     </div>
   );
@@ -209,12 +166,21 @@ const INITIAL_FORM = {
   title: "",
   description: "",
   deadline: "",
-  timeSlots: [],
+  date: "",
+  start: "",
+  end: "",
 };
 
-export default function ProposeScheduleModal({ onClose, onSubmit }) {
+function createInitialForm(fixedGroup) {
+  return {
+    ...INITIAL_FORM,
+    group: fixedGroup?.id ?? "",
+  };
+}
+
+export default function ProposeScheduleModal({ onClose, onSubmit, fixedGroup }) {
   const [step, setStep] = useState(0);
-  const [form, setForm] = useState(INITIAL_FORM);
+  const [form, setForm] = useState(() => createInitialForm(fixedGroup));
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const overlayRef = useRef(null);
@@ -239,7 +205,7 @@ export default function ProposeScheduleModal({ onClose, onSubmit }) {
 
   const validateStep = () => {
     if (step === 0) {
-      if (!form.group) return "Please select a group.";
+      if (!fixedGroup && !form.group) return "Please select a group.";
       if (!form.title.trim()) return "Meeting title is required.";
     }
     return "";
@@ -310,7 +276,13 @@ export default function ProposeScheduleModal({ onClose, onSubmit }) {
         )}
 
         {/* Step content */}
-        {step === 0 && <StepDetails form={form} onChange={handleChange} />}
+        {step === 0 && (
+          <StepDetails
+            form={form}
+            onChange={handleChange}
+            fixedGroup={fixedGroup}
+          />
+        )}
         {step === 1 && <StepLocation />}
 
         {/* Footer */}

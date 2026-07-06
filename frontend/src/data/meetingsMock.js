@@ -42,7 +42,7 @@ export const MEETINGS_LIST = [
     location: "Covered Court",
     schedule: "Friday, 10:00 AM – 11:00 AM",
     date: new Date(Date.now() + 86400000 * 3).toISOString().slice(0, 10),
-    status: "voting",
+    status: "pending",
     finalized: false,
     description:
       "Plan logistics and volunteer assignments for the upcoming outreach event.",
@@ -51,11 +51,8 @@ export const MEETINGS_LIST = [
       "Material preparation",
       "Transport coordination",
     ],
-    proposedTimes: [
-      { id: "t1", label: "Friday, 10:00 AM – 11:00 AM", votes: 5, total: 5 },
-      { id: "t2", label: "Saturday, 2:00 PM – 3:00 PM", votes: 3, total: 5 },
-      { id: "t3", label: "Sunday, 9:00 AM – 10:00 AM", votes: 2, total: 5 },
-    ],
+    attending: ["Juan Cruz", "Maria Hiwaga", "Miggy Villareal"],
+    notAttending: ["Victor Magtanggol", "Ivan Zabala"],
   },
   {
     id: 4,
@@ -92,5 +89,5 @@ export const MEETINGS_LIST = [
   },
 ];
 
-// Unfinalized (voting) meetings that appear in the "Finalize Meeting" modal
+// Unfinalized meetings that appear in the "Finalize Meeting" modal
 export const UNFINALIZED_MEETINGS = MEETINGS_LIST.filter((m) => !m.finalized);

@@ -16,6 +16,7 @@ import {
 } from "../utils/groups.js";
 import Icon from "../components/Icon.jsx";
 import InviteMembersModal from "../components/InviteMembersModal.jsx";
+import CreateMeetingModal from "../components/CreateMeetingModal.jsx";
 import RemoveMemberModal from "../components/RemoveMemberModal.jsx";
 import PageHeader from "../components/PageHeader.jsx";
 import { isToday } from "../utils/date.js";
@@ -80,6 +81,7 @@ export default function GroupPage() {
   const [removingMemberId, setRemovingMemberId] = useState(null);
   const [removeError, setRemoveError] = useState("");
   const [memberToRemove, setMemberToRemove] = useState(null);
+  const [showCreateMeetingModal, setShowCreateMeetingModal] = useState(false);
 
   const mockDetails = getGroupDetails(groupId);
   const meetings = USE_MOCK_GROUPS ? mockDetails.meetings : [];
@@ -271,9 +273,11 @@ export default function GroupPage() {
         action={
           <button
             type="button"
-            className="btn-primary group-page__btn-pill group-page__btn-pill--soft"
+            className="page-action-btn page-action-btn--primary"
+            onClick={() => setShowCreateMeetingModal(true)}
           >
-            Schedule
+            <Icon icon="plus" size="sm" />
+            Create Meeting
           </button>
         }
       />
@@ -365,6 +369,17 @@ export default function GroupPage() {
           existingMemberIds={members.map((member) => member.id)}
           submitting={inviting}
           submitError={inviteError}
+        />
+      )}
+
+      {showCreateMeetingModal && (
+        <CreateMeetingModal
+          fixedGroup={{ id: group.id, name: group.name }}
+          onClose={() => setShowCreateMeetingModal(false)}
+          onSubmit={async (data) => {
+            // TODO: wire to API when ready
+            console.log("Create Meeting submitted:", data);
+          }}
         />
       )}
 

@@ -1,0 +1,34 @@
+/* Shared primary action button for page headers (e.g. Create Meeting) */
+
+.page-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: auto;
+  padding: 0.5rem 1.25rem;
+  border-radius: 999px;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  border: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease, opacity 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.page-action-btn--primary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.page-action-btn--primary:hover:not(:disabled) {
+  background-color: #1e2f6e;
+}
+
+.page-action-btn--primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

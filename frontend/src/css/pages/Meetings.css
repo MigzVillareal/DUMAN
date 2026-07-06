@@ -53,6 +53,16 @@
   background-color: var(--color-hover-surface);
 }
 
+.meetings-btn--danger {
+  background-color: var(--color-surface);
+  color: var(--color-destructive);
+  border: 1px solid var(--color-destructive);
+}
+
+.meetings-btn--danger:hover {
+  background-color: #fef3f2;
+}
+
 /* ── Filter Tabs ─────────────────────────────────────────────────── */
 .meetings-filters {
   display: flex;
@@ -182,6 +192,15 @@
   background-color: var(--color-panel);
 }
 
+.meetings-detail__footer-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.meetings-detail__footer-actions .meetings-btn {
+  flex: 1;
+}
+
 .meetings-detail__finalize-btn {
   width: 100%;
 }
@@ -254,7 +273,7 @@
   color: #555;
 }
 
-.meetings-badge--voting {
+.meetings-badge--pending {
   background-color: #fff3cd;
   color: var(--color-gold-text);
 }
@@ -358,6 +377,14 @@
   line-height: 1.55;
   margin: 0;
   color: #444;
+}
+
+.meetings-detail__member-list {
+  margin: 0.25rem 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.875rem;
+  color: #444;
+  line-height: 1.6;
 }
 
 .meetings-detail__agenda {
@@ -510,71 +537,29 @@
   color: #888;
 }
 
-/* ── Vote rows ───────────────────────────────────────────────────── */
-.finalize-vote-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-top: 0.35rem;
-}
-
-.finalize-vote-row {
-  width: 100%;
-  background-color: var(--color-inset);
-  border: 1.5px solid var(--color-border);
-  border-radius: 0.5rem;
-  padding: 0.5rem 0.75rem;
+/* ── Member attendance (Step 2) ──────────────────────────────────── */
+.finalize-modal__members {
   display: grid;
-  grid-template-columns: 1fr auto auto;
-  align-items: center;
-  gap: 0.625rem;
-  cursor: pointer;
-  font-family: var(--font-ui);
-  transition: border-color 0.15s ease, background-color 0.15s ease;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
-.finalize-vote-row:hover {
-  border-color: var(--color-primary);
-  background-color: #f0f4ff;
-}
-
-.finalize-vote-row--selected {
-  border-color: var(--color-primary);
-  background-color: #dce5f8;
-}
-
-.finalize-vote-row__label {
+.finalize-members-group__empty {
+  margin: 0.25rem 0 0;
   font-size: 0.8125rem;
-  color: var(--color-text);
-  font-weight: var(--weight-medium);
-  text-align: left;
+  color: #888;
 }
 
-.finalize-vote-row__bar-wrap {
-  width: 80px;
-  height: 8px;
-  background-color: var(--color-border);
-  border-radius: 999px;
-  overflow: hidden;
+.finalize-members-group__list {
+  margin: 0.25rem 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.875rem;
+  color: #444;
+  line-height: 1.6;
 }
 
-.finalize-vote-row__bar {
-  height: 100%;
-  background-color: var(--color-primary);
-  border-radius: 999px;
-  transition: width 0.3s ease;
-}
-
-.finalize-vote-row--selected .finalize-vote-row__bar {
-  background-color: #1e2f6e;
-}
-
-.finalize-vote-row__count {
-  font-size: 0.8125rem;
-  font-weight: var(--weight-semibold);
-  color: var(--color-primary);
-  min-width: 28px;
-  text-align: right;
+.finalize-members-group__item {
+  margin: 0;
 }
 
 /* ── Meta grid (Step 2 bottom) ───────────────────────────────────── */
@@ -608,8 +593,14 @@
 .finalize-modal__actions {
   display: flex;
   gap: 0.75rem;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 0.25rem;
+}
+
+.finalize-modal__actions-group {
+  display: flex;
+  gap: 0.75rem;
 }
 
 .finalize-modal__actions--right {

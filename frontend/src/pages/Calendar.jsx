@@ -50,8 +50,7 @@ function Calendar() {
         groupFilter,
       });
       setEvents(nextEvents);
-    } catch (err) {
-      setError(err.message ?? "Unable to load calendar.");
+    } catch {
       setEvents([]);
     } finally {
       setLoading(false);
@@ -112,7 +111,7 @@ function Calendar() {
         action={
           <button
             type="button"
-            className="calendar-btn calendar-btn--primary"
+            className="page-action-btn page-action-btn--primary"
             onClick={() => setShowCreateMeetingModal(true)}
           >
             <Icon icon="plus" size="sm" />
