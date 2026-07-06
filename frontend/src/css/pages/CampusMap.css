@@ -105,8 +105,16 @@
   cursor: pointer;
 }
 
+.campus-map-pin .app-icon {
+  font-size: 2rem;
+}
+
 .campus-map-pin--active {
   color: var(--color-primary);
+}
+
+.campus-map-pin--active .app-icon {
+  font-size: 2.25rem;
 }
 
 .campus-map-grid {
