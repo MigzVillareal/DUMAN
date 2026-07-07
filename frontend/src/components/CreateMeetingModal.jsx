@@ -129,9 +129,7 @@ function StepLocation({ form, onLocationChange, onFieldChange }) {
           </ul>
         </section>
 
-        <section
-          className={`cmm-location-picker__details campus-map-selected-room-card${selectedLocation && !hasRoomSelection ? " campus-map-selected-room-card--compact" : ""}`}
-        >
+        <section className="cmm-location-picker__details campus-map-selected-room-card">
           {selectedLocation ? (
             <>
               <header className="campus-map-selected-room-card__header">
@@ -139,41 +137,49 @@ function StepLocation({ form, onLocationChange, onFieldChange }) {
                   {selectedLocation.building}
                 </h3>
               </header>
-              {hasRoomSelection && (
-                <div className="campus-map-selected-room-card__details">
-                  <label className="campus-map-detail-field" htmlFor="cmm-location-floor">
-                    <span className="campus-map-detail-field__label">Floor Number</span>
-                    <select
-                      id="cmm-location-floor"
-                      className="campus-map-select"
-                      value={form.floor}
-                      onChange={handleFloorChange}
-                    >
-                      {selectedLocation.floors.map((floor) => (
+              <div className="campus-map-selected-room-card__details">
+                <label className="campus-map-detail-field" htmlFor="cmm-location-floor">
+                  <span className="campus-map-detail-field__label">Floor Number</span>
+                  <select
+                    id="cmm-location-floor"
+                    className="campus-map-select"
+                    value={hasRoomSelection ? form.floor : ""}
+                    onChange={handleFloorChange}
+                    disabled={!hasRoomSelection}
+                  >
+                    {hasRoomSelection ? (
+                      selectedLocation.floors.map((floor) => (
                         <option key={floor} value={floor}>
                           Floor {floor}
                         </option>
-                      ))}
-                    </select>
-                  </label>
+                      ))
+                    ) : (
+                      <option value="">Not applicable</option>
+                    )}
+                  </select>
+                </label>
 
-                  <label className="campus-map-detail-field" htmlFor="cmm-location-room">
-                    <span className="campus-map-detail-field__label">Room Number</span>
-                    <select
-                      id="cmm-location-room"
-                      className="campus-map-select"
-                      value={form.room}
-                      onChange={(event) => onFieldChange("room", event.target.value)}
-                    >
-                      {roomOptions.map((room) => (
+                <label className="campus-map-detail-field" htmlFor="cmm-location-room">
+                  <span className="campus-map-detail-field__label">Room Number</span>
+                  <select
+                    id="cmm-location-room"
+                    className="campus-map-select"
+                    value={hasRoomSelection ? form.room : ""}
+                    onChange={(event) => onFieldChange("room", event.target.value)}
+                    disabled={!hasRoomSelection}
+                  >
+                    {hasRoomSelection ? (
+                      roomOptions.map((room) => (
                         <option key={room} value={room}>
                           {room}
                         </option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
-              )}
+                      ))
+                    ) : (
+                      <option value="">Not applicable</option>
+                    )}
+                  </select>
+                </label>
+              </div>
             </>
           ) : (
             <p className="campus-map-selected-room-card__instruction">

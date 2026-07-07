@@ -154,7 +154,6 @@ function Meetings() {
   const { user } = useAuth();
   const [meetings, setMeetings] = useState(USE_MOCK_MEETINGS ? MEETINGS_LIST : []);
   const [loading, setLoading] = useState(!USE_MOCK_MEETINGS);
-  const [loadError, setLoadError] = useState("");
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState(null);
@@ -171,14 +170,12 @@ function Meetings() {
     }
 
     setLoading(true);
-    setLoadError("");
 
     try {
       const data = await fetchUserMeetings(user.userId);
       setMeetings((data.meetings ?? []).map(mapMeetingForMeetingsList));
-    } catch (err) {
+    } catch {
       setMeetings([]);
-      setLoadError(err.message ?? "Unable to load meetings.");
     } finally {
       setLoading(false);
     }
@@ -259,12 +256,6 @@ function Meetings() {
           </button>
         }
       />
-
-      {loadError && (
-        <p className="meetings-list-panel__empty" role="alert">
-          {loadError}
-        </p>
-      )}
 
       {/* ── Filter Tabs ── */}
       <nav className="meetings-filters" aria-label="Meeting filters">

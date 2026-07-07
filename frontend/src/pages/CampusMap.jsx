@@ -92,13 +92,7 @@ function CampusMap() {
         </section>
 
         <aside className="campus-map-sidebar" aria-label="Room details and locations">
-          <section
-            className={`campus-map-selected-room-card${
-              selectedLocation && !hasRoomSelection
-                ? " campus-map-selected-room-card--compact"
-                : ""
-            }`}
-          >
+          <section className="campus-map-selected-room-card">
             {selectedLocation ? (
               <>
                 <header className="campus-map-selected-room-card__header">
@@ -106,41 +100,49 @@ function CampusMap() {
                     {selectedLocation.building}
                   </h2>
                 </header>
-                {hasRoomSelection && (
-                  <div className="campus-map-selected-room-card__details">
-                    <label className="campus-map-detail-field" htmlFor="campus-map-floor">
-                      <span className="campus-map-detail-field__label">Floor Number</span>
-                      <select
-                        id="campus-map-floor"
-                        className="campus-map-select"
-                        value={selectedFloor}
-                        onChange={handleFloorChange}
-                      >
-                        {selectedLocation.floors.map((floor) => (
+                <div className="campus-map-selected-room-card__details">
+                  <label className="campus-map-detail-field" htmlFor="campus-map-floor">
+                    <span className="campus-map-detail-field__label">Floor Number</span>
+                    <select
+                      id="campus-map-floor"
+                      className="campus-map-select"
+                      value={hasRoomSelection ? selectedFloor : ""}
+                      onChange={handleFloorChange}
+                      disabled={!hasRoomSelection}
+                    >
+                      {hasRoomSelection ? (
+                        selectedLocation.floors.map((floor) => (
                           <option key={floor} value={floor}>
                             Floor {floor}
                           </option>
-                        ))}
-                      </select>
-                    </label>
+                        ))
+                      ) : (
+                        <option value="">Not applicable</option>
+                      )}
+                    </select>
+                  </label>
 
-                    <label className="campus-map-detail-field" htmlFor="campus-map-room">
-                      <span className="campus-map-detail-field__label">Room Number</span>
-                      <select
-                        id="campus-map-room"
-                        className="campus-map-select"
-                        value={selectedRoom}
-                        onChange={(event) => setSelectedRoom(event.target.value)}
-                      >
-                        {roomOptions.map((room) => (
+                  <label className="campus-map-detail-field" htmlFor="campus-map-room">
+                    <span className="campus-map-detail-field__label">Room Number</span>
+                    <select
+                      id="campus-map-room"
+                      className="campus-map-select"
+                      value={hasRoomSelection ? selectedRoom : ""}
+                      onChange={(event) => setSelectedRoom(event.target.value)}
+                      disabled={!hasRoomSelection}
+                    >
+                      {hasRoomSelection ? (
+                        roomOptions.map((room) => (
                           <option key={room} value={room}>
                             {room}
                           </option>
-                        ))}
-                      </select>
-                    </label>
-                  </div>
-                )}
+                        ))
+                      ) : (
+                        <option value="">Not applicable</option>
+                      )}
+                    </select>
+                  </label>
+                </div>
                 <footer className="campus-map-selected-room-card__footer">
                   <button
                     type="button"

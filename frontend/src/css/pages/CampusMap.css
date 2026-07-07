@@ -214,6 +214,13 @@
   color: var(--color-text);
 }
 
+.campus-map-select:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  background-color: var(--color-inset);
+  color: #888;
+}
+
 .campus-map-selected-room-card__footer {
   flex-shrink: 0;
   padding: 0.875rem 1.5rem 1.25rem;
