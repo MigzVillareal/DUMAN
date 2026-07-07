@@ -387,14 +387,6 @@
   line-height: 1.6;
 }
 
-.meetings-detail__agenda {
-  margin: 0;
-  padding-left: 1.1rem;
-  font-size: 0.875rem;
-  color: #444;
-  line-height: 1.7;
-}
-
 /* ================================================================
    Finalize Meeting Modal
    ================================================================ */
@@ -579,14 +571,6 @@
 
 .finalize-modal__meta-item--full {
   grid-column: 1 / -1;
-}
-
-.finalize-modal__agenda {
-  margin: 0.1rem 0 0;
-  padding-left: 1.1rem;
-  font-size: 0.8125rem;
-  color: #555;
-  line-height: 1.7;
 }
 
 /* ── Modal action row ────────────────────────────────────────────── */

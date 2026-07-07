@@ -59,12 +59,6 @@ function MeetingCard({ meeting }) {
         <div className="dashboard-meeting-card__body">
           <p className="dashboard-meeting-card__label">Meeting Description:</p>
           <p className="dashboard-meeting-card__text">{meeting.description}</p>
-          <p className="dashboard-meeting-card__label">Agenda</p>
-          <ul className="dashboard-meeting-card__agenda">
-            {meeting.agenda.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
         </div>
       )}
     </article>

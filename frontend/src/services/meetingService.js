@@ -105,7 +105,6 @@ export function mapMeetingForMeetingsList(meeting) {
     status: mapMeetingUiStatus(meeting.status),
     finalized: meeting.status !== "FINISHED",
     description: meeting.description ?? "",
-    agenda: [],
     attending: [],
     notAttending: [],
   };
@@ -119,7 +118,6 @@ export function mapMeetingForGroupPage(meeting, index = 0) {
     schedule: formatMeetingSchedule(meeting.schedule, meeting.endsAt),
     date: new Date(meeting.schedule).toISOString().slice(0, 10),
     description: meeting.description ?? "",
-    agenda: [],
     defaultExpanded: index === 0,
   };
 }

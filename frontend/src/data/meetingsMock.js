@@ -12,11 +12,6 @@ export const MEETINGS_LIST = [
     finalized: true,
     description:
       "Review progress on individual thesis chapters and align on next steps.",
-    agenda: [
-      "Chapter status updates",
-      "Adviser feedback discussion",
-      "Timeline adjustment",
-    ],
   },
   {
     id: 2,
@@ -29,11 +24,6 @@ export const MEETINGS_LIST = [
     finalized: true,
     description:
       "Collaborative review session for the upcoming Ethics in IT midterm exam.",
-    agenda: [
-      "Review key concepts",
-      "Past exam walkthroughs",
-      "Q&A session",
-    ],
   },
   {
     id: 3,
@@ -46,11 +36,6 @@ export const MEETINGS_LIST = [
     finalized: false,
     description:
       "Plan logistics and volunteer assignments for the upcoming outreach event.",
-    agenda: [
-      "Assign team roles",
-      "Material preparation",
-      "Transport coordination",
-    ],
     attending: ["Juan Cruz", "Maria Hiwaga", "Miggy Villareal"],
     notAttending: ["Victor Magtanggol", "Ivan Zabala"],
   },
@@ -65,11 +50,6 @@ export const MEETINGS_LIST = [
     finalized: true,
     description:
       "Reviewed and compiled relevant literature for the research background section.",
-    agenda: [
-      "Source evaluation",
-      "Annotation review",
-      "Bibliography compilation",
-    ],
   },
   {
     id: 5,
@@ -81,11 +61,6 @@ export const MEETINGS_LIST = [
     status: "past",
     finalized: true,
     description: "Intensive preparation for the midterm examinations.",
-    agenda: [
-      "Practice problems",
-      "Concept clarification",
-      "Group Q&A",
-    ],
   },
 ];
 
