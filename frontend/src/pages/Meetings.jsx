@@ -1,11 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "../css/pages/Login.css";
 import "../css/pages/Meetings.css";
 import Icon from "../components/Icon.jsx";
 import PageHeader from "../components/PageHeader.jsx";
 import FinalizeMeetingModal from "../components/FinalizeMeetingModal.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 import { MEETINGS_LIST } from "../data/meetingsMock.js";
 import { USE_MOCK_MEETINGS } from "../data/mock.js";
+import {
+  fetchUserMeetings,
+  mapMeetingForMeetingsList,
+} from "../services/meetingService.js";
 
 // ── Status badge ──────────────────────────────────────────────────────────────
 function StatusBadge({ status }) {
@@ -146,12 +151,42 @@ const FILTERS = [
 
 // ── Main Page ─────────────────────────────────────────────────────────────────
 function Meetings() {
+  const { user } = useAuth();
   const [meetings, setMeetings] = useState(USE_MOCK_MEETINGS ? MEETINGS_LIST : []);
+  const [loading, setLoading] = useState(!USE_MOCK_MEETINGS);
+  const [loadError, setLoadError] = useState("");
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMeeting, setModalMeeting] = useState(null);
+
+  const loadMeetings = useCallback(async () => {
+    if (USE_MOCK_MEETINGS) return;
+
+    if (!user?.userId) {
+      setMeetings([]);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    setLoadError("");
+
+    try {
+      const data = await fetchUserMeetings(user.userId);
+      setMeetings((data.meetings ?? []).map(mapMeetingForMeetingsList));
+    } catch (err) {
+      setMeetings([]);
+      setLoadError(err.message ?? "Unable to load meetings.");
+    } finally {
+      setLoading(false);
+    }
+  }, [user?.userId]);
+
+  useEffect(() => {
+    loadMeetings();
+  }, [loadMeetings]);
 
   const openFinalizeModal = (meeting = null) => {
     setModalMeeting(meeting);
@@ -225,6 +260,12 @@ function Meetings() {
         }
       />
 
+      {loadError && (
+        <p className="meetings-list-panel__empty" role="alert">
+          {loadError}
+        </p>
+      )}
+
       {/* ── Filter Tabs ── */}
       <nav className="meetings-filters" aria-label="Meeting filters">
         {FILTERS.map((f) => (
@@ -259,7 +300,9 @@ function Meetings() {
           </div>
 
           <div className="meetings-list-panel__list">
-            {filtered.length === 0 ? (
+            {loading ? (
+              <p className="meetings-list-panel__empty">Loading meetings...</p>
+            ) : filtered.length === 0 ? (
               <p className="meetings-list-panel__empty">No meetings found.</p>
             ) : (
               filtered.map((meeting) => (

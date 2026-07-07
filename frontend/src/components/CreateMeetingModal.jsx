@@ -1,8 +1,25 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Icon from "./Icon.jsx";
 import "../css/components_styles/CreateMeetingModal.css";
+import "../css/pages/CampusMap.css";
+import {
+  campusLocations,
+  getRoomsForFloor,
+  locationHasRoomSelection,
+} from "../data/campusLocations.js";
 
-const STEPS = ["Details", "Location"];
+const STEPS = ["Location", "Details"];
+
+function formatSelectedLocation(form) {
+  const location = campusLocations.find((item) => item.id === form.locationId);
+  if (!location) return "";
+
+  if (locationHasRoomSelection(location) && form.floor && form.room) {
+    return `${location.building} · Floor ${form.floor} · ${form.room}`;
+  }
+
+  return location.building;
+}
 
 /* ── Step indicator tabs ─────────────────────────────────────────── */
 function StepIndicator({ currentStep }) {
@@ -22,10 +39,166 @@ function StepIndicator({ currentStep }) {
   );
 }
 
-/* ── Step 1 — Details ────────────────────────────────────────────── */
-function StepDetails({ form, onChange, fixedGroup }) {
+/* ── Step 1 — Location ───────────────────────────────────────────── */
+function StepLocation({ form, onLocationChange, onFieldChange }) {
+  const [locationSearch, setLocationSearch] = useState("");
+
+  const selectedLocation = campusLocations.find(
+    (location) => location.id === form.locationId
+  );
+  const hasRoomSelection = selectedLocation
+    ? locationHasRoomSelection(selectedLocation)
+    : false;
+  const roomOptions = hasRoomSelection
+    ? (getRoomsForFloor(selectedLocation, form.floor) ?? [])
+    : null;
+
+  const filteredLocations = useMemo(() => {
+    const query = locationSearch.trim().toLowerCase();
+    if (!query) return campusLocations;
+
+    return campusLocations.filter((location) =>
+      location.building.toLowerCase().includes(query)
+    );
+  }, [locationSearch]);
+
+  function selectLocation(location) {
+    if (locationHasRoomSelection(location)) {
+      const floor = location.floors[0];
+      onLocationChange({
+        locationId: location.id,
+        floor,
+        room: location.roomsByFloor[floor][0],
+      });
+      return;
+    }
+
+    onLocationChange({
+      locationId: location.id,
+      floor: "",
+      room: "",
+    });
+  }
+
+  function handleFloorChange(event) {
+    const floor = event.target.value;
+    const rooms = getRoomsForFloor(selectedLocation, floor);
+    onLocationChange({
+      locationId: form.locationId,
+      floor,
+      room: rooms?.[0] ?? "",
+    });
+  }
+
+  return (
+    <div className="cmm-step-body cmm-step-body--location">
+      <div className="cmm-location-picker">
+        <section className="cmm-location-picker__list campus-map-all-locations-card">
+          <header className="campus-map-all-locations-card__header">
+            <h3 className="campus-map-all-locations-card__title">All Locations</h3>
+          </header>
+          <div className="campus-map-all-locations-card__search-wrap">
+            <span className="campus-map-all-locations-card__search-icon">
+              <Icon icon="search" size="sm" />
+            </span>
+            <input
+              id="cmm-locations-search"
+              type="text"
+              className="campus-map-all-locations-card__search"
+              placeholder="Search locations..."
+              value={locationSearch}
+              onChange={(event) => setLocationSearch(event.target.value)}
+            />
+          </div>
+          <ul className="campus-map-all-locations-card__list">
+            {filteredLocations.length === 0 ? (
+              <li className="campus-map-all-locations-card__empty">No locations found.</li>
+            ) : (
+              filteredLocations.map((location) => (
+                <li key={location.id}>
+                  <button
+                    type="button"
+                    className={`campus-map-location-item${selectedLocation?.id === location.id ? " campus-map-location-item--active" : ""}`}
+                    onClick={() => selectLocation(location)}
+                  >
+                    <span className="campus-map-location-item__name">{location.building}</span>
+                  </button>
+                </li>
+              ))
+            )}
+          </ul>
+        </section>
+
+        <section
+          className={`cmm-location-picker__details campus-map-selected-room-card${selectedLocation && !hasRoomSelection ? " campus-map-selected-room-card--compact" : ""}`}
+        >
+          {selectedLocation ? (
+            <>
+              <header className="campus-map-selected-room-card__header">
+                <h3 className="campus-map-selected-room-card__room-code">
+                  {selectedLocation.building}
+                </h3>
+              </header>
+              {hasRoomSelection && (
+                <div className="campus-map-selected-room-card__details">
+                  <label className="campus-map-detail-field" htmlFor="cmm-location-floor">
+                    <span className="campus-map-detail-field__label">Floor Number</span>
+                    <select
+                      id="cmm-location-floor"
+                      className="campus-map-select"
+                      value={form.floor}
+                      onChange={handleFloorChange}
+                    >
+                      {selectedLocation.floors.map((floor) => (
+                        <option key={floor} value={floor}>
+                          Floor {floor}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label className="campus-map-detail-field" htmlFor="cmm-location-room">
+                    <span className="campus-map-detail-field__label">Room Number</span>
+                    <select
+                      id="cmm-location-room"
+                      className="campus-map-select"
+                      value={form.room}
+                      onChange={(event) => onFieldChange("room", event.target.value)}
+                    >
+                      {roomOptions.map((room) => (
+                        <option key={room} value={room}>
+                          {room}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+              )}
+            </>
+          ) : (
+            <p className="campus-map-selected-room-card__instruction">
+              Select a location to view details.
+            </p>
+          )}
+        </section>
+      </div>
+    </div>
+  );
+}
+
+/* ── Step 2 — Details ────────────────────────────────────────────── */
+function StepDetails({ form, onChange, fixedGroup, groups = [] }) {
+  const selectedLocationLabel = formatSelectedLocation(form);
+
   return (
     <div className="cmm-step-body">
+      {selectedLocationLabel && (
+        <div className="cmm-selected-location">
+          <span className="cmm-selected-location__label">Location</span>
+          <p className="cmm-selected-location__value">{selectedLocationLabel}</p>
+        </div>
+      )}
+
       {fixedGroup ? (
         <div className="cmm-field">
           <label className="cmm-label" htmlFor="cmm-title">
@@ -55,9 +228,11 @@ function StepDetails({ form, onChange, fixedGroup }) {
                 onChange={(e) => onChange("group", e.target.value)}
               >
                 <option value="">Select group…</option>
-                <option value="research">Research</option>
-                <option value="volunteer">Volunteer</option>
-                <option value="study">Study Group</option>
+                {groups.map((group) => (
+                  <option key={group.groupId} value={group.groupId}>
+                    {group.name}
+                  </option>
+                ))}
               </select>
               <span className="cmm-select-arrow" aria-hidden="true">&#8964;</span>
             </div>
@@ -145,21 +320,6 @@ function StepDetails({ form, onChange, fixedGroup }) {
   );
 }
 
-/* ── Step 2 — Location (map placeholder) ────────────────────────── */
-function StepLocation() {
-  return (
-    <div className="cmm-step-body">
-      <p className="cmm-location-hint">
-        Tap a pin to select a preferred meeting location.
-      </p>
-      <div
-        className="cmm-map-placeholder"
-        aria-label="Campus map (coming soon)"
-      />
-    </div>
-  );
-}
-
 /* ── Main modal ──────────────────────────────────────────────────── */
 const INITIAL_FORM = {
   group: "",
@@ -169,18 +329,31 @@ const INITIAL_FORM = {
   date: "",
   start: "",
   end: "",
+  locationId: "",
+  floor: "",
+  room: "",
 };
 
-function createInitialForm(fixedGroup) {
+function createInitialForm(fixedGroup, fixedLocation) {
   return {
     ...INITIAL_FORM,
-    group: fixedGroup?.id ?? "",
+    group: fixedGroup?.groupId ?? fixedGroup?.id ?? "",
+    locationId: fixedLocation?.locationId ?? "",
+    floor: fixedLocation?.floor ?? "",
+    room: fixedLocation?.room ?? "",
   };
 }
 
-export default function ProposeScheduleModal({ onClose, onSubmit, fixedGroup }) {
-  const [step, setStep] = useState(0);
-  const [form, setForm] = useState(() => createInitialForm(fixedGroup));
+export default function ProposeScheduleModal({
+  onClose,
+  onSubmit,
+  fixedGroup,
+  fixedLocation,
+  groups = [],
+}) {
+  const skipLocationStep = Boolean(fixedLocation);
+  const [step, setStep] = useState(() => (skipLocationStep ? 1 : 0));
+  const [form, setForm] = useState(() => createInitialForm(fixedGroup, fixedLocation));
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const overlayRef = useRef(null);
@@ -203,8 +376,16 @@ export default function ProposeScheduleModal({ onClose, onSubmit, fixedGroup }) 
     if (error) setError("");
   };
 
+  const handleLocationChange = (patch) => {
+    setForm((prev) => ({ ...prev, ...patch }));
+    if (error) setError("");
+  };
+
   const validateStep = () => {
-    if (step === 0) {
+    if (step === 0 && !skipLocationStep) {
+      if (!form.locationId) return "Please select a location.";
+    }
+    if (step === 1) {
       if (!fixedGroup && !form.group) return "Please select a group.";
       if (!form.title.trim()) return "Meeting title is required.";
     }
@@ -227,6 +408,12 @@ export default function ProposeScheduleModal({ onClose, onSubmit, fixedGroup }) 
   };
 
   const handleSubmit = async () => {
+    const validationError = validateStep();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
     setSubmitting(true);
     try {
       await onSubmit?.(form);
@@ -249,7 +436,7 @@ export default function ProposeScheduleModal({ onClose, onSubmit, fixedGroup }) 
       aria-modal="true"
       aria-labelledby="cmm-heading"
     >
-      <div className="cmm-modal">
+      <div className={`cmm-modal${step === 0 && !skipLocationStep ? " cmm-modal--wide" : ""}`}>
         {/* Header */}
         <div className="cmm-header">
           <h2 id="cmm-heading" className="cmm-heading">
@@ -266,7 +453,7 @@ export default function ProposeScheduleModal({ onClose, onSubmit, fixedGroup }) 
         </div>
 
         {/* Step tabs */}
-        <StepIndicator currentStep={step} />
+        {!skipLocationStep && <StepIndicator currentStep={step} />}
 
         {/* Error */}
         {error && (
@@ -276,18 +463,25 @@ export default function ProposeScheduleModal({ onClose, onSubmit, fixedGroup }) 
         )}
 
         {/* Step content */}
-        {step === 0 && (
+        {step === 0 && !skipLocationStep && (
+          <StepLocation
+            form={form}
+            onLocationChange={handleLocationChange}
+            onFieldChange={handleChange}
+          />
+        )}
+        {step === 1 && (
           <StepDetails
             form={form}
             onChange={handleChange}
             fixedGroup={fixedGroup}
+            groups={groups}
           />
         )}
-        {step === 1 && <StepLocation />}
 
         {/* Footer */}
         <div className="cmm-footer">
-          {step === 0 ? (
+          {step === 0 || skipLocationStep ? (
             <button
               type="button"
               className="cmm-btn cmm-btn--secondary"

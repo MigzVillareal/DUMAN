@@ -100,7 +100,7 @@
   padding: 0;
   border: none;
   background: none;
-  color: #e53935;
+  color: var(--color-primary);
   transform: translate(-50%, -100%);
   cursor: pointer;
 }
@@ -110,7 +110,7 @@
 }
 
 .campus-map-pin--active {
-  color: var(--color-primary);
+  color: #e53935;
 }
 
 .campus-map-pin--active .app-icon {
@@ -145,6 +145,18 @@
   overflow: hidden;
 }
 
+.campus-map-selected-room-card--compact {
+  min-height: 0;
+}
+
+.campus-map-selected-room-card--compact .campus-map-selected-room-card__header {
+  padding-bottom: 1rem;
+}
+
+.campus-map-selected-room-card--compact .campus-map-selected-room-card__footer {
+  padding-top: 0;
+}
+
 .campus-map-selected-room-card__instruction {
   margin: auto;
   padding: 1.5rem;
@@ -168,12 +180,6 @@
   font-weight: var(--weight-bold);
   color: var(--color-primary);
   line-height: 1.1;
-}
-
-.campus-map-selected-room-card__room-type {
-  margin: 0;
-  font-size: 0.9375rem;
-  color: #666;
 }
 
 .campus-map-selected-room-card__details {
@@ -231,6 +237,52 @@
   border-bottom: 1px solid var(--color-border);
 }
 
+.campus-map-all-locations-card__search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0.75rem 1.25rem;
+}
+
+.campus-map-all-locations-card__search-icon {
+  position: absolute;
+  left: calc(1.25rem + 9px);
+  display: flex;
+  align-items: center;
+  color: #aaa;
+  pointer-events: none;
+}
+
+.campus-map-all-locations-card__search {
+  width: 100%;
+  padding: 0.425rem 0.625rem 0.425rem 1.875rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background-color: var(--color-inset);
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  color: var(--color-text);
+  outline: none;
+  transition: border-color 0.15s ease;
+  box-sizing: border-box;
+}
+
+.campus-map-all-locations-card__search::placeholder {
+  color: #aaa;
+}
+
+.campus-map-all-locations-card__search:focus {
+  border-color: var(--color-primary);
+}
+
+.campus-map-all-locations-card__empty {
+  padding: 1rem 1.25rem;
+  font-size: 0.875rem;
+  color: #666;
+  text-align: center;
+}
+
 .campus-map-all-locations-card__title {
   margin: 0;
   font-family: var(--font-display);
@@ -242,6 +294,38 @@
 .campus-map-all-locations-card__list {
   flex: 1;
   min-height: 280px;
+  margin: 0;
+  padding: 0.5rem 0;
+  list-style: none;
+  overflow-y: auto;
+}
+
+.campus-map-location-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.125rem;
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.campus-map-location-item:hover {
+  background-color: rgba(39, 60, 141, 0.06);
+}
+
+.campus-map-location-item--active {
+  background-color: rgba(39, 60, 141, 0.1);
+}
+
+.campus-map-location-item__name {
+  font-size: 0.9375rem;
+  font-weight: var(--weight-semibold);
+  color: var(--color-primary);
 }
 
 @media (max-width: 900px) {

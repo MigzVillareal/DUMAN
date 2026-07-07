@@ -10,6 +10,11 @@ import {
   USE_MOCK_GROUPS,
 } from "../services/groupService.js";
 import {
+  createMeeting,
+  fetchGroupMeetings,
+  mapMeetingForGroupPage,
+} from "../services/meetingService.js";
+import {
   canRemoveGroupMember,
   ensureOwnerAsLeader,
   mapApiMember,
@@ -82,9 +87,10 @@ export default function GroupPage() {
   const [removeError, setRemoveError] = useState("");
   const [memberToRemove, setMemberToRemove] = useState(null);
   const [showCreateMeetingModal, setShowCreateMeetingModal] = useState(false);
+  const [meetings, setMeetings] = useState([]);
+  const [meetingsLoading, setMeetingsLoading] = useState(!USE_MOCK_GROUPS);
 
   const mockDetails = getGroupDetails(groupId);
-  const meetings = USE_MOCK_GROUPS ? mockDetails.meetings : [];
 
   useEffect(() => {
     if (!group) {
@@ -149,6 +155,67 @@ export default function GroupPage() {
       cancelled = true;
     };
   }, [group?.id, group?.groupId, group?.userId, groupId, user?.userId]);
+
+  useEffect(() => {
+    if (!group) {
+      setMeetings([]);
+      setMeetingsLoading(false);
+      return;
+    }
+
+    if (USE_MOCK_GROUPS) {
+      setMeetings(mockDetails.meetings ?? []);
+      setMeetingsLoading(false);
+      return;
+    }
+
+    if (group.groupId == null) {
+      setMeetings([]);
+      setMeetingsLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+
+    async function loadMeetings() {
+      setMeetingsLoading(true);
+
+      try {
+        const data = await fetchGroupMeetings(group.groupId);
+
+        if (cancelled) return;
+
+        if (data.errorMessage) {
+          setMeetings([]);
+          return;
+        }
+
+        const upcoming = (data.meetings ?? [])
+          .filter((meeting) => meeting.status !== "FINISHED")
+          .sort(
+            (a, b) =>
+              new Date(a.schedule).getTime() - new Date(b.schedule).getTime()
+          )
+          .map((meeting, index) => mapMeetingForGroupPage(meeting, index));
+
+        setMeetings(upcoming);
+      } catch {
+        if (!cancelled) {
+          setMeetings([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setMeetingsLoading(false);
+        }
+      }
+    }
+
+    loadMeetings();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [group?.groupId, groupId, mockDetails.meetings]);
 
   if (loading) {
     return (
@@ -286,7 +353,9 @@ export default function GroupPage() {
         <section className="dashboard-panel">
           <h2 className="dashboard-panel__title">Upcoming Group Meetings</h2>
           <div className="dashboard-panel__list">
-            {meetings.length === 0 ? (
+            {meetingsLoading ? (
+              <p className="group-page__empty">Loading meetings...</p>
+            ) : meetings.length === 0 ? (
               <p className="group-page__empty">No upcoming meetings scheduled.</p>
             ) : (
               meetings.map((meeting) => (
@@ -374,11 +443,19 @@ export default function GroupPage() {
 
       {showCreateMeetingModal && (
         <CreateMeetingModal
-          fixedGroup={{ id: group.id, name: group.name }}
+          fixedGroup={{ id: group.id, groupId: group.groupId, name: group.name }}
           onClose={() => setShowCreateMeetingModal(false)}
           onSubmit={async (data) => {
-            // TODO: wire to API when ready
-            console.log("Create Meeting submitted:", data);
+            await createMeeting(data);
+            const result = await fetchGroupMeetings(group.groupId);
+            const upcoming = (result.meetings ?? [])
+              .filter((meeting) => meeting.status !== "FINISHED")
+              .sort(
+                (a, b) =>
+                  new Date(a.schedule).getTime() - new Date(b.schedule).getTime()
+              )
+              .map((meeting, index) => mapMeetingForGroupPage(meeting, index));
+            setMeetings(upcoming);
           }}
         />
       )}
