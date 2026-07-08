@@ -29,7 +29,6 @@ import { MEETINGS_LIST } from "./meetingsMock.js";
  * @property {number} intendedGroupId
  * @property {CalendarGroup} intendedGroup
  * @property {{ status: RsvpStatus }} rsvp
- * @property {string[]} [agenda]
  * @property {boolean} [finalized]
  * @property {Array<{ id: string, label: string, votes: number, total: number }>} [proposedTimes]
  */
@@ -103,7 +102,6 @@ export function meetingToCalendarEvent(meeting) {
     intendedGroupId: group.groupId,
     intendedGroup: group,
     rsvp: { status: "PENDING" },
-    agenda: meeting.agenda ?? [],
     finalized: meeting.finalized ?? true,
     ...(meeting.proposedTimes ? { proposedTimes: meeting.proposedTimes } : {}),
   };

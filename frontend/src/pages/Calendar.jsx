@@ -7,7 +7,9 @@ import CalendarGroupFilters from "../components/calendar/CalendarGroupFilters.js
 import CalendarMonthView from "../components/calendar/CalendarMonthView.jsx";
 import CalendarEventPanel from "../components/calendar/CalendarEventPanel.jsx";
 import CreateMeetingModal from "../components/CreateMeetingModal.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 import { useGroups } from "../context/GroupsContext.jsx";
+import { createMeeting } from "../services/meetingService.js";
 import {
   fetchCalendarEvents,
   updateMeetingRsvp,
@@ -21,6 +23,7 @@ import {
 const today = new Date();
 
 function Calendar() {
+  const { user } = useAuth();
   const { groups } = useGroups();
   const [visibleYear, setVisibleYear] = useState(today.getFullYear());
   const [visibleMonth, setVisibleMonth] = useState(today.getMonth());
@@ -44,19 +47,25 @@ function Calendar() {
     setError(null);
 
     try {
+      const resolvedGroupFilter =
+        groupFilter === "all"
+          ? "all"
+          : groups.find((group) => group.id === groupFilter)?.groupId ?? groupFilter;
+
       const { events: nextEvents } = await fetchCalendarEvents({
+        userId: user?.userId,
         from: monthRange.from,
         to: monthRange.to,
-        groupFilter,
+        groupFilter: resolvedGroupFilter,
       });
       setEvents(nextEvents);
     } catch (err) {
-      setError(err.message ?? "Unable to load calendar.");
       setEvents([]);
+      setError(err.message ?? "Unable to load calendar events.");
     } finally {
       setLoading(false);
     }
-  }, [monthRange.from, monthRange.to, groupFilter]);
+  }, [user?.userId, monthRange.from, monthRange.to, groupFilter, groups]);
 
   useEffect(() => {
     loadEvents();
@@ -112,7 +121,7 @@ function Calendar() {
         action={
           <button
             type="button"
-            className="calendar-btn calendar-btn--primary"
+            className="page-action-btn page-action-btn--primary"
             onClick={() => setShowCreateMeetingModal(true)}
           >
             <Icon icon="plus" size="sm" />
@@ -160,10 +169,11 @@ function Calendar() {
 
       {showCreateMeetingModal && (
         <CreateMeetingModal
+          groups={groups}
           onClose={() => setShowCreateMeetingModal(false)}
           onSubmit={async (data) => {
-            // TODO: wire to API when ready
-            console.log("Create Meeting submitted:", data);
+            await createMeeting(data);
+            await loadEvents();
           }}
         />
       )}

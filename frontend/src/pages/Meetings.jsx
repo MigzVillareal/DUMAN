@@ -1,19 +1,66 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "../css/pages/Login.css";
 import "../css/pages/Meetings.css";
 import Icon from "../components/Icon.jsx";
 import PageHeader from "../components/PageHeader.jsx";
 import FinalizeMeetingModal from "../components/FinalizeMeetingModal.jsx";
-import { MEETINGS_LIST, UNFINALIZED_MEETINGS } from "../data/meetingsMock.js";
+import { useAuth } from "../context/AuthContext.jsx";
+import { MEETINGS_LIST } from "../data/meetingsMock.js";
 import { USE_MOCK_MEETINGS } from "../data/mock.js";
+import {
+  fetchUserMeetings,
+  mapMeetingForMeetingsList,
+} from "../services/meetingService.js";
 
 // ── Status badge ──────────────────────────────────────────────────────────────
 function StatusBadge({ status }) {
-  const labels = { upcoming: "Upcoming", past: "Past", voting: "Voting" };
+  const labels = { upcoming: "Upcoming", past: "Past", pending: "Pending" };
   return (
     <span className={`meetings-badge meetings-badge--${status}`}>
       {labels[status] ?? status}
     </span>
+  );
+}
+
+function MemberAttendance({ meeting }) {
+  const attending = meeting.attending ?? [];
+  const notAttending = meeting.notAttending ?? [];
+
+  if (attending.length === 0 && notAttending.length === 0) {
+    return null;
+  }
+
+  return (
+    <>
+      <div className="meetings-detail__field meetings-detail__field--block">
+        <span className="meetings-detail__label">Attending</span>
+        {attending.length === 0 ? (
+          <p className="meetings-detail__value meetings-detail__value--text">
+            No members attending yet.
+          </p>
+        ) : (
+          <ul className="meetings-detail__member-list">
+            {attending.map((name) => (
+              <li key={name}>{name}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+      <div className="meetings-detail__field meetings-detail__field--block">
+        <span className="meetings-detail__label">Not Attending</span>
+        {notAttending.length === 0 ? (
+          <p className="meetings-detail__value meetings-detail__value--text">
+            No members marked as not attending.
+          </p>
+        ) : (
+          <ul className="meetings-detail__member-list">
+            {notAttending.map((name) => (
+              <li key={name}>{name}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </>
   );
 }
 
@@ -75,17 +122,18 @@ function MeetingDetailPanel({ meeting, onFinalize }) {
             {meeting.description}
           </p>
         </div>
+        <MemberAttendance meeting={meeting} />
       </div>
       </div>
 
-      {meeting.status === "voting" && (
+      {meeting.status === "pending" && (
         <div className="meetings-detail__footer">
           <button
             type="button"
             className="meetings-btn meetings-btn--primary meetings-detail__finalize-btn"
             onClick={() => onFinalize(meeting)}
           >
-            Finalized Meeting
+            Finalize Meeting
           </button>
         </div>
       )}
@@ -97,18 +145,45 @@ function MeetingDetailPanel({ meeting, onFinalize }) {
 const FILTERS = [
   { key: "all", label: "All Meetings" },
   { key: "upcoming", label: "Upcoming" },
-  { key: "voting", label: "Voting" },
+  { key: "pending", label: "Pending" },
   { key: "past", label: "Past" },
 ];
 
 // ── Main Page ─────────────────────────────────────────────────────────────────
 function Meetings() {
+  const { user } = useAuth();
   const [meetings, setMeetings] = useState(USE_MOCK_MEETINGS ? MEETINGS_LIST : []);
+  const [loading, setLoading] = useState(!USE_MOCK_MEETINGS);
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMeeting, setModalMeeting] = useState(null);
+
+  const loadMeetings = useCallback(async () => {
+    if (USE_MOCK_MEETINGS) return;
+
+    if (!user?.userId) {
+      setMeetings([]);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const data = await fetchUserMeetings(user.userId);
+      setMeetings((data.meetings ?? []).map(mapMeetingForMeetingsList));
+    } catch {
+      setMeetings([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [user?.userId]);
+
+  useEffect(() => {
+    loadMeetings();
+  }, [loadMeetings]);
 
   const openFinalizeModal = (meeting = null) => {
     setModalMeeting(meeting);
@@ -138,23 +213,29 @@ function Meetings() {
     }
   }, [filter, search]);
 
-  const handleFinalized = (meeting, time) => {
-    // Mark the meeting as finalized and update schedule to chosen time
+  const handleFinalized = (meeting) => {
     setMeetings((prev) =>
       prev.map((m) =>
         m.id === meeting.id
-          ? { ...m, finalized: true, status: "upcoming", schedule: time.label }
+          ? { ...m, finalized: true, status: "upcoming" }
           : m
       )
     );
-    // Update selected if it's the same meeting
+
     if (selected?.id === meeting.id) {
       setSelected((prev) => ({
         ...prev,
         finalized: true,
         status: "upcoming",
-        schedule: time.label,
       }));
+    }
+  };
+
+  const handleCancelMeeting = (meeting) => {
+    setMeetings((prev) => prev.filter((m) => m.id !== meeting.id));
+
+    if (selected?.id === meeting.id) {
+      setSelected(null);
     }
   };
 
@@ -210,7 +291,9 @@ function Meetings() {
           </div>
 
           <div className="meetings-list-panel__list">
-            {filtered.length === 0 ? (
+            {loading ? (
+              <p className="meetings-list-panel__empty">Loading meetings...</p>
+            ) : filtered.length === 0 ? (
               <p className="meetings-list-panel__empty">No meetings found.</p>
             ) : (
               filtered.map((meeting) => (
@@ -235,9 +318,10 @@ function Meetings() {
       {showModal && (
         <FinalizeMeetingModal
           initialMeeting={modalMeeting}
-          meetings={USE_MOCK_MEETINGS ? UNFINALIZED_MEETINGS : []}
+          meetings={meetings.filter((m) => !m.finalized)}
           onClose={closeFinalizeModal}
           onFinalized={handleFinalized}
+          onCancelMeeting={handleCancelMeeting}
         />
       )}
     </div>

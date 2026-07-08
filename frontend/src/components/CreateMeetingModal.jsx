@@ -1,8 +1,25 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Icon from "./Icon.jsx";
 import "../css/components_styles/CreateMeetingModal.css";
+import "../css/pages/CampusMap.css";
+import {
+  campusLocations,
+  getRoomsForFloor,
+  locationHasRoomSelection,
+} from "../data/campusLocations.js";
 
-const STEPS = ["Details", "Location"];
+const STEPS = ["Location", "Details"];
+
+function formatSelectedLocation(form) {
+  const location = campusLocations.find((item) => item.id === form.locationId);
+  if (!location) return "";
+
+  if (locationHasRoomSelection(location) && form.floor && form.room) {
+    return `${location.building} · Floor ${form.floor} · ${form.room}`;
+  }
+
+  return location.building;
+}
 
 /* ── Step indicator tabs ─────────────────────────────────────────── */
 function StepIndicator({ currentStep }) {
@@ -22,94 +39,173 @@ function StepIndicator({ currentStep }) {
   );
 }
 
-/* ── Time slot row ───────────────────────────────────────────────── */
-function TimeSlotRow({ slot, index, onChange, onRemove }) {
+/* ── Step 1 — Location ───────────────────────────────────────────── */
+function StepLocation({ form, onLocationChange, onFieldChange }) {
+  const [locationSearch, setLocationSearch] = useState("");
+
+  const selectedLocation = campusLocations.find(
+    (location) => location.id === form.locationId
+  );
+  const hasRoomSelection = selectedLocation
+    ? locationHasRoomSelection(selectedLocation)
+    : false;
+  const roomOptions = hasRoomSelection
+    ? (getRoomsForFloor(selectedLocation, form.floor) ?? [])
+    : null;
+
+  const filteredLocations = useMemo(() => {
+    const query = locationSearch.trim().toLowerCase();
+    if (!query) return campusLocations;
+
+    return campusLocations.filter((location) =>
+      location.building.toLowerCase().includes(query)
+    );
+  }, [locationSearch]);
+
+  function selectLocation(location) {
+    if (locationHasRoomSelection(location)) {
+      const floor = location.floors[0];
+      onLocationChange({
+        locationId: location.id,
+        floor,
+        room: location.roomsByFloor[floor][0],
+      });
+      return;
+    }
+
+    onLocationChange({
+      locationId: location.id,
+      floor: "",
+      room: "",
+    });
+  }
+
+  function handleFloorChange(event) {
+    const floor = event.target.value;
+    const rooms = getRoomsForFloor(selectedLocation, floor);
+    onLocationChange({
+      locationId: form.locationId,
+      floor,
+      room: rooms?.[0] ?? "",
+    });
+  }
+
   return (
-    <div className="cmm-slot-row">
-      <input
-        id={`cmm-slot-date-${index}`}
-        className="cmm-input cmm-slot-date"
-        type="date"
-        value={slot.date}
-        onChange={(e) => onChange(index, "date", e.target.value)}
-        aria-label={`Slot ${index + 1} date`}
-      />
-      <input
-        id={`cmm-slot-start-${index}`}
-        className="cmm-input cmm-slot-time"
-        type="time"
-        value={slot.start}
-        onChange={(e) => onChange(index, "start", e.target.value)}
-        aria-label={`Slot ${index + 1} start time`}
-      />
-      <span className="cmm-slot-sep">–</span>
-      <input
-        id={`cmm-slot-end-${index}`}
-        className="cmm-input cmm-slot-time"
-        type="time"
-        value={slot.end}
-        onChange={(e) => onChange(index, "end", e.target.value)}
-        aria-label={`Slot ${index + 1} end time`}
-      />
-      <button
-        type="button"
-        className="cmm-slot-remove"
-        onClick={() => onRemove(index)}
-        aria-label={`Remove slot ${index + 1}`}
-      >
-        <Icon icon="xmark" size="xs" />
-      </button>
+    <div className="cmm-step-body cmm-step-body--location">
+      <div className="cmm-location-picker">
+        <section className="cmm-location-picker__list campus-map-all-locations-card">
+          <header className="campus-map-all-locations-card__header">
+            <h3 className="campus-map-all-locations-card__title">All Locations</h3>
+          </header>
+          <div className="campus-map-all-locations-card__search-wrap">
+            <span className="campus-map-all-locations-card__search-icon">
+              <Icon icon="search" size="sm" />
+            </span>
+            <input
+              id="cmm-locations-search"
+              type="text"
+              className="campus-map-all-locations-card__search"
+              placeholder="Search locations..."
+              value={locationSearch}
+              onChange={(event) => setLocationSearch(event.target.value)}
+            />
+          </div>
+          <ul className="campus-map-all-locations-card__list">
+            {filteredLocations.length === 0 ? (
+              <li className="campus-map-all-locations-card__empty">No locations found.</li>
+            ) : (
+              filteredLocations.map((location) => (
+                <li key={location.id}>
+                  <button
+                    type="button"
+                    className={`campus-map-location-item${selectedLocation?.id === location.id ? " campus-map-location-item--active" : ""}`}
+                    onClick={() => selectLocation(location)}
+                  >
+                    <span className="campus-map-location-item__name">{location.building}</span>
+                  </button>
+                </li>
+              ))
+            )}
+          </ul>
+        </section>
+
+        <section className="cmm-location-picker__details campus-map-selected-room-card">
+          {selectedLocation ? (
+            <>
+              <header className="campus-map-selected-room-card__header">
+                <h3 className="campus-map-selected-room-card__room-code">
+                  {selectedLocation.building}
+                </h3>
+              </header>
+              <div className="campus-map-selected-room-card__details">
+                <label className="campus-map-detail-field" htmlFor="cmm-location-floor">
+                  <span className="campus-map-detail-field__label">Floor Number</span>
+                  <select
+                    id="cmm-location-floor"
+                    className="campus-map-select"
+                    value={hasRoomSelection ? form.floor : ""}
+                    onChange={handleFloorChange}
+                    disabled={!hasRoomSelection}
+                  >
+                    {hasRoomSelection ? (
+                      selectedLocation.floors.map((floor) => (
+                        <option key={floor} value={floor}>
+                          Floor {floor}
+                        </option>
+                      ))
+                    ) : (
+                      <option value="">Not applicable</option>
+                    )}
+                  </select>
+                </label>
+
+                <label className="campus-map-detail-field" htmlFor="cmm-location-room">
+                  <span className="campus-map-detail-field__label">Room Number</span>
+                  <select
+                    id="cmm-location-room"
+                    className="campus-map-select"
+                    value={hasRoomSelection ? form.room : ""}
+                    onChange={(event) => onFieldChange("room", event.target.value)}
+                    disabled={!hasRoomSelection}
+                  >
+                    {hasRoomSelection ? (
+                      roomOptions.map((room) => (
+                        <option key={room} value={room}>
+                          {room}
+                        </option>
+                      ))
+                    ) : (
+                      <option value="">Not applicable</option>
+                    )}
+                  </select>
+                </label>
+              </div>
+            </>
+          ) : (
+            <p className="campus-map-selected-room-card__instruction">
+              Select a location to view details.
+            </p>
+          )}
+        </section>
+      </div>
     </div>
   );
 }
 
-/* ── Step 1 — Details ────────────────────────────────────────────── */
-function StepDetails({ form, onChange }) {
-  const handleSlotChange = (index, field, value) => {
-    const updated = form.timeSlots.map((s, i) =>
-      i === index ? { ...s, [field]: value } : s
-    );
-    onChange("timeSlots", updated);
-  };
-
-  const handleAddSlot = () => {
-    onChange("timeSlots", [
-      ...form.timeSlots,
-      { date: "", start: "", end: "" },
-    ]);
-  };
-
-  const handleRemoveSlot = (index) => {
-    onChange(
-      "timeSlots",
-      form.timeSlots.filter((_, i) => i !== index)
-    );
-  };
+/* ── Step 2 — Details ────────────────────────────────────────────── */
+function StepDetails({ form, onChange, fixedGroup, groups = [] }) {
+  const selectedLocationLabel = formatSelectedLocation(form);
 
   return (
     <div className="cmm-step-body">
-      {/* Group & Meeting Title */}
-      <div className="cmm-row cmm-row--two">
-        <div className="cmm-field">
-          <label className="cmm-label" htmlFor="cmm-group">
-            Group
-          </label>
-          <div className="cmm-select-wrap">
-            <select
-              id="cmm-group"
-              className="cmm-input cmm-select"
-              value={form.group}
-              onChange={(e) => onChange("group", e.target.value)}
-            >
-              <option value="">Select group…</option>
-              <option value="research">Research</option>
-              <option value="volunteer">Volunteer</option>
-              <option value="study">Study Group</option>
-            </select>
-            <span className="cmm-select-arrow" aria-hidden="true">&#8964;</span>
-          </div>
+      {selectedLocationLabel && (
+        <div className="cmm-selected-location">
+          <span className="cmm-selected-location__label">Location</span>
+          <p className="cmm-selected-location__value">{selectedLocationLabel}</p>
         </div>
+      )}
 
+      {fixedGroup ? (
         <div className="cmm-field">
           <label className="cmm-label" htmlFor="cmm-title">
             Meeting Title
@@ -124,7 +220,46 @@ function StepDetails({ form, onChange }) {
             maxLength={120}
           />
         </div>
-      </div>
+      ) : (
+        <div className="cmm-row cmm-row--two">
+          <div className="cmm-field">
+            <label className="cmm-label" htmlFor="cmm-group">
+              Group
+            </label>
+            <div className="cmm-select-wrap">
+              <select
+                id="cmm-group"
+                className="cmm-input cmm-select"
+                value={form.group}
+                onChange={(e) => onChange("group", e.target.value)}
+              >
+                <option value="">Select group…</option>
+                {groups.map((group) => (
+                  <option key={group.groupId} value={group.groupId}>
+                    {group.name}
+                  </option>
+                ))}
+              </select>
+              <span className="cmm-select-arrow" aria-hidden="true">&#8964;</span>
+            </div>
+          </div>
+
+          <div className="cmm-field">
+            <label className="cmm-label" htmlFor="cmm-title">
+              Meeting Title
+            </label>
+            <input
+              id="cmm-title"
+              className="cmm-input"
+              type="text"
+              placeholder="e.g. Weekly Sync"
+              value={form.title}
+              onChange={(e) => onChange("title", e.target.value)}
+              maxLength={120}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Description */}
       <div className="cmm-field">
@@ -156,49 +291,37 @@ function StepDetails({ form, onChange }) {
         />
       </div>
 
-      {/* Proposed Time Slots */}
+      {/* Meeting Time */}
       <div className="cmm-field">
-        <span className="cmm-label">Proposed Time Slots</span>
-
-        <div className="cmm-slot-list">
-          {form.timeSlots.length === 0 ? (
-            <p className="cmm-slot-empty">No time slots added yet.</p>
-          ) : (
-            form.timeSlots.map((slot, i) => (
-              <TimeSlotRow
-                key={i}
-                slot={slot}
-                index={i}
-                onChange={handleSlotChange}
-                onRemove={handleRemoveSlot}
-              />
-            ))
-          )}
+        <span className="cmm-label">Meeting Time</span>
+        <div className="cmm-slot-row">
+          <input
+            id="cmm-date"
+            className="cmm-input cmm-slot-date"
+            type="date"
+            value={form.date}
+            onChange={(e) => onChange("date", e.target.value)}
+            aria-label="Meeting date"
+          />
+          <input
+            id="cmm-start"
+            className="cmm-input cmm-slot-time"
+            type="time"
+            value={form.start}
+            onChange={(e) => onChange("start", e.target.value)}
+            aria-label="Meeting start time"
+          />
+          <span className="cmm-slot-sep">–</span>
+          <input
+            id="cmm-end"
+            className="cmm-input cmm-slot-time"
+            type="time"
+            value={form.end}
+            onChange={(e) => onChange("end", e.target.value)}
+            aria-label="Meeting end time"
+          />
         </div>
-
-        <button
-          type="button"
-          className="cmm-add-slot-btn"
-          onClick={handleAddSlot}
-        >
-          + Add Slot
-        </button>
       </div>
-    </div>
-  );
-}
-
-/* ── Step 2 — Location (map placeholder) ────────────────────────── */
-function StepLocation() {
-  return (
-    <div className="cmm-step-body">
-      <p className="cmm-location-hint">
-        Tap a pin to select a preferred meeting location.
-      </p>
-      <div
-        className="cmm-map-placeholder"
-        aria-label="Campus map (coming soon)"
-      />
     </div>
   );
 }
@@ -209,12 +332,34 @@ const INITIAL_FORM = {
   title: "",
   description: "",
   deadline: "",
-  timeSlots: [],
+  date: "",
+  start: "",
+  end: "",
+  locationId: "",
+  floor: "",
+  room: "",
 };
 
-export default function ProposeScheduleModal({ onClose, onSubmit }) {
-  const [step, setStep] = useState(0);
-  const [form, setForm] = useState(INITIAL_FORM);
+function createInitialForm(fixedGroup, fixedLocation) {
+  return {
+    ...INITIAL_FORM,
+    group: fixedGroup?.groupId ?? fixedGroup?.id ?? "",
+    locationId: fixedLocation?.locationId ?? "",
+    floor: fixedLocation?.floor ?? "",
+    room: fixedLocation?.room ?? "",
+  };
+}
+
+export default function ProposeScheduleModal({
+  onClose,
+  onSubmit,
+  fixedGroup,
+  fixedLocation,
+  groups = [],
+}) {
+  const skipLocationStep = Boolean(fixedLocation);
+  const [step, setStep] = useState(() => (skipLocationStep ? 1 : 0));
+  const [form, setForm] = useState(() => createInitialForm(fixedGroup, fixedLocation));
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const overlayRef = useRef(null);
@@ -237,9 +382,17 @@ export default function ProposeScheduleModal({ onClose, onSubmit }) {
     if (error) setError("");
   };
 
+  const handleLocationChange = (patch) => {
+    setForm((prev) => ({ ...prev, ...patch }));
+    if (error) setError("");
+  };
+
   const validateStep = () => {
-    if (step === 0) {
-      if (!form.group) return "Please select a group.";
+    if (step === 0 && !skipLocationStep) {
+      if (!form.locationId) return "Please select a location.";
+    }
+    if (step === 1) {
+      if (!fixedGroup && !form.group) return "Please select a group.";
       if (!form.title.trim()) return "Meeting title is required.";
     }
     return "";
@@ -261,6 +414,12 @@ export default function ProposeScheduleModal({ onClose, onSubmit }) {
   };
 
   const handleSubmit = async () => {
+    const validationError = validateStep();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
     setSubmitting(true);
     try {
       await onSubmit?.(form);
@@ -283,7 +442,7 @@ export default function ProposeScheduleModal({ onClose, onSubmit }) {
       aria-modal="true"
       aria-labelledby="cmm-heading"
     >
-      <div className="cmm-modal">
+      <div className={`cmm-modal${step === 0 && !skipLocationStep ? " cmm-modal--wide" : ""}`}>
         {/* Header */}
         <div className="cmm-header">
           <h2 id="cmm-heading" className="cmm-heading">
@@ -300,7 +459,7 @@ export default function ProposeScheduleModal({ onClose, onSubmit }) {
         </div>
 
         {/* Step tabs */}
-        <StepIndicator currentStep={step} />
+        {!skipLocationStep && <StepIndicator currentStep={step} />}
 
         {/* Error */}
         {error && (
@@ -310,12 +469,25 @@ export default function ProposeScheduleModal({ onClose, onSubmit }) {
         )}
 
         {/* Step content */}
-        {step === 0 && <StepDetails form={form} onChange={handleChange} />}
-        {step === 1 && <StepLocation />}
+        {step === 0 && !skipLocationStep && (
+          <StepLocation
+            form={form}
+            onLocationChange={handleLocationChange}
+            onFieldChange={handleChange}
+          />
+        )}
+        {step === 1 && (
+          <StepDetails
+            form={form}
+            onChange={handleChange}
+            fixedGroup={fixedGroup}
+            groups={groups}
+          />
+        )}
 
         {/* Footer */}
         <div className="cmm-footer">
-          {step === 0 ? (
+          {step === 0 || skipLocationStep ? (
             <button
               type="button"
               className="cmm-btn cmm-btn--secondary"

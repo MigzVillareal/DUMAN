@@ -1,32 +1,10 @@
 import { CALENDAR_MOCK_EVENTS } from "../data/calendarMock.js";
 import { getDateKey } from "../utils/calendar.js";
 import { USE_MOCK_CALENDAR } from "../data/mock.js";
+import { getAuthHeaders } from "../utils/authStorage.js";
+import { normalizeMeetingForCalendar } from "./meetingService.js";
 
-/**
- * Maps a Prisma Meeting (with includes) to the calendar event shape.
- * Use when wiring the real API.
- *
- * @param {object} meeting
- * @param {{ status?: string }|null} [rsvp]
- */
-export function normalizeMeetingForCalendar(meeting, rsvp = null) {
-  return {
-    meetingId: meeting.meetingId,
-    title: meeting.title,
-    description: meeting.description ?? null,
-    status: meeting.status,
-    locationDetail: meeting.locationDetail ?? null,
-    schedule: meeting.schedule,
-    endsAt: meeting.endsAt ?? null,
-    setterId: meeting.setterId,
-    intendedGroupId: meeting.intendedGroupId,
-    intendedGroup: {
-      groupId: meeting.intendedGroup.groupId,
-      name: meeting.intendedGroup.name,
-    },
-    rsvp: { status: rsvp?.status ?? "PENDING" },
-  };
-}
+export { normalizeMeetingForCalendar };
 
 /**
  * @param {object} params
@@ -48,6 +26,10 @@ export async function fetchCalendarEvents({
     };
   }
 
+  if (!userId) {
+    throw new Error("Unable to load calendar events.");
+  }
+
   const params = new URLSearchParams();
   if (from) params.set("from", from);
   if (to) params.set("to", to);
@@ -56,14 +38,16 @@ export async function fetchCalendarEvents({
   }
 
   const response = await fetch(
-    `/api/v1/users/${userId}/meetings?${params.toString()}`
+    `/api/v1/users/${userId}/meetings?${params.toString()}`,
+    { headers: getAuthHeaders() }
   );
 
-  if (!response.ok) {
-    throw new Error("Unable to load calendar events.");
+  const data = await response.json();
+
+  if (!response.ok || data.errorMessage) {
+    throw new Error(data.errorMessage ?? "Unable to load calendar events.");
   }
 
-  const data = await response.json();
   return {
     events: (data.meetings ?? []).map((meeting) =>
       normalizeMeetingForCalendar(meeting, meeting.myRsvp)
@@ -83,15 +67,17 @@ export async function updateMeetingRsvp(meetingId, status) {
 
   const response = await fetch(`/api/v1/meetings/${meetingId}/rsvp`, {
     method: "PATCH",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(true),
     body: JSON.stringify({ status }),
   });
 
-  if (!response.ok) {
-    throw new Error("Unable to update RSVP.");
+  const data = await response.json();
+
+  if (!response.ok || data.errorMessage) {
+    throw new Error(data.errorMessage ?? "Unable to update RSVP.");
   }
 
-  return response.json();
+  return data;
 }
 
 function filterMockEvents({ from, to, groupFilter }) {

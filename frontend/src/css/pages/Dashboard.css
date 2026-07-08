@@ -107,20 +107,6 @@
   margin-bottom: 0;
 }
 
-.dashboard-meeting-card__agenda {
-  margin: 0;
-  padding-left: 1.25rem;
-  font-size: 0.8125rem;
-}
-
-.dashboard-meeting-card__agenda li {
-  margin-bottom: 0.25rem;
-}
-
-.dashboard-meeting-card__agenda li:last-child {
-  margin-bottom: 0;
-}
-
 .dashboard-invite-card {
   padding: 1rem 1.25rem;
 }

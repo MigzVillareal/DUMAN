@@ -10,12 +10,18 @@ import {
   USE_MOCK_GROUPS,
 } from "../services/groupService.js";
 import {
+  createMeeting,
+  fetchGroupMeetings,
+  mapMeetingForGroupPage,
+} from "../services/meetingService.js";
+import {
   canRemoveGroupMember,
   ensureOwnerAsLeader,
   mapApiMember,
 } from "../utils/groups.js";
 import Icon from "../components/Icon.jsx";
 import InviteMembersModal from "../components/InviteMembersModal.jsx";
+import CreateMeetingModal from "../components/CreateMeetingModal.jsx";
 import RemoveMemberModal from "../components/RemoveMemberModal.jsx";
 import PageHeader from "../components/PageHeader.jsx";
 import { isToday } from "../utils/date.js";
@@ -55,12 +61,6 @@ function GroupMeetingCard({ meeting }) {
         <div className="dashboard-meeting-card__body">
           <p className="dashboard-meeting-card__label">Meeting Description:</p>
           <p className="dashboard-meeting-card__text">{meeting.description}</p>
-          <p className="dashboard-meeting-card__label">Agenda</p>
-          <ul className="dashboard-meeting-card__agenda">
-            {meeting.agenda.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
         </div>
       )}
     </article>
@@ -80,9 +80,11 @@ export default function GroupPage() {
   const [removingMemberId, setRemovingMemberId] = useState(null);
   const [removeError, setRemoveError] = useState("");
   const [memberToRemove, setMemberToRemove] = useState(null);
+  const [showCreateMeetingModal, setShowCreateMeetingModal] = useState(false);
+  const [meetings, setMeetings] = useState([]);
+  const [meetingsLoading, setMeetingsLoading] = useState(!USE_MOCK_GROUPS);
 
   const mockDetails = getGroupDetails(groupId);
-  const meetings = USE_MOCK_GROUPS ? mockDetails.meetings : [];
 
   useEffect(() => {
     if (!group) {
@@ -147,6 +149,67 @@ export default function GroupPage() {
       cancelled = true;
     };
   }, [group?.id, group?.groupId, group?.userId, groupId, user?.userId]);
+
+  useEffect(() => {
+    if (!group) {
+      setMeetings([]);
+      setMeetingsLoading(false);
+      return;
+    }
+
+    if (USE_MOCK_GROUPS) {
+      setMeetings(mockDetails.meetings ?? []);
+      setMeetingsLoading(false);
+      return;
+    }
+
+    if (group.groupId == null) {
+      setMeetings([]);
+      setMeetingsLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+
+    async function loadMeetings() {
+      setMeetingsLoading(true);
+
+      try {
+        const data = await fetchGroupMeetings(group.groupId);
+
+        if (cancelled) return;
+
+        if (data.errorMessage) {
+          setMeetings([]);
+          return;
+        }
+
+        const upcoming = (data.meetings ?? [])
+          .filter((meeting) => meeting.status !== "FINISHED")
+          .sort(
+            (a, b) =>
+              new Date(a.schedule).getTime() - new Date(b.schedule).getTime()
+          )
+          .map((meeting, index) => mapMeetingForGroupPage(meeting, index));
+
+        setMeetings(upcoming);
+      } catch {
+        if (!cancelled) {
+          setMeetings([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setMeetingsLoading(false);
+        }
+      }
+    }
+
+    loadMeetings();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [group?.groupId, groupId, mockDetails.meetings]);
 
   if (loading) {
     return (
@@ -271,9 +334,11 @@ export default function GroupPage() {
         action={
           <button
             type="button"
-            className="btn-primary group-page__btn-pill group-page__btn-pill--soft"
+            className="page-action-btn page-action-btn--primary"
+            onClick={() => setShowCreateMeetingModal(true)}
           >
-            Schedule
+            <Icon icon="plus" size="sm" />
+            Create Meeting
           </button>
         }
       />
@@ -282,7 +347,9 @@ export default function GroupPage() {
         <section className="dashboard-panel">
           <h2 className="dashboard-panel__title">Upcoming Group Meetings</h2>
           <div className="dashboard-panel__list">
-            {meetings.length === 0 ? (
+            {meetingsLoading ? (
+              <p className="group-page__empty">Loading meetings...</p>
+            ) : meetings.length === 0 ? (
               <p className="group-page__empty">No upcoming meetings scheduled.</p>
             ) : (
               meetings.map((meeting) => (
@@ -365,6 +432,25 @@ export default function GroupPage() {
           existingMemberIds={members.map((member) => member.id)}
           submitting={inviting}
           submitError={inviteError}
+        />
+      )}
+
+      {showCreateMeetingModal && (
+        <CreateMeetingModal
+          fixedGroup={{ id: group.id, groupId: group.groupId, name: group.name }}
+          onClose={() => setShowCreateMeetingModal(false)}
+          onSubmit={async (data) => {
+            await createMeeting(data);
+            const result = await fetchGroupMeetings(group.groupId);
+            const upcoming = (result.meetings ?? [])
+              .filter((meeting) => meeting.status !== "FINISHED")
+              .sort(
+                (a, b) =>
+                  new Date(a.schedule).getTime() - new Date(b.schedule).getTime()
+              )
+              .map((meeting, index) => mapMeetingForGroupPage(meeting, index));
+            setMeetings(upcoming);
+          }}
         />
       )}
 

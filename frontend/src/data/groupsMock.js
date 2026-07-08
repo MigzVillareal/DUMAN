@@ -46,11 +46,6 @@ export const GROUP_DETAILS = {
         schedule: "Today, 2:00 PM – 3:30 PM",
         date: new Date().toISOString().slice(0, 10),
         description: LOREM,
-        agenda: [
-          "Lorem ipsum dolor sit amet",
-          "Lorem ipsum dolor sit amet",
-          "Lorem ipsum dolor sit amet",
-        ],
         defaultExpanded: true,
       },
       {
@@ -60,7 +55,6 @@ export const GROUP_DETAILS = {
         schedule: "Friday, 1:00 PM – 2:30 PM",
         date: new Date(Date.now() + 86400000 * 3).toISOString().slice(0, 10),
         description: LOREM,
-        agenda: ["Lorem ipsum dolor sit amet"],
         defaultExpanded: false,
       },
     ],
@@ -79,12 +73,6 @@ export const GROUP_DETAILS = {
         schedule: "Friday, 10:00 AM – 11:00 AM",
         date: new Date(Date.now() + 86400000 * 3).toISOString().slice(0, 10),
         description: LOREM,
-        agenda: [
-          "Lorem ipsum dolor sit amet",
-          "Lorem ipsum dolor sit amet",
-          "Lorem ipsum dolor sit amet",
-          "Lorem ipsum dolor sit amet",
-        ],
         defaultExpanded: true,
       },
       {
@@ -94,7 +82,6 @@ export const GROUP_DETAILS = {
         schedule: "Saturday, 8:00 AM – 9:00 AM",
         date: new Date(Date.now() + 86400000 * 4).toISOString().slice(0, 10),
         description: LOREM,
-        agenda: ["Lorem ipsum dolor sit amet"],
         defaultExpanded: false,
       },
     ],
@@ -113,10 +100,6 @@ export const GROUP_DETAILS = {
         schedule: "Tomorrow, 4:00 PM – 5:30 PM",
         date: new Date(Date.now() + 86400000).toISOString().slice(0, 10),
         description: LOREM,
-        agenda: [
-          "Lorem ipsum dolor sit amet",
-          "Lorem ipsum dolor sit amet",
-        ],
         defaultExpanded: true,
       },
       {
@@ -126,7 +109,6 @@ export const GROUP_DETAILS = {
         schedule: "Next Monday, 5:00 PM – 6:30 PM",
         date: new Date(Date.now() + 86400000 * 5).toISOString().slice(0, 10),
         description: LOREM,
-        agenda: ["Lorem ipsum dolor sit amet"],
         defaultExpanded: false,
       },
     ],

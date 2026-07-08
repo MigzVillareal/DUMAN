@@ -19,3 +19,12 @@ export async function register(userData) {
 }
 
 export { fetchGroups, fetchGroupById, createGroup, fetchGroupMembers, sendGroupInvite, fetchUsers, removeGroupMember, fetchUserInvites, acceptGroupInvite, declineGroupInvite } from "./groupService.js";
+export {
+  createMeeting,
+  fetchUserMeetings,
+  fetchGroupMeetings,
+  formatMeetingLocation,
+  formatMeetingSchedule,
+  mapMeetingForMeetingsList,
+  mapMeetingForGroupPage,
+} from "./meetingService.js";

@@ -1,8 +1,45 @@
+export function locationHasRoomSelection(location) {
+  return location?.hasRoomSelection === true;
+}
+
+export function getRoomsForFloor(location, floor) {
+  if (!locationHasRoomSelection(location)) return null;
+  return location.roomsByFloor[floor] ?? null;
+}
+
+export function createBuildingLocation({
+  id,
+  building,
+  col,
+  row,
+  floors,
+  roomsByFloor,
+}) {
+  return {
+    id,
+    building,
+    col,
+    row,
+    hasRoomSelection: true,
+    floors,
+    roomsByFloor,
+  };
+}
+
+export function createOpenLocation({ id, building, col, row }) {
+  return {
+    id,
+    building,
+    col,
+    row,
+    hasRoomSelection: false,
+  };
+}
+
 export const campusLocations = [
-  {
+  createBuildingLocation({
     id: "alingal-building",
-    roomCode: "Alingal Building",
-    roomType: "Building",
+    building: "Alingal Building",
     col: 15,
     row: 10,
     floors: ["1", "2", "3", "4"],
@@ -12,11 +49,10 @@ export const campusLocations = [
       "3": ["301", "302"],
       "4": ["401"],
     },
-  },
-  {
+  }),
+  createBuildingLocation({
     id: "phelan-building",
-    roomCode: "Phelan Building",
-    roomType: "Building",
+    building: "Phelan Building",
     col: 7,
     row: 7,
     floors: ["1", "2", "3"],
@@ -25,5 +61,11 @@ export const campusLocations = [
       "2": ["201", "202", "203"],
       "3": ["301"],
     },
-  },
+  }),
+  createOpenLocation({
+    id: "covered-court",
+    building: "Covered Court",
+    col: 16,
+    row: 14,
+  }),
 ];
