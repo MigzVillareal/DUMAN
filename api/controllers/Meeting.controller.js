@@ -157,11 +157,28 @@ export const getMeetingNotifications = async (req, res) => {
 
         const notification = await prisma.notifications.findMany({
             where: { meetingId: parseInt(meetingId) },
-            include: {user: true }
+            include: { user: true }
         });
 
         res.status(200).json({ notifications });
     } catch (error) {
         res.status(500).json({ errorMessage: "Unable to get meeting notifications." });
+    }
+};
+
+// Attendance
+
+export const getMeetingAttendance = async (req, res) => {
+    try {
+        const { meetingId } = req.params;
+
+        const attendance =  await prisma.attendance.findMany({
+            where: { meetingId: parseInt(meetingId) },
+            include: { member: true }
+        });
+
+        res.status(200).json({ attendance });
+    } catch (error) {
+        res.status(500).json({ errorMessage: "Unable to get Meeting Attendance" });
     }
 };

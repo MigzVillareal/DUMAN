@@ -35,6 +35,14 @@ enum NotificationStatus {
   FAILED
 }
 
+enum AttendanceStatus {
+  PENDING
+  CONFIRMED
+  DECLINED
+  ATTENDED
+  ABSENT
+}
+
 model User {
   userId    Int    @id @default(autoincrement())
   username  String @unique
@@ -46,12 +54,12 @@ model User {
   ownedGroups   Group[]
   groupMembers  GroupMember[]
   notifications Notification[]
+  attendance    Attendance[]
 
   sentInvites GroupMember[] @relation("invitedBy")
 
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  calendars Calendar[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("users")
 }
@@ -68,9 +76,8 @@ model Group {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user      User?      @relation(fields: [userId], references: [userId])
-  userId    Int?
-  calendars Calendar[]
+  user   User? @relation(fields: [userId], references: [userId])
+  userId Int?
 
   @@unique([groupId, userId])
   @@map("groups")
@@ -99,12 +106,15 @@ model Meeting {
   description String?
   status      MeetingStatus @default(UPCOMING)
   building    String?
+  floor       String?
   roomNumber  String?
 
   schedule DateTime
   endsAt   DateTime?
 
-  group         Group          @relation(fields: [groupId], references: [groupId])
+  group Group @relation(fields: [groupId], references: [groupId])
+
+  attendance    Attendance[]
   notifications Notification[]
 
   createdAt DateTime @default(now())
@@ -133,13 +143,15 @@ model Notification {
   @@map("notifications")
 }
 
-model Calendar {
-  calendarId Int @id @default(autoincrement())
-  groupId    Int
-  userId     Int
+model Attendance {
+  meetingId   Int
+  memberId    Int
+  status      AttendanceStatus @default(PENDING)
+  respondedAt DateTime?
 
-  user  User  @relation(fields: [userId], references: [userId])
-  group Group @relation(fields: [groupId], references: [groupId])
+  meeting Meeting @relation(fields: [meetingId], references: [meetingId], onDelete: Cascade)
+  member  User    @relation(fields: [memberId], references: [userId], onDelete: Cascade)
 
-  @@map("calendars")
+  @@id([meetingId, memberId])
+  @@map("attendance")
 }

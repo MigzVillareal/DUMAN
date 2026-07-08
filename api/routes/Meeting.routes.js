@@ -16,4 +16,8 @@ router.patch("/:meetingId/status", authenticateToken, meetingController.updateMe
 // Related Data Operations
 router.get("/:meetingId/notifications", authenticateToken, meetingController.getMeetingNotifications);
 
+// Attendance
+router.get("/:meetingId/attendance", authenticateToken, meetingController.getMeetingAttendance);
+// router.patch("/:meetingId/attendance", authenticateToken, meetingController.confirmAttendance);
+
 export default router;
