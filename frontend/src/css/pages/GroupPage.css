@@ -30,6 +30,23 @@
   align-items: start;
 }
 
+.group-page__meetings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.group-page__meetings-header .dashboard-panel__title {
+  margin-bottom: 0;
+}
+
+.group-page__meetings-header .meetings-filters {
+  flex-shrink: 0;
+}
+
 .group-page__empty {
   font-size: 0.875rem;
   margin: 0;

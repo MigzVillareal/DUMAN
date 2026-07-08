@@ -72,7 +72,7 @@ export function buildCreateMeetingPayload(form) {
 }
 
 export function normalizeMeetingForCalendar(meeting, rsvp = null) {
-  const group = meeting.group ?? meeting.intendedGroup;
+  const group = meeting.group;
 
   return {
     meetingId: meeting.meetingId,
@@ -83,8 +83,8 @@ export function normalizeMeetingForCalendar(meeting, rsvp = null) {
     schedule: meeting.schedule,
     endsAt: meeting.endsAt ?? null,
     setterId: meeting.setterId ?? null,
-    intendedGroupId: meeting.groupId ?? group?.groupId,
-    intendedGroup: group
+    groupId: meeting.groupId ?? group?.groupId,
+    group: group
       ? {
           groupId: group.groupId,
           name: group.name,

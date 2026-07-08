@@ -11,7 +11,7 @@ function CalendarEventCard({ event, onRsvp, isUpdating }) {
     <article className="calendar-event-card">
       <div className="calendar-event-card__info">
         <p className="meetings-list-item__name">
-          {event.intendedGroup.name} &mdash; {event.title}
+          {event.group?.name ?? "—"} &mdash; {event.title}
         </p>
         <p className="meetings-list-item__meta">
           {event.locationDetail ?? "—"}

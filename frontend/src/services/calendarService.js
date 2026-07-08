@@ -93,8 +93,8 @@ function filterMockEvents({ from, to, groupFilter }) {
   if (groupFilter && groupFilter !== "all") {
     events = events.filter(
       (event) =>
-        event.intendedGroup.slug === groupFilter ||
-        String(event.intendedGroupId) === groupFilter
+        event.group.slug === groupFilter ||
+        String(event.groupId) === groupFilter
     );
   }
 

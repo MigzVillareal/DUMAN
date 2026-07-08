@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useGroups } from "../context/GroupsContext.jsx";
@@ -28,6 +28,44 @@ import { isToday } from "../utils/date.js";
 import "../css/pages/Login.css";
 import "../css/pages/Dashboard.css";
 import "../css/pages/GroupPage.css";
+import "../css/pages/Meetings.css";
+
+const MEETING_FILTERS = [
+  { key: "upcoming", label: "Upcoming" },
+  { key: "past", label: "Past" },
+];
+
+function getDisplayedGroupMeetings(meetings, filter, isMock) {
+  if (isMock) {
+    const today = new Date().toISOString().slice(0, 10);
+
+    return meetings
+      .filter((meeting) =>
+        filter === "past" ? meeting.date < today : meeting.date >= today
+      )
+      .sort((a, b) => {
+        const diff = a.date.localeCompare(b.date);
+        return filter === "past" ? -diff : diff;
+      })
+      .map((meeting, index) => ({
+        ...meeting,
+        defaultExpanded: index === 0,
+      }));
+  }
+
+  return (meetings ?? [])
+    .filter((meeting) =>
+      filter === "past"
+        ? meeting.status === "FINISHED"
+        : meeting.status !== "FINISHED"
+    )
+    .sort((a, b) => {
+      const diff =
+        new Date(a.schedule).getTime() - new Date(b.schedule).getTime();
+      return filter === "past" ? -diff : diff;
+    })
+    .map((meeting, index) => mapMeetingForGroupPage(meeting, index));
+}
 
 function GroupMeetingCard({ meeting }) {
   const [expanded, setExpanded] = useState(meeting.defaultExpanded);
@@ -81,8 +119,14 @@ export default function GroupPage() {
   const [removeError, setRemoveError] = useState("");
   const [memberToRemove, setMemberToRemove] = useState(null);
   const [showCreateMeetingModal, setShowCreateMeetingModal] = useState(false);
-  const [meetings, setMeetings] = useState([]);
+  const [allMeetings, setAllMeetings] = useState([]);
+  const [meetingFilter, setMeetingFilter] = useState("upcoming");
   const [meetingsLoading, setMeetingsLoading] = useState(!USE_MOCK_GROUPS);
+
+  const displayedMeetings = useMemo(
+    () => getDisplayedGroupMeetings(allMeetings, meetingFilter, USE_MOCK_GROUPS),
+    [allMeetings, meetingFilter]
+  );
 
   const mockDetails = getGroupDetails(groupId);
 
@@ -152,19 +196,19 @@ export default function GroupPage() {
 
   useEffect(() => {
     if (!group) {
-      setMeetings([]);
+      setAllMeetings([]);
       setMeetingsLoading(false);
       return;
     }
 
     if (USE_MOCK_GROUPS) {
-      setMeetings(mockDetails.meetings ?? []);
+      setAllMeetings(mockDetails.meetings ?? []);
       setMeetingsLoading(false);
       return;
     }
 
     if (group.groupId == null) {
-      setMeetings([]);
+      setAllMeetings([]);
       setMeetingsLoading(false);
       return;
     }
@@ -180,22 +224,14 @@ export default function GroupPage() {
         if (cancelled) return;
 
         if (data.errorMessage) {
-          setMeetings([]);
+          setAllMeetings([]);
           return;
         }
 
-        const upcoming = (data.meetings ?? [])
-          .filter((meeting) => meeting.status !== "FINISHED")
-          .sort(
-            (a, b) =>
-              new Date(a.schedule).getTime() - new Date(b.schedule).getTime()
-          )
-          .map((meeting, index) => mapMeetingForGroupPage(meeting, index));
-
-        setMeetings(upcoming);
+        setAllMeetings(data.meetings ?? []);
       } catch {
         if (!cancelled) {
-          setMeetings([]);
+          setAllMeetings([]);
         }
       } finally {
         if (!cancelled) {
@@ -345,14 +381,34 @@ export default function GroupPage() {
 
       <div className="group-page__grid">
         <section className="dashboard-panel">
-          <h2 className="dashboard-panel__title">Upcoming Group Meetings</h2>
+          <div className="group-page__meetings-header">
+            <h2 className="dashboard-panel__title">
+              {meetingFilter === "past" ? "Past Group Meetings" : "Upcoming Group Meetings"}
+            </h2>
+            <nav className="meetings-filters" aria-label="Meeting filters">
+              {MEETING_FILTERS.map((item) => (
+                <button
+                  key={item.key}
+                  type="button"
+                  className={`meetings-filter-tab${meetingFilter === item.key ? " meetings-filter-tab--active" : ""}`}
+                  onClick={() => setMeetingFilter(item.key)}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </nav>
+          </div>
           <div className="dashboard-panel__list">
             {meetingsLoading ? (
               <p className="group-page__empty">Loading meetings...</p>
-            ) : meetings.length === 0 ? (
-              <p className="group-page__empty">No upcoming meetings scheduled.</p>
+            ) : displayedMeetings.length === 0 ? (
+              <p className="group-page__empty">
+                {meetingFilter === "past"
+                  ? "No past meetings."
+                  : "No upcoming meetings scheduled."}
+              </p>
             ) : (
-              meetings.map((meeting) => (
+              displayedMeetings.map((meeting) => (
                 <GroupMeetingCard key={meeting.id} meeting={meeting} />
               ))
             )}
@@ -442,14 +498,8 @@ export default function GroupPage() {
           onSubmit={async (data) => {
             await createMeeting(data);
             const result = await fetchGroupMeetings(group.groupId);
-            const upcoming = (result.meetings ?? [])
-              .filter((meeting) => meeting.status !== "FINISHED")
-              .sort(
-                (a, b) =>
-                  new Date(a.schedule).getTime() - new Date(b.schedule).getTime()
-              )
-              .map((meeting, index) => mapMeetingForGroupPage(meeting, index));
-            setMeetings(upcoming);
+            setAllMeetings(result.meetings ?? []);
+            setMeetingFilter("upcoming");
           }}
         />
       )}

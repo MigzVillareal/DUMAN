@@ -14,9 +14,9 @@ export const getAllUsers = async (req, res) => {
 
 export const getUserById = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { userId } = req.params;
         
-        const user = await prisma.user.findUnique({ where: { id: parseInt(id) } });
+        const user = await prisma.user.findUnique({ where: { userId: parseInt(userId) } });
         if (!user) return res.status(404).json({ errorMessage: "User not found." });
 
         res.status(200).json({ user });
@@ -31,7 +31,7 @@ export const updateUser = async (req, res) => {
         const { firstname, lastname, username, email } = req.body;
 
         const user = await prisma.user.update({
-            where: { userId: parseInt(id) },
+            where: { userId: parseInt(userId) },
             data: {
                 firstname,
                 lastname,
@@ -49,9 +49,9 @@ export const updateUser = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { userId } = req.params;
 
-        await prisma.user.delete({ where: { userId: parseInt(id) } });
+        await prisma.user.delete({ where: { userId: parseInt(userId) } });
 
         res.status(200).json({ message: "User deleted successfully" });
     } catch (error) {
@@ -88,7 +88,7 @@ export const getUserMeetings = async (req, res) => {
 
         const meetings = await prisma.meeting.findMany({
             where: {
-                intendedGroup: {
+                group: {
                     members: {
                         some: {
                             memberId: parseInt(userId),
@@ -99,8 +99,7 @@ export const getUserMeetings = async (req, res) => {
             },
             orderBy: { schedule: "asc"},
             include: {
-                setter: true,
-                intendedGroup: true,
+                group: true,
                 notifications: true,
             },
         });
@@ -117,27 +116,26 @@ export const getUserMeeting = async (req, res) => {
 
         const meeting = await prisma.meeting.findUnique({
             where: { meetingId: parseInt(meetingId) },
-            include : {
-                setter: true,
-                intendedGroup: true,
-            }
+            include: {
+                group: true,
+            },
         });
 
         if (!meeting) {
-            res.status(404).json({ errorMessage: "Meeting not found." });
+            return res.status(404).json({ errorMessage: "Meeting not found." });
         }
 
         const isMember = await prisma.groupMember.findUnique({
             where: {
                 memberId_groupId: {
                     memberId: parseInt(userId),
-                    groupId: meeting.intendedGroupId,
+                    groupId: meeting.groupId,
                 }
             }
         });
 
-        if (!isMember || isMember.status !== ACCEPTED) {
-            res.status(404).json({ errorMessage: "User is not a member of this" });
+        if (!isMember || isMember.status !== "ACCEPTED") {
+            return res.status(403).json({ errorMessage: "User is not a member of this group." });
         }
 
         res.status(200).json({ meeting });

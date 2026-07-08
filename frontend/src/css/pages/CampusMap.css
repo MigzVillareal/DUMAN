@@ -103,6 +103,42 @@
   color: var(--color-primary);
   transform: translate(-50%, -100%);
   cursor: pointer;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.campus-map-pin:hover,
+.campus-map-pin:focus-visible {
+  z-index: 4;
+  color: #1e2f6e;
+  transform: translate(-50%, -100%) scale(1.08);
+  outline: none;
+}
+
+.campus-map-pin__tooltip {
+  position: absolute;
+  bottom: calc(100% + 0.35rem);
+  left: 50%;
+  transform: translateX(-50%) translateY(0.25rem);
+  padding: 0.5rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-panel);
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  font-weight: var(--weight-semibold);
+  color: var(--color-primary);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+}
+
+.campus-map-pin:hover .campus-map-pin__tooltip,
+.campus-map-pin:focus-visible .campus-map-pin__tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
 }
 
 .campus-map-pin .app-icon {
@@ -110,6 +146,11 @@
 }
 
 .campus-map-pin--active {
+  color: #e53935;
+}
+
+.campus-map-pin--active:hover,
+.campus-map-pin--active:focus-visible {
   color: #e53935;
 }
 
