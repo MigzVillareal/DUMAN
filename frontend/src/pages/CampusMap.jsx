@@ -4,7 +4,7 @@ import "../css/pages/CampusMap.css";
 import CreateMeetingModal from "../components/CreateMeetingModal.jsx";
 import { useGroups } from "../context/GroupsContext.jsx";
 import { createMeeting } from "../services/meetingService.js";
-import { campusLocations, getRoomsForFloor, locationHasRoomSelection } from "../data/campusLocations.js";
+import { campusLocations, locationHasRoomSelection } from "../data/campusLocations.js";
 
 function CampusMap() {
   const { groups } = useGroups();
@@ -21,7 +21,7 @@ function CampusMap() {
     if (locationHasRoomSelection(location)) {
       const floor = location.floors[0];
       setSelectedFloor(floor);
-      setSelectedRoom(location.roomsByFloor[floor][0]);
+      setSelectedRoom("");
       return;
     }
 
@@ -32,16 +32,12 @@ function CampusMap() {
   function handleFloorChange(event) {
     const floor = event.target.value;
     setSelectedFloor(floor);
-    const rooms = getRoomsForFloor(selectedLocation, floor);
-    setSelectedRoom(rooms?.[0] ?? "");
+    setSelectedRoom("");
   }
 
   const hasRoomSelection = selectedLocation
     ? locationHasRoomSelection(selectedLocation)
     : false;
-  const roomOptions = hasRoomSelection
-    ? (getRoomsForFloor(selectedLocation, selectedFloor) ?? [])
-    : null;
 
   const filteredLocations = useMemo(() => {
     const query = locationSearch.trim().toLowerCase();
@@ -127,23 +123,15 @@ function CampusMap() {
 
                   <label className="campus-map-detail-field" htmlFor="campus-map-room">
                     <span className="campus-map-detail-field__label">Room Number</span>
-                    <select
+                    <input
                       id="campus-map-room"
                       className="campus-map-select"
+                      type="text"
                       value={hasRoomSelection ? selectedRoom : ""}
                       onChange={(event) => setSelectedRoom(event.target.value)}
                       disabled={!hasRoomSelection}
-                    >
-                      {hasRoomSelection ? (
-                        roomOptions.map((room) => (
-                          <option key={room} value={room}>
-                            {room}
-                          </option>
-                        ))
-                      ) : (
-                        <option value="">Not applicable</option>
-                      )}
-                    </select>
+                      placeholder="Enter room number or room name"
+                    />
                   </label>
                 </div>
                 <footer className="campus-map-selected-room-card__footer">
@@ -212,6 +200,7 @@ function CampusMap() {
           onClose={() => setShowCreateMeetingModal(false)}
           onSubmit={async (data) => {
             await createMeeting(data);
+            setSelectedRoom("");
           }}
         />
       )}

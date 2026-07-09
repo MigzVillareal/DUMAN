@@ -13,22 +13,22 @@ function combineDateAndTime(date, time) {
   return new Date(`${date}T${time}`).toISOString();
 }
 
-export function formatMeetingLocation({ building, roomNumber }) {
+export function formatMeetingLocation({ building, floor, roomNumber }) {
   if (!building) return "";
 
-  const location = campusLocations.find((item) => item.building === building);
-
-  if (!location || !roomNumber || !locationHasRoomSelection(location)) {
-    return building;
+  if (floor && roomNumber) {
+    return `${building} · Floor ${floor} · ${roomNumber}`;
   }
 
-  const floor = Object.entries(location.roomsByFloor).find(([, rooms]) =>
-    rooms.includes(roomNumber)
-  )?.[0];
+  if (floor) {
+    return `${building} · Floor ${floor}`;
+  }
 
-  return floor
-    ? `${building} · Floor ${floor} · ${roomNumber}`
-    : `${building} · ${roomNumber}`;
+  if (roomNumber) {
+    return `${building} · ${roomNumber}`;
+  }
+
+  return building;
 }
 
 export function formatMeetingSchedule(schedule, endsAt) {
@@ -64,8 +64,12 @@ export function buildCreateMeetingPayload(form) {
     description: form.description.trim() || null,
     groupId: Number(form.group),
     building: location?.building ?? "",
+    floor:
+      location && locationHasRoomSelection(location) ? form.floor || null : null,
     roomNumber:
-      location && locationHasRoomSelection(location) ? form.room || null : null,
+      location && locationHasRoomSelection(location)
+        ? form.room.trim() || null
+        : null,
     schedule: combineDateAndTime(form.date, form.start),
     endsAt: combineDateAndTime(form.date, form.end),
   };

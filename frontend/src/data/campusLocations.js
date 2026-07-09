@@ -2,18 +2,12 @@ export function locationHasRoomSelection(location) {
   return location?.hasRoomSelection === true;
 }
 
-export function getRoomsForFloor(location, floor) {
-  if (!locationHasRoomSelection(location)) return null;
-  return location.roomsByFloor[floor] ?? null;
-}
-
 export function createBuildingLocation({
   id,
   building,
   col,
   row,
   floors,
-  roomsByFloor,
 }) {
   return {
     id,
@@ -22,7 +16,6 @@ export function createBuildingLocation({
     row,
     hasRoomSelection: true,
     floors,
-    roomsByFloor,
   };
 }
 
@@ -43,12 +36,6 @@ export const campusLocations = [
     col: 15,
     row: 10,
     floors: ["1", "2", "3", "4"],
-    roomsByFloor: {
-      "1": ["101", "102", "103", "104"],
-      "2": ["201", "202", "203"],
-      "3": ["301", "302"],
-      "4": ["401"],
-    },
   }),
   createBuildingLocation({
     id: "phelan-building",
@@ -56,11 +43,6 @@ export const campusLocations = [
     col: 7,
     row: 7,
     floors: ["1", "2", "3"],
-    roomsByFloor: {
-      "1": ["101", "102"],
-      "2": ["201", "202", "203"],
-      "3": ["301"],
-    },
   }),
   createOpenLocation({
     id: "covered-court",
@@ -74,11 +56,6 @@ export const campusLocations = [
     col: 4,
     row: 11,
     floors: ["1", "2", "3"],
-    roomsByFloor: {
-      "1": ["101", "102", "103"],
-      "2": ["201", "202", "203"],
-      "3": ["301", "302"],
-    },
   }),
   createBuildingLocation({
     id: "santos-building",
@@ -86,11 +63,6 @@ export const campusLocations = [
     col: 8,
     row: 9,
     floors: ["1", "2", "3"],
-    roomsByFloor: {
-      "1": ["101", "102", "103"],
-      "2": ["201", "202", "203"],
-      "3": ["301", "302"],
-    },
   }),
   createBuildingLocation({
     id: "burns-building",
@@ -98,11 +70,6 @@ export const campusLocations = [
     col: 11,
     row: 12,
     floors: ["1", "2", "3"],
-    roomsByFloor: {
-      "1": ["101", "102", "103"],
-      "2": ["201", "202", "203"],
-      "3": ["301", "302"],
-    },
   }),
   createBuildingLocation({
     id: "library",
@@ -110,11 +77,6 @@ export const campusLocations = [
     col: 12,
     row: 7,
     floors: ["1", "2", "3"],
-    roomsByFloor: {
-      "1": ["101", "102", "103"],
-      "2": ["201", "202", "203"],
-      "3": ["301", "302"],
-    },
   }),
   createBuildingLocation({
     id: "bonoan-building",
@@ -122,11 +84,6 @@ export const campusLocations = [
     col: 13,
     row: 10,
     floors: ["1", "2", "3"],
-    roomsByFloor: {
-      "1": ["101", "102", "103"],
-      "2": ["201", "202", "204"],
-      "3": ["301", "302"],
-    },
   }),
   createBuildingLocation({
     id: "dolan-building",
@@ -134,11 +91,6 @@ export const campusLocations = [
     col: 9,
     row: 4,
     floors: ["1", "2", "3"],
-    roomsByFloor: {
-      "1": ["101", "102", "103"],
-      "2": ["201", "202", "203"],
-      "3": ["301", "302"],
-    },
   }),
   createBuildingLocation({
     id: "madrigal-building",
@@ -146,11 +98,6 @@ export const campusLocations = [
     col: 12,
     row: 13,
     floors: ["1", "2", "3"],
-    roomsByFloor: {
-      "1": ["101", "102", "103"],
-      "2": ["201", "202", "203"],
-      "3": ["301", "302"],
-    },
   }),
   createBuildingLocation({
     id: "arrupe-building",
@@ -158,11 +105,6 @@ export const campusLocations = [
     col: 15,
     row: 6,
     floors: ["1", "2", "3"],
-    roomsByFloor: {
-      "1": ["101", "102", "103"],
-      "2": ["201", "202", "203"],
-      "3": ["301", "302"],
-    },
   }),
   createOpenLocation({
     id: "xavier-grounds",

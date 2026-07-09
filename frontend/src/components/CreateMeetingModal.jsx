@@ -4,7 +4,6 @@ import "../css/components_styles/CreateMeetingModal.css";
 import "../css/pages/CampusMap.css";
 import {
   campusLocations,
-  getRoomsForFloor,
   locationHasRoomSelection,
 } from "../data/campusLocations.js";
 
@@ -49,9 +48,6 @@ function StepLocation({ form, onLocationChange, onFieldChange }) {
   const hasRoomSelection = selectedLocation
     ? locationHasRoomSelection(selectedLocation)
     : false;
-  const roomOptions = hasRoomSelection
-    ? (getRoomsForFloor(selectedLocation, form.floor) ?? [])
-    : null;
 
   const filteredLocations = useMemo(() => {
     const query = locationSearch.trim().toLowerCase();
@@ -68,7 +64,7 @@ function StepLocation({ form, onLocationChange, onFieldChange }) {
       onLocationChange({
         locationId: location.id,
         floor,
-        room: location.roomsByFloor[floor][0],
+        room: "",
       });
       return;
     }
@@ -82,11 +78,10 @@ function StepLocation({ form, onLocationChange, onFieldChange }) {
 
   function handleFloorChange(event) {
     const floor = event.target.value;
-    const rooms = getRoomsForFloor(selectedLocation, floor);
     onLocationChange({
       locationId: form.locationId,
       floor,
-      room: rooms?.[0] ?? "",
+      room: "",
     });
   }
 
@@ -161,23 +156,15 @@ function StepLocation({ form, onLocationChange, onFieldChange }) {
 
                 <label className="campus-map-detail-field" htmlFor="cmm-location-room">
                   <span className="campus-map-detail-field__label">Room Number</span>
-                  <select
+                  <input
                     id="cmm-location-room"
                     className="campus-map-select"
+                    type="text"
                     value={hasRoomSelection ? form.room : ""}
                     onChange={(event) => onFieldChange("room", event.target.value)}
                     disabled={!hasRoomSelection}
-                  >
-                    {hasRoomSelection ? (
-                      roomOptions.map((room) => (
-                        <option key={room} value={room}>
-                          {room}
-                        </option>
-                      ))
-                    ) : (
-                      <option value="">Not applicable</option>
-                    )}
-                  </select>
+                    placeholder="Enter room number or room name"
+                  />
                 </label>
               </div>
             </>
@@ -423,6 +410,7 @@ export default function ProposeScheduleModal({
     setSubmitting(true);
     try {
       await onSubmit?.(form);
+      setForm(createInitialForm(fixedGroup, fixedLocation));
       onClose();
     } catch (err) {
       setError(err.message ?? "Something went wrong. Please try again.");
