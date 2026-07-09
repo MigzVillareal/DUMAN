@@ -11,6 +11,10 @@ import {
   fetchGroupById,
   fetchUserInvites,
 } from "../services/groupService.js";
+import {
+  fetchUserMeetings,
+  mapMeetingForMeetingsList,
+} from "../services/meetingService.js";
 import { isToday } from "../utils/date.js";
 import { mapApiInvite } from "../utils/groups.js";
 
@@ -68,13 +72,45 @@ function MeetingCard({ meeting }) {
 function Dashboard() {
   const { user } = useAuth();
   const { loadGroups, mergeGroup } = useGroups();
-  const [meetings] = useState([]);
+  const [meetings, setMeetings] = useState([]);
+  const [meetingsLoading, setMeetingsLoading] = useState(true);
+  const [meetingsError, setMeetingsError] = useState("");
   const [invitations, setInvitations] = useState([]);
   const [invitesLoading, setInvitesLoading] = useState(true);
   const [inviteError, setInviteError] = useState("");
   const [actioningInviteId, setActioningInviteId] = useState(null);
 
   const firstName = user?.firstname ?? "blank";
+
+  const loadMeetings = useCallback(async () => {
+    if (!user?.userId) {
+      setMeetings([]);
+      setMeetingsLoading(false);
+      return;
+    }
+
+    setMeetingsLoading(true);
+    setMeetingsError("");
+
+    try {
+      const data = await fetchUserMeetings(user.userId);
+      const upcomingMeetings = (data.meetings ?? [])
+        .map(mapMeetingForMeetingsList)
+        .filter((meeting) => meeting.status === "upcoming")
+        .sort((a, b) => a.date.localeCompare(b.date))
+        .map((meeting, index) => ({
+          ...meeting,
+          defaultExpanded: index === 0,
+        }));
+
+      setMeetings(upcomingMeetings);
+    } catch (err) {
+      setMeetingsError(err.message || "Unable to load meetings.");
+      setMeetings([]);
+    } finally {
+      setMeetingsLoading(false);
+    }
+  }, [user?.userId]);
 
   const loadInvites = useCallback(async () => {
     if (!user?.userId) {
@@ -103,8 +139,9 @@ function Dashboard() {
   }, [user?.userId]);
 
   useEffect(() => {
+    loadMeetings();
     loadInvites();
-  }, [loadInvites]);
+  }, [loadMeetings, loadInvites]);
 
   const handleDeclineInvite = async (invite) => {
     setActioningInviteId(invite.id);
@@ -162,7 +199,13 @@ function Dashboard() {
         <section className="dashboard-panel">
           <h2 className="dashboard-panel__title">All Upcoming Meetings</h2>
           <div className="dashboard-panel__list">
-            {meetings.length === 0 ? (
+            {meetingsError ? (
+              <p className="dashboard-invite-card__meta dashboard-invite-card__error">
+                {meetingsError}
+              </p>
+            ) : meetingsLoading ? (
+              <p className="dashboard-invite-card__meta">Loading meetings...</p>
+            ) : meetings.length === 0 ? (
               <p className="dashboard-invite-card__meta">No upcoming meetings.</p>
             ) : (
               meetings.map((meeting) => (

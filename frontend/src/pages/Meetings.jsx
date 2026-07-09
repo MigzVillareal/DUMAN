@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useLocation } from "react-router-dom";
 import "../css/pages/Login.css";
 import "../css/pages/Meetings.css";
 import Icon from "../components/Icon.jsx";
@@ -152,6 +153,7 @@ const FILTERS = [
 // ── Main Page ─────────────────────────────────────────────────────────────────
 function Meetings() {
   const { user } = useAuth();
+  const location = useLocation();
   const [meetings, setMeetings] = useState(USE_MOCK_MEETINGS ? MEETINGS_LIST : []);
   const [loading, setLoading] = useState(!USE_MOCK_MEETINGS);
   const [filter, setFilter] = useState("all");
@@ -184,6 +186,17 @@ function Meetings() {
   useEffect(() => {
     loadMeetings();
   }, [loadMeetings]);
+
+  useEffect(() => {
+    const meetingId = location.state?.meetingId;
+    if (!meetingId || meetings.length === 0) return;
+
+    const match = meetings.find((meeting) => meeting.id === meetingId);
+    if (match) {
+      setSelected(match);
+      setFilter("all");
+    }
+  }, [location.state?.meetingId, meetings]);
 
   const openFinalizeModal = (meeting = null) => {
     setModalMeeting(meeting);
