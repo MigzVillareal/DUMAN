@@ -6,3 +6,117 @@
   color: var(--color-text);
   width: 100%;
 }
+
+.notifications-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.notifications-toggle {
+  display: flex;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+}
+
+.notifications-toggle__tab {
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-panel);
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.notifications-toggle__tab:hover:not(.notifications-toggle__tab--active) {
+  background-color: var(--color-hover-surface);
+}
+
+.notifications-toggle__tab--active {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.notifications-list__empty {
+  margin: 0;
+  padding: 2rem 0;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #999;
+}
+
+.notifications-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.875rem 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  background-color: var(--color-panel);
+  font-family: var(--font-ui);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.notifications-item:hover {
+  background-color: var(--color-hover-surface);
+}
+
+.notifications-item__main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.notifications-item__group {
+  font-size: 0.875rem;
+  font-weight: var(--weight-semibold);
+  color: var(--color-primary);
+}
+
+.notifications-item__meeting {
+  font-size: 0.875rem;
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
+}
+
+.notifications-item__message {
+  font-size: 0.8125rem;
+  color: var(--color-text);
+  opacity: 0.85;
+}
+
+.notifications-item__time {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  color: var(--color-text);
+  opacity: 0.65;
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .notifications-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .notifications-item__time {
+    align-self: flex-end;
+  }
+}

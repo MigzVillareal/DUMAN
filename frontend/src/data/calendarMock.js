@@ -26,8 +26,8 @@ import { MEETINGS_LIST } from "./meetingsMock.js";
  * @property {string|null} endsAt ISO-8601 DateTime
  * @property {string} scheduleLabel Display label from meetings mock
  * @property {number} setterId
- * @property {number} intendedGroupId
- * @property {CalendarGroup} intendedGroup
+ * @property {number} groupId
+ * @property {CalendarGroup} group
  * @property {{ status: RsvpStatus }} rsvp
  * @property {boolean} [finalized]
  * @property {Array<{ id: string, label: string, votes: number, total: number }>} [proposedTimes]
@@ -99,8 +99,8 @@ export function meetingToCalendarEvent(meeting) {
     endsAt: buildISO(meeting.date, slot.endH, slot.endM),
     scheduleLabel: meeting.schedule,
     setterId: 1,
-    intendedGroupId: group.groupId,
-    intendedGroup: group,
+    groupId: group.groupId,
+    group,
     rsvp: { status: "PENDING" },
     finalized: meeting.finalized ?? true,
     ...(meeting.proposedTimes ? { proposedTimes: meeting.proposedTimes } : {}),

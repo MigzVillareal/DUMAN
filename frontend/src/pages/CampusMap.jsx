@@ -85,6 +85,9 @@ function CampusMap() {
                 onClick={() => selectLocation(location)}
                 aria-label={location.building}
               >
+                <span className="campus-map-pin__tooltip" role="tooltip">
+                  {location.building}
+                </span>
                 <Icon icon="location-dot" size="lg" />
               </button>
             ))}

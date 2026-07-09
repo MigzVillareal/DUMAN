@@ -13,18 +13,27 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1rem;
+  align-items: stretch;
+}
+
+.my-groups-page__list > li {
+  display: flex;
+  min-width: 0;
 }
 
 .my-groups-page__card {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
+  width: 100%;
+  height: 9rem;
   padding: 1.25rem;
   background-color: var(--color-panel);
   border: 1px solid var(--color-border);
   border-radius: 0.75rem;
   text-decoration: none;
   color: inherit;
+  box-sizing: border-box;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -36,11 +45,18 @@
 .my-groups-page__card-name {
   font-weight: var(--weight-semibold);
   color: var(--color-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .my-groups-page__card-desc {
+  flex: 1;
+  min-height: 0;
   font-size: 0.8125rem;
+  line-height: 1.4;
   opacity: 0.8;
+  overflow: hidden;
 }
 
 .my-groups-page__status {
