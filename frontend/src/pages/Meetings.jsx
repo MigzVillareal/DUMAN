@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import "../css/pages/Login.css";
 import "../css/pages/Meetings.css";
@@ -85,8 +85,166 @@ function MeetingListItem({ meeting, isSelected, onClick }) {
   );
 }
 
+// ── Edit Meeting Modal ────────────────────────────────────────────────────────
+function EditMeetingModal({ meeting, onClose, onSave }) {
+  const [title, setTitle] = useState(meeting.title);
+  const [description, setDescription] = useState(meeting.description ?? "");
+  const overlayRef = useRef(null);
+
+  const handleOverlayClick = (e) => {
+    if (e.target === overlayRef.current) onClose();
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!title.trim()) return;
+    onSave({ ...meeting, title: title.trim(), description: description.trim() });
+    onClose();
+  };
+
+  return (
+    <div
+      className="meeting-modal-overlay"
+      ref={overlayRef}
+      onClick={handleOverlayClick}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="edit-meeting-title"
+    >
+      <div className="meeting-modal">
+        <div className="meeting-modal__header">
+          <h2 id="edit-meeting-title" className="meeting-modal__title">
+            Edit Meeting
+          </h2>
+          <button
+            type="button"
+            className="meeting-modal__close"
+            onClick={onClose}
+            aria-label="Close"
+          >
+            &times;
+          </button>
+        </div>
+
+        <form className="meeting-modal__body" onSubmit={handleSubmit}>
+          <div className="meeting-modal__field">
+            <label className="meeting-modal__label" htmlFor="edit-meeting-title-input">
+              Meeting Title
+            </label>
+            <input
+              id="edit-meeting-title-input"
+              type="text"
+              className="meeting-modal__input"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Enter meeting title"
+              required
+              autoFocus
+            />
+          </div>
+
+          <div className="meeting-modal__field">
+            <label className="meeting-modal__label" htmlFor="edit-meeting-desc">
+              Description
+            </label>
+            <textarea
+              id="edit-meeting-desc"
+              className="meeting-modal__textarea"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Enter meeting description"
+              rows={4}
+            />
+          </div>
+
+          <div className="meeting-modal__actions">
+            <button
+              type="button"
+              className="meetings-btn meetings-btn--outline"
+              onClick={onClose}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="meetings-btn meetings-btn--primary"
+              disabled={!title.trim()}
+            >
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+// ── Delete Confirmation Modal ─────────────────────────────────────────────────
+function DeleteConfirmModal({ meeting, onClose, onConfirm }) {
+  const overlayRef = useRef(null);
+
+  const handleOverlayClick = (e) => {
+    if (e.target === overlayRef.current) onClose();
+  };
+
+  return (
+    <div
+      className="meeting-modal-overlay"
+      ref={overlayRef}
+      onClick={handleOverlayClick}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="delete-meeting-title"
+    >
+      <div className="meeting-modal meeting-modal--sm">
+        <div className="meeting-modal__header">
+          <h2 id="delete-meeting-title" className="meeting-modal__title">
+            Delete Meeting
+          </h2>
+          <button
+            type="button"
+            className="meeting-modal__close"
+            onClick={onClose}
+            aria-label="Close"
+          >
+            &times;
+          </button>
+        </div>
+
+        <div className="meeting-modal__body">
+          <div className="meeting-modal__delete-icon-wrap">
+            <span className="meeting-modal__delete-icon">🗑️</span>
+          </div>
+          <p className="meeting-modal__delete-msg">
+            Are you sure you want to delete{" "}
+            <strong>&ldquo;{meeting.title}&rdquo;</strong>? This action cannot be
+            undone.
+          </p>
+
+          <div className="meeting-modal__actions">
+            <button
+              type="button"
+              className="meetings-btn meetings-btn--outline"
+              onClick={onClose}
+            >
+              Keep Meeting
+            </button>
+            <button
+              type="button"
+              className="meetings-btn meetings-btn--destructive"
+              onClick={() => { onConfirm(meeting); onClose(); }}
+            >
+              Yes, Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Meeting detail panel ──────────────────────────────────────────────────────
-function MeetingDetailPanel({ meeting, onFinalize }) {
+function MeetingDetailPanel({ meeting, onFinalize, onEdit, onDelete }) {
   if (!meeting) {
     return (
       <div className="meetings-detail meetings-detail--empty">
@@ -105,7 +263,42 @@ function MeetingDetailPanel({ meeting, onFinalize }) {
           <h2 className="meetings-detail__title">{meeting.title}</h2>
           <p className="meetings-detail__group">{meeting.group}</p>
         </div>
-        <StatusBadge status={meeting.status} />
+        <div className="meetings-detail__header-right">
+          <StatusBadge status={meeting.status} />
+          <div className="meetings-detail__actions">
+            <button
+              type="button"
+              id="edit-meeting-btn"
+              className="meetings-detail__action-btn meetings-detail__action-btn--edit"
+              onClick={() => onEdit(meeting)}
+              title="Edit meeting"
+              aria-label="Edit meeting"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+              Edit
+            </button>
+            <button
+              type="button"
+              id="delete-meeting-btn"
+              className="meetings-detail__action-btn meetings-detail__action-btn--delete"
+              onClick={() => onDelete(meeting)}
+              title="Delete meeting"
+              aria-label="Delete meeting"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                <path d="M10 11v6"/>
+                <path d="M14 11v6"/>
+                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+              </svg>
+              Delete
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className="meetings-detail__body">
@@ -161,6 +354,8 @@ function Meetings() {
   const [selected, setSelected] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMeeting, setModalMeeting] = useState(null);
+  const [editingMeeting, setEditingMeeting] = useState(null);
+  const [deletingMeeting, setDeletingMeeting] = useState(null);
 
   const loadMeetings = useCallback(async () => {
     if (USE_MOCK_MEETINGS) return;
@@ -252,6 +447,24 @@ function Meetings() {
     }
   };
 
+  // ── Edit handler ────────────────────────────────────────────────────────────
+  const handleEditSave = (updated) => {
+    setMeetings((prev) =>
+      prev.map((m) => (m.id === updated.id ? { ...m, ...updated } : m))
+    );
+    if (selected?.id === updated.id) {
+      setSelected((prev) => ({ ...prev, ...updated }));
+    }
+  };
+
+  // ── Delete handler ──────────────────────────────────────────────────────────
+  const handleDeleteConfirm = (meeting) => {
+    setMeetings((prev) => prev.filter((m) => m.id !== meeting.id));
+    if (selected?.id === meeting.id) {
+      setSelected(null);
+    }
+  };
+
   return (
     <div className="meetings-page">
       {/* ── Page Header ── */}
@@ -323,7 +536,12 @@ function Meetings() {
 
         {/* Right: Detail Panel */}
         <div className="meetings-detail-panel">
-          <MeetingDetailPanel meeting={selected} onFinalize={openFinalizeModal} />
+          <MeetingDetailPanel
+            meeting={selected}
+            onFinalize={openFinalizeModal}
+            onEdit={(m) => setEditingMeeting(m)}
+            onDelete={(m) => setDeletingMeeting(m)}
+          />
         </div>
       </div>
 
@@ -335,6 +553,24 @@ function Meetings() {
           onClose={closeFinalizeModal}
           onFinalized={handleFinalized}
           onCancelMeeting={handleCancelMeeting}
+        />
+      )}
+
+      {/* ── Edit Meeting Modal ── */}
+      {editingMeeting && (
+        <EditMeetingModal
+          meeting={editingMeeting}
+          onClose={() => setEditingMeeting(null)}
+          onSave={handleEditSave}
+        />
+      )}
+
+      {/* ── Delete Confirm Modal ── */}
+      {deletingMeeting && (
+        <DeleteConfirmModal
+          meeting={deletingMeeting}
+          onClose={() => setDeletingMeeting(null)}
+          onConfirm={handleDeleteConfirm}
         />
       )}
     </div>
