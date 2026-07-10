@@ -165,6 +165,40 @@ export async function createMeeting(form) {
   return data;
 }
 
+export async function updateMeeting(meetingId, { title, description }) {
+  const response = await fetch(`/api/v1/meetings/${meetingId}`, {
+    method: "PATCH",
+    headers: getAuthHeaders(true),
+    body: JSON.stringify({
+      title: title.trim(),
+      description: description?.trim() || null,
+    }),
+  });
+
+  const data = await parseJson(response);
+
+  if (!response.ok || data.errorMessage) {
+    throw new Error(data.errorMessage ?? "Unable to update meeting.");
+  }
+
+  return data;
+}
+
+export async function deleteMeeting(meetingId) {
+  const response = await fetch(`/api/v1/meetings/${meetingId}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+
+  const data = await parseJson(response);
+
+  if (!response.ok || data.errorMessage) {
+    throw new Error(data.errorMessage ?? "Unable to delete meeting.");
+  }
+
+  return data;
+}
+
 export async function fetchUserMeetings(userId, { from, to, groupId } = {}) {
   const params = new URLSearchParams();
   if (from) params.set("from", from);

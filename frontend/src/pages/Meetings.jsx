@@ -11,6 +11,8 @@ import { USE_MOCK_MEETINGS } from "../data/mock.js";
 import {
   fetchUserMeetings,
   mapMeetingForMeetingsList,
+  updateMeeting,
+  deleteMeeting,
 } from "../services/meetingService.js";
 
 // ── Status badge ──────────────────────────────────────────────────────────────
@@ -94,17 +96,33 @@ function MeetingListItem({ meeting, isSelected, onClick }) {
 function EditMeetingModal({ meeting, onClose, onSave }) {
   const [title, setTitle] = useState(meeting.title);
   const [description, setDescription] = useState(meeting.description ?? "");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
   const overlayRef = useRef(null);
 
   const handleOverlayClick = (e) => {
-    if (e.target === overlayRef.current) onClose();
+    if (e.target === overlayRef.current && !saving) onClose();
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title.trim()) return;
-    onSave({ ...meeting, title: title.trim(), description: description.trim() });
-    onClose();
+    if (!title.trim() || saving) return;
+
+    setSaving(true);
+    setError(null);
+
+    try {
+      await onSave({
+        ...meeting,
+        title: title.trim(),
+        description: description.trim(),
+      });
+      onClose();
+    } catch (err) {
+      setError(err.message ?? "Unable to update meeting.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -126,12 +144,18 @@ function EditMeetingModal({ meeting, onClose, onSave }) {
             className="meeting-modal__close"
             onClick={onClose}
             aria-label="Close"
+            disabled={saving}
           >
             &times;
           </button>
         </div>
 
         <form className="meeting-modal__body" onSubmit={handleSubmit}>
+          {error && (
+            <p className="meeting-modal__error" role="alert">
+              {error}
+            </p>
+          )}
           <div className="meeting-modal__field">
             <label className="meeting-modal__label" htmlFor="edit-meeting-title-input">
               Meeting Title
@@ -145,6 +169,7 @@ function EditMeetingModal({ meeting, onClose, onSave }) {
               placeholder="Enter meeting title"
               required
               autoFocus
+              disabled={saving}
             />
           </div>
 
@@ -159,6 +184,7 @@ function EditMeetingModal({ meeting, onClose, onSave }) {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Enter meeting description"
               rows={4}
+              disabled={saving}
             />
           </div>
 
@@ -167,15 +193,16 @@ function EditMeetingModal({ meeting, onClose, onSave }) {
               type="button"
               className="meetings-btn meetings-btn--outline"
               onClick={onClose}
+              disabled={saving}
             >
               Cancel
             </button>
             <button
               type="submit"
               className="meetings-btn meetings-btn--primary"
-              disabled={!title.trim()}
+              disabled={!title.trim() || saving}
             >
-              Save Changes
+              {saving ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </form>
@@ -186,10 +213,28 @@ function EditMeetingModal({ meeting, onClose, onSave }) {
 
 // ── Delete Confirmation Modal ─────────────────────────────────────────────────
 function DeleteConfirmModal({ meeting, onClose, onConfirm }) {
+  const [deleting, setDeleting] = useState(false);
+  const [error, setError] = useState(null);
   const overlayRef = useRef(null);
 
   const handleOverlayClick = (e) => {
-    if (e.target === overlayRef.current) onClose();
+    if (e.target === overlayRef.current && !deleting) onClose();
+  };
+
+  const handleConfirm = async () => {
+    if (deleting) return;
+
+    setDeleting(true);
+    setError(null);
+
+    try {
+      await onConfirm(meeting);
+      onClose();
+    } catch (err) {
+      setError(err.message ?? "Unable to delete meeting.");
+    } finally {
+      setDeleting(false);
+    }
   };
 
   return (
@@ -211,17 +256,20 @@ function DeleteConfirmModal({ meeting, onClose, onConfirm }) {
             className="meeting-modal__close"
             onClick={onClose}
             aria-label="Close"
+            disabled={deleting}
           >
             &times;
           </button>
         </div>
 
         <div className="meeting-modal__body">
-          <div className="meeting-modal__delete-icon-wrap">
-            <span className="meeting-modal__delete-icon">🗑️</span>
-          </div>
+          {error && (
+            <p className="meeting-modal__error" role="alert">
+              {error}
+            </p>
+          )}
           <p className="meeting-modal__delete-msg">
-            Are you sure you want to delete{" "}
+            Are you sure you want to delete the meeting{" "}
             <strong>&ldquo;{meeting.title}&rdquo;</strong>? This action cannot be
             undone.
           </p>
@@ -231,15 +279,17 @@ function DeleteConfirmModal({ meeting, onClose, onConfirm }) {
               type="button"
               className="meetings-btn meetings-btn--outline"
               onClick={onClose}
+              disabled={deleting}
             >
               Keep Meeting
             </button>
             <button
               type="button"
               className="meetings-btn meetings-btn--destructive"
-              onClick={() => { onConfirm(meeting); onClose(); }}
+              onClick={handleConfirm}
+              disabled={deleting}
             >
-              Yes, Delete
+              {deleting ? "Deleting..." : "Yes, Delete"}
             </button>
           </div>
         </div>
@@ -264,13 +314,14 @@ function MeetingDetailPanel({ meeting, onFinalize, onEdit, onDelete }) {
     <div className="meetings-detail-wrap">
       <div className="meetings-detail">
       <div className="meetings-detail__header">
-        <div>
-          <h2 className="meetings-detail__title">{meeting.title}</h2>
+        <div className="meetings-detail__header-main">
+          <div className="meetings-detail__title-row">
+            <h2 className="meetings-detail__title">{meeting.title}</h2>
+            <StatusBadge status={meeting.status} />
+          </div>
           <p className="meetings-detail__group">{meeting.group}</p>
         </div>
-        <div className="meetings-detail__header-right">
-          <StatusBadge status={meeting.status} />
-          <div className="meetings-detail__actions">
+        <div className="meetings-detail__actions">
             <button
               type="button"
               id="edit-meeting-btn"
@@ -279,10 +330,7 @@ function MeetingDetailPanel({ meeting, onFinalize, onEdit, onDelete }) {
               title="Edit meeting"
               aria-label="Edit meeting"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-              </svg>
+              <Icon icon="pen" size="xs" />
               Edit
             </button>
             <button
@@ -293,16 +341,9 @@ function MeetingDetailPanel({ meeting, onFinalize, onEdit, onDelete }) {
               title="Delete meeting"
               aria-label="Delete meeting"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="3 6 5 6 21 6"/>
-                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                <path d="M10 11v6"/>
-                <path d="M14 11v6"/>
-                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-              </svg>
+              <Icon icon="xmark" size="xs" />
               Delete
             </button>
-          </div>
         </div>
       </div>
 
@@ -453,8 +494,7 @@ function Meetings() {
     }
   };
 
-  // ── Edit handler ────────────────────────────────────────────────────────────
-  const handleEditSave = (updated) => {
+  const applyMeetingUpdate = (updated) => {
     setMeetings((prev) =>
       prev.map((m) => (m.id === updated.id ? { ...m, ...updated } : m))
     );
@@ -463,12 +503,41 @@ function Meetings() {
     }
   };
 
-  // ── Delete handler ──────────────────────────────────────────────────────────
-  const handleDeleteConfirm = (meeting) => {
-    setMeetings((prev) => prev.filter((m) => m.id !== meeting.id));
-    if (selected?.id === meeting.id) {
+  const removeMeeting = (meetingId) => {
+    setMeetings((prev) => prev.filter((m) => m.id !== meetingId));
+    if (selected?.id === meetingId) {
       setSelected(null);
     }
+  };
+
+  // ── Edit handler ────────────────────────────────────────────────────────────
+  const handleEditSave = async (updated) => {
+    if (USE_MOCK_MEETINGS) {
+      applyMeetingUpdate(updated);
+      return;
+    }
+
+    const data = await updateMeeting(updated.id, {
+      title: updated.title,
+      description: updated.description,
+    });
+    const mapped = mapMeetingForMeetingsList(data.meeting);
+    applyMeetingUpdate({
+      ...mapped,
+      attending: updated.attending ?? [],
+      notAttending: updated.notAttending ?? [],
+    });
+  };
+
+  // ── Delete handler ──────────────────────────────────────────────────────────
+  const handleDeleteConfirm = async (meeting) => {
+    if (USE_MOCK_MEETINGS) {
+      removeMeeting(meeting.id);
+      return;
+    }
+
+    await deleteMeeting(meeting.id);
+    removeMeeting(meeting.id);
   };
 
   return (
