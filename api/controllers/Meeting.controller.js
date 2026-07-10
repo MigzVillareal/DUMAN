@@ -58,11 +58,11 @@ export const createMeeting = async (req, res) => {
                     <p><strong>Meeting details:</strong></p>    
                     <ul>
                         <li><strong>Title:</strong> ${title}</li>
-                        <li><strong>Description:</strong> ${description}</li>
+                        <li><strong>Description:</strong> ${description || "No description set."}</li>
                         <li><strong>Group:</strong> ${meeting.group.name}</li>
                         <li><strong>Date:</strong> ${format(new Date(schedule), 'MMMM d, yyyy')}</li>
                         <li><strong>Time:</strong> ${format(new Date(schedule), `h:mma'-${fEndsAt}'`)}</li>
-                        <li><strong>Building:</strong> ${building}, (${roomNumber})</li>
+                        <li><strong>Building:</strong> ${building}${roomNumber ? ` Room ${roomNumber}` : ""}</li>
                     </ul>
                     `,
         });
