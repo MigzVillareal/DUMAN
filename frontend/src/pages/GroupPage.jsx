@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useGroups } from "../context/GroupsContext.jsx";
 import { getGroupDetails } from "../data/groupsMock.js";
@@ -19,6 +19,7 @@ import {
 import {
   canRemoveGroupMember,
   ensureOwnerAsLeader,
+  isGroupLeader,
   mapApiMember,
 } from "../utils/groups.js";
 import Icon from "../components/Icon.jsx";
@@ -31,6 +32,156 @@ import "../css/pages/Login.css";
 import "../css/pages/Dashboard.css";
 import "../css/pages/GroupPage.css";
 import "../css/pages/Meetings.css";
+
+// ── Shared icon helpers ──────────────────────────────────────────────────────
+function IconEdit() {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" style={{ width: "1em", height: "1em" }}>
+      <path
+        d="M13.586 3.586a2 2 0 1 1 2.828 2.828l-9 9A2 2 0 0 1 6 16H4a1 1 0 0 1-1-1v-2a2 2 0 0 1 .586-1.414l9-9Z"
+        stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function IconTrash() {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" style={{ width: "1em", height: "1em" }}>
+      <path
+        d="M8 4h4M3 6h14M5 6l1 10a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2l1-10"
+        stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function IconClose() {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" style={{ width: "1em", height: "1em" }}>
+      <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+// ── Edit Group Modal ─────────────────────────────────────────────────────────
+function EditGroupModal({ group, onClose, onSave }) {
+  const [name, setName] = useState(group.name);
+  const [description, setDescription] = useState(group.description ?? "");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
+  const inputRef = useRef(null);
+
+  useEffect(() => { inputRef.current?.focus(); inputRef.current?.select(); }, []);
+
+  useEffect(() => {
+    function onKey(e) { if (e.key === "Escape") onClose(); }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const trimmedName = name.trim();
+    if (!trimmedName) { setError("Group title cannot be empty."); return; }
+    setSaving(true); setError(null);
+    try {
+      await onSave(group.id, { name: trimmedName, description: description.trim() });
+      onClose();
+    } catch (err) {
+      setError(err.message ?? "Failed to update group.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div
+      className="gp-modal-backdrop"
+      role="dialog" aria-modal="true" aria-labelledby="edit-group-modal-title"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <div className="gp-modal">
+        <div className="gp-modal__header">
+          <h2 id="edit-group-modal-title" className="gp-modal__title">Edit Group</h2>
+          <button className="gp-modal__close" onClick={onClose} aria-label="Close"><IconClose /></button>
+        </div>
+        <form className="gp-modal__form" onSubmit={handleSubmit}>
+          <label className="gp-modal__label" htmlFor="gp-edit-name">Group Title</label>
+          <input
+            id="gp-edit-name" ref={inputRef}
+            className="gp-modal__input"
+            type="text" value={name}
+            onChange={(e) => setName(e.target.value)}
+            maxLength={80} required
+          />
+          <label className="gp-modal__label" htmlFor="gp-edit-desc">
+            Description <span className="gp-modal__label-opt">(optional)</span>
+          </label>
+          <textarea
+            id="gp-edit-desc" className="gp-modal__textarea"
+            value={description} onChange={(e) => setDescription(e.target.value)}
+            rows={3} maxLength={300} placeholder="What is this group about?"
+          />
+          {error && <p className="gp-modal__error">{error}</p>}
+          <div className="gp-modal__actions">
+            <button type="button" className="gp-modal__btn gp-modal__btn--ghost" onClick={onClose} disabled={saving}>Cancel</button>
+            <button type="submit" className="gp-modal__btn gp-modal__btn--primary" disabled={saving}>{saving ? "Saving…" : "Save Changes"}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+// ── Delete Confirm Modal ─────────────────────────────────────────────────────
+function DeleteGroupModal({ group, onClose, onConfirm }) {
+  const [deleting, setDeleting] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    function onKey(e) { if (e.key === "Escape") onClose(); }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  async function handleDelete() {
+    setDeleting(true); setError(null);
+    try {
+      await onConfirm(group.id);
+      onClose();
+    } catch (err) {
+      setError(err.message ?? "Failed to delete group.");
+      setDeleting(false);
+    }
+  }
+
+  return (
+    <div
+      className="gp-modal-backdrop"
+      role="dialog" aria-modal="true" aria-labelledby="delete-group-modal-title"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <div className="gp-modal gp-modal--danger">
+        <div className="gp-modal__header">
+          <h2 id="delete-group-modal-title" className="gp-modal__title">Delete Group</h2>
+          <button className="gp-modal__close" onClick={onClose} aria-label="Close"><IconClose /></button>
+        </div>
+        <div className="gp-modal__body">
+          <p className="gp-modal__confirm-text">
+            Are you sure you want to delete <strong>&ldquo;{group.name}&rdquo;</strong>?{" "}
+            This action <em>cannot</em> be undone and will permanently remove the group and all its data.
+          </p>
+          {error && <p className="gp-modal__error">{error}</p>}
+        </div>
+        <div className="gp-modal__actions gp-modal__actions--footer">
+          <button type="button" className="gp-modal__btn gp-modal__btn--ghost" onClick={onClose} disabled={deleting}>Cancel</button>
+          <button type="button" className="gp-modal__btn gp-modal__btn--destructive" onClick={handleDelete} disabled={deleting}>{deleting ? "Deleting…" : "Delete Group"}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const MEETING_FILTERS = [
   { key: "upcoming", label: "Upcoming" },
@@ -109,8 +260,9 @@ function GroupMeetingCard({ meeting }) {
 
 export default function GroupPage() {
   const { groupId } = useParams();
+  const navigate = useNavigate();
   const { user } = useAuth();
-  const { groups, loading, setGroupMembers } = useGroups();
+  const { groups, loading, setGroupMembers, editGroup, removeGroup } = useGroups();
   const group = groups.find((g) => g.id === groupId);
   const [members, setMembers] = useState([]);
   const [membersLoading, setMembersLoading] = useState(true);
@@ -121,6 +273,8 @@ export default function GroupPage() {
   const [removeError, setRemoveError] = useState("");
   const [memberToRemove, setMemberToRemove] = useState(null);
   const [showCreateMeetingModal, setShowCreateMeetingModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [allMeetings, setAllMeetings] = useState([]);
   const [meetingFilter, setMeetingFilter] = useState("upcoming");
   const [meetingsLoading, setMeetingsLoading] = useState(!USE_MOCK_GROUPS);
@@ -259,6 +413,17 @@ export default function GroupPage() {
 
   if (!group) return <Navigate to="/groups" replace />;
 
+  const userIsLeader = isGroupLeader(user, group, members);
+
+  const handleEditGroup = useCallback(async (id, payload) => {
+    await editGroup(id, payload);
+  }, [editGroup]);
+
+  const handleDeleteGroup = useCallback(async (id) => {
+    await removeGroup(id);
+    navigate("/groups", { replace: true });
+  }, [removeGroup, navigate]);
+
   const handleRemoveMember = async (member) => {
     const allowed =
       USE_MOCK_GROUPS && group.userId == null
@@ -370,14 +535,40 @@ export default function GroupPage() {
         title={group.name}
         subtitle={group.description || undefined}
         action={
-          <button
-            type="button"
-            className="page-action-btn page-action-btn--primary"
-            onClick={() => setShowCreateMeetingModal(true)}
-          >
-            <Icon icon="plus" size="sm" />
-            Create Meeting
-          </button>
+          <div className="group-page__header-actions">
+            {userIsLeader && (
+              <>
+                <button
+                  type="button"
+                  className="gp-icon-btn gp-icon-btn--edit"
+                  title="Edit group"
+                  aria-label="Edit group"
+                  onClick={() => setShowEditModal(true)}
+                >
+                  <IconEdit />
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  className="gp-icon-btn gp-icon-btn--delete"
+                  title="Delete group"
+                  aria-label="Delete group"
+                  onClick={() => setShowDeleteModal(true)}
+                >
+                  <IconTrash />
+                  Delete
+                </button>
+              </>
+            )}
+            <button
+              type="button"
+              className="page-action-btn page-action-btn--primary"
+              onClick={() => setShowCreateMeetingModal(true)}
+            >
+              <Icon icon="plus" size="sm" />
+              Create Meeting
+            </button>
+          </div>
         }
       />
 
@@ -515,6 +706,22 @@ export default function GroupPage() {
           }}
           onConfirm={handleConfirmRemove}
           confirming={removingMemberId === memberToRemove.id}
+        />
+      )}
+
+      {showEditModal && (
+        <EditGroupModal
+          group={group}
+          onClose={() => setShowEditModal(false)}
+          onSave={handleEditGroup}
+        />
+      )}
+
+      {showDeleteModal && (
+        <DeleteGroupModal
+          group={group}
+          onClose={() => setShowDeleteModal(false)}
+          onConfirm={handleDeleteGroup}
         />
       )}
     </div>

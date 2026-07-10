@@ -9,8 +9,10 @@ import { INITIAL_GROUPS, slugifyGroupName } from "../data/groupsMock.js";
 import {
   USE_MOCK_GROUPS,
   createGroup,
+  deleteGroup as apiDeleteGroup,
   fetchGroups,
   sendGroupInvite,
+  updateGroup as apiUpdateGroup,
 } from "../services/groupService.js";
 import { buildGroupMembers, mapApiGroup } from "../utils/groups.js";
 import { useAuth } from "./AuthContext.jsx";
@@ -157,11 +159,47 @@ export function GroupsProvider({ children }) {
     return mapped;
   }, []);
 
+  const editGroup = useCallback(async (groupId, { name, description }) => {
+    if (USE_MOCK_GROUPS) {
+      setGroups((prev) =>
+        prev.map((g) =>
+          g.id === String(groupId) ? { ...g, name, description } : g
+        )
+      );
+      return;
+    }
+
+    const data = await apiUpdateGroup(groupId, { name, description });
+    if (data.errorMessage) throw new Error(data.errorMessage);
+
+    setGroups((prev) =>
+      prev.map((g) =>
+        g.id === String(groupId)
+          ? { ...g, name: data.group.name, description: data.group.description ?? "" }
+          : g
+      )
+    );
+  }, []);
+
+  const removeGroup = useCallback(async (groupId) => {
+    if (USE_MOCK_GROUPS) {
+      setGroups((prev) => prev.filter((g) => g.id !== String(groupId)));
+      return;
+    }
+
+    const data = await apiDeleteGroup(groupId);
+    if (data.errorMessage) throw new Error(data.errorMessage);
+
+    setGroups((prev) => prev.filter((g) => g.id !== String(groupId)));
+  }, []);
+
   return (
     <GroupsContext.Provider
       value={{
         groups,
         addGroup,
+        editGroup,
+        removeGroup,
         mergeGroup,
         setGroupMembers,
         loading,
