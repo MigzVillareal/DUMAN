@@ -35,7 +35,7 @@ export const campusLocations = [
     building: "Alingal Building",
     col: 15,
     row: 10,
-    floors: ["1", "2", "3", "4"],
+    floors: ["1", "2", "3", "4", "5"],
   }),
   createBuildingLocation({
     id: "phelan-building",
@@ -55,7 +55,7 @@ export const campusLocations = [
     building: "Xavier Hall",
     col: 4,
     row: 11,
-    floors: ["1", "2", "3"],
+    floors: ["1", "2"],
   }),
   createBuildingLocation({
     id: "santos-building",
@@ -83,14 +83,14 @@ export const campusLocations = [
     building: "Bonoan Building",
     col: 13,
     row: 10,
-    floors: ["1", "2", "3"],
+    floors: ["1", "2", "3", "4"],
   }),
   createBuildingLocation({
     id: "dolan-building",
     building: "Dolan Building",
     col: 9,
     row: 4,
-    floors: ["1", "2", "3"],
+    floors: ["1", "2", "3", "4"],
   }),
   createBuildingLocation({
     id: "madrigal-building",
