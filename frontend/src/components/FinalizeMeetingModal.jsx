@@ -59,13 +59,19 @@ function FinalizeStep1({ meetings, onSelect, onClose }) {
   );
 }
 
-function FinalizeStep2({ meeting, onConfirm, onCancelMeeting, onBack }) {
+function FinalizeStep2({ meeting, onConfirm, onCancelMeeting, onBack, saving, error }) {
   const attending = meeting.attending ?? [];
   const notAttending = meeting.notAttending ?? [];
 
   return (
     <div className="finalize-modal__content">
       <h2 className="finalize-modal__title">Finalized Meeting</h2>
+
+      {error && (
+        <p className="meeting-modal__error" role="alert">
+          {error}
+        </p>
+      )}
 
       <div className="finalize-modal__section">
         <p className="finalize-modal__field-label">Meeting Title</p>
@@ -107,6 +113,7 @@ function FinalizeStep2({ meeting, onConfirm, onCancelMeeting, onBack }) {
           type="button"
           className="btn-primary meetings-btn meetings-btn--outline"
           onClick={onBack}
+          disabled={saving}
         >
           Back
         </button>
@@ -115,6 +122,7 @@ function FinalizeStep2({ meeting, onConfirm, onCancelMeeting, onBack }) {
             type="button"
             className="btn-primary meetings-btn meetings-btn--danger"
             onClick={() => onCancelMeeting(meeting)}
+            disabled={saving}
           >
             Cancel Meeting
           </button>
@@ -122,8 +130,9 @@ function FinalizeStep2({ meeting, onConfirm, onCancelMeeting, onBack }) {
             type="button"
             className="btn-primary meetings-btn meetings-btn--primary"
             onClick={() => onConfirm(meeting)}
+            disabled={saving}
           >
-            Confirm &amp; Finalize
+            {saving ? "Saving..." : "Confirm & Finalize"}
           </button>
         </div>
       </div>
@@ -140,34 +149,58 @@ export default function FinalizeMeetingModal({
 }) {
   const [step, setStep] = useState(initialMeeting ? 2 : 1);
   const [selectedMeeting, setSelectedMeeting] = useState(initialMeeting);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
   const overlayRef = useRef(null);
 
   const handleOverlayClick = (event) => {
-    if (event.target === overlayRef.current) onClose();
+    if (event.target === overlayRef.current && !saving) onClose();
   };
 
   useEffect(() => {
     const handleKey = (event) => {
-      if (event.key === "Escape") onClose();
+      if (event.key === "Escape" && !saving) onClose();
     };
 
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [onClose]);
+  }, [onClose, saving]);
 
   const handleSelect = (meeting) => {
     setSelectedMeeting(meeting);
     setStep(2);
   };
 
-  const handleConfirm = (meeting) => {
-    onFinalized(meeting);
-    onClose();
+  const handleConfirm = async (meeting) => {
+    if (saving) return;
+
+    setSaving(true);
+    setError(null);
+
+    try {
+      await onFinalized(meeting);
+      onClose();
+    } catch (err) {
+      setError(err.message ?? "Unable to finalize meeting.");
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleCancelMeeting = (meeting) => {
-    onCancelMeeting(meeting);
-    onClose();
+  const handleCancelMeeting = async (meeting) => {
+    if (saving) return;
+
+    setSaving(true);
+    setError(null);
+
+    try {
+      await onCancelMeeting(meeting);
+      onClose();
+    } catch (err) {
+      setError(err.message ?? "Unable to cancel meeting.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -192,6 +225,8 @@ export default function FinalizeMeetingModal({
             onConfirm={handleConfirm}
             onCancelMeeting={handleCancelMeeting}
             onBack={() => setStep(1)}
+            saving={saving}
+            error={error}
           />
         )}
       </div>

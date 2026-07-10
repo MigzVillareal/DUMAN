@@ -199,6 +199,22 @@ export async function deleteMeeting(meetingId) {
   return data;
 }
 
+export async function updateMeetingStatus(meetingId, status) {
+  const response = await fetch(`/api/v1/meetings/${meetingId}/status`, {
+    method: "PATCH",
+    headers: getAuthHeaders(true),
+    body: JSON.stringify({ status }),
+  });
+
+  const data = await parseJson(response);
+
+  if (!response.ok || data.errorMessage) {
+    throw new Error(data.errorMessage ?? "Unable to update meeting status.");
+  }
+
+  return data;
+}
+
 export async function fetchUserMeetings(userId, { from, to, groupId } = {}) {
   const params = new URLSearchParams();
   if (from) params.set("from", from);

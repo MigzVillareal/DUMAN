@@ -103,15 +103,10 @@ export const updateMeeting = async (req, res) => {
         const { title, description } = req.body;
 
         const meeting = await prisma.meeting.update({
-            where: { meetingid: parseInt(meetingId) },
+            where: { meetingId: parseInt(meetingId) },
             data: {
                 title,
                 description,
-                building,
-                floor,
-                roomNumber,
-                ...(schedule && { schedule: new Data(schedule) }),
-                ...(endsAt && { endsAt: new Data(endsAt) }),
             },
         });
 

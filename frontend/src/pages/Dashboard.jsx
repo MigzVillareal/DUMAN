@@ -13,6 +13,7 @@ import {
 } from "../services/groupService.js";
 import {
   fetchUserMeetings,
+  isUpcomingMeetingStatus,
   mapMeetingForMeetingsList,
 } from "../services/meetingService.js";
 import { isToday } from "../utils/date.js";
@@ -95,8 +96,8 @@ function Dashboard() {
     try {
       const data = await fetchUserMeetings(user.userId);
       const upcomingMeetings = (data.meetings ?? [])
+        .filter((meeting) => isUpcomingMeetingStatus(meeting.status))
         .map(mapMeetingForMeetingsList)
-        .filter((meeting) => meeting.status === "upcoming")
         .sort((a, b) => a.date.localeCompare(b.date))
         .map((meeting, index) => ({
           ...meeting,
@@ -206,7 +207,10 @@ function Dashboard() {
             ) : meetingsLoading ? (
               <p className="dashboard-invite-card__meta">Loading meetings...</p>
             ) : meetings.length === 0 ? (
-              <p className="dashboard-invite-card__meta">No upcoming meetings.</p>
+              <p className="dashboard-invite-card__meta">
+                No upcoming meetings. Finalize pending meetings on the Meetings
+                page first.
+              </p>
             ) : (
               meetings.map((meeting) => (
                 <MeetingCard key={meeting.id} meeting={meeting} />

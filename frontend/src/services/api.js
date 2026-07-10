@@ -23,6 +23,7 @@ export {
   createMeeting,
   updateMeeting,
   deleteMeeting,
+  updateMeetingStatus,
   fetchUserMeetings,
   fetchGroupMeetings,
   formatMeetingLocation,

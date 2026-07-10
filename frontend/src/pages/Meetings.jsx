@@ -13,6 +13,7 @@ import {
   mapMeetingForMeetingsList,
   updateMeeting,
   deleteMeeting,
+  updateMeetingStatus,
 } from "../services/meetingService.js";
 
 // ── Status badge ──────────────────────────────────────────────────────────────
@@ -468,26 +469,46 @@ function Meetings() {
     }
   }, [filter, search]);
 
-  const handleFinalized = (meeting) => {
-    setMeetings((prev) =>
-      prev.map((m) =>
-        m.id === meeting.id
-          ? { ...m, finalized: true, status: "upcoming" }
-          : m
-      )
-    );
-
-    if (selected?.id === meeting.id) {
-      setSelected((prev) => ({
-        ...prev,
+  const handleFinalized = async (meeting) => {
+    if (USE_MOCK_MEETINGS) {
+      applyMeetingUpdate({
+        ...meeting,
         finalized: true,
         status: "upcoming",
-      }));
+      });
+      return;
     }
+
+    const data = await updateMeetingStatus(meeting.id, "UPCOMING");
+    const mapped = mapMeetingForMeetingsList(data.meeting);
+    applyMeetingUpdate({
+      ...meeting,
+      status: mapped.status,
+      finalized: mapped.finalized,
+      attending: meeting.attending ?? [],
+      notAttending: meeting.notAttending ?? [],
+    });
   };
 
-  const handleCancelMeeting = (meeting) => {
-    setMeetings((prev) => prev.filter((m) => m.id !== meeting.id));
+  const handleCancelMeeting = async (meeting) => {
+    if (USE_MOCK_MEETINGS) {
+      applyMeetingUpdate({
+        ...meeting,
+        finalized: true,
+        status: "cancelled",
+      });
+      return;
+    }
+
+    const data = await updateMeetingStatus(meeting.id, "CANCELLED");
+    const mapped = mapMeetingForMeetingsList(data.meeting);
+    applyMeetingUpdate({
+      ...meeting,
+      status: mapped.status,
+      finalized: mapped.finalized,
+      attending: meeting.attending ?? [],
+      notAttending: meeting.notAttending ?? [],
+    });
 
     if (selected?.id === meeting.id) {
       setSelected(null);
