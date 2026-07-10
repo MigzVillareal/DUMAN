@@ -265,7 +265,7 @@ function StepDetails({ form, onChange, fixedGroup, groups = [] }) {
       </div>
 
       {/* Voting Deadline */}
-      <div className="cmm-field cmm-field--half">
+      {/* <div className="cmm-field cmm-field--half">
         <label className="cmm-label" htmlFor="cmm-deadline">
           Voting Deadline
         </label>
@@ -276,7 +276,7 @@ function StepDetails({ form, onChange, fixedGroup, groups = [] }) {
           value={form.deadline}
           onChange={(e) => onChange("deadline", e.target.value)}
         />
-      </div>
+      </div> */}
 
       {/* Meeting Time */}
       <div className="cmm-field">
@@ -377,11 +377,40 @@ export default function ProposeScheduleModal({
   const validateStep = () => {
     if (step === 0 && !skipLocationStep) {
       if (!form.locationId) return "Please select a location.";
+
+      // If the selected location requires a room
+      const location = campusLocations.find(
+        (l) => l.id === form.locationId
+      );
+
+      if (location && locationHasRoomSelection(location) && !form.room.trim()) {
+        return "Please enter a room number.";
+      }
     }
+
     if (step === 1) {
-      if (!fixedGroup && !form.group) return "Please select a group.";
-      if (!form.title.trim()) return "Meeting title is required.";
+      if (!fixedGroup && !form.group)
+        return "Please select a group.";
+
+      if (!form.title.trim())
+        return "Meeting title is required.";
+
+      // if (!form.deadline)
+      //   return "i dont wanna live anymore. please kill me.";
+
+      if (!form.date)
+        return "Meeting date is required.";
+
+      if (!form.start)
+        return "Start time is required.";
+
+      if (!form.end)
+        return "End time is required.";
+
+      if (form.start && form.end && form.start >= form.end)
+        return "End time must be after the start time.";
     }
+
     return "";
   };
 
