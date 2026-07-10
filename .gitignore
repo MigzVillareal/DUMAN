@@ -144,3 +144,6 @@ vite.config.ts.timestamp-*
 
 #node modules
 ./api/node_modules
+
+# api/.gitignore
+prisma/generated/
