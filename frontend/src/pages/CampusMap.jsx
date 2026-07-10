@@ -6,9 +6,11 @@ import { useGroups } from "../context/GroupsContext.jsx";
 import { createMeeting } from "../services/meetingService.js";
 import { campusLocations, locationHasRoomSelection } from "../data/campusLocations.js";
 
+// Toggle campus map grid overlay: change false to true to show the grid.
+const SHOW_CAMPUS_MAP_GRID = false;
+
 function CampusMap() {
   const { groups } = useGroups();
-  const [showGrid, setShowGrid] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedFloor, setSelectedFloor] = useState("");
   const [selectedRoom, setSelectedRoom] = useState("");
@@ -52,14 +54,6 @@ function CampusMap() {
     <div className="campus-map-page">
       <div className="campus-map-layout">
         <section className="campus-map-view-container" aria-label="Campus map">
-          <button
-            type="button"
-            onClick={() => setShowGrid(!showGrid)}
-            aria-pressed={showGrid}
-          >
-            {showGrid ? "Hide Grid" : "Show Grid"}
-          </button>
-
           <div className="campus-map-canvas">
             <img
               src="/adnu-campus-map.png"
@@ -67,7 +61,9 @@ function CampusMap() {
               className="campus-map-image"
             />
 
-            {showGrid && <div className="campus-map-grid" aria-hidden="true" />}
+            {SHOW_CAMPUS_MAP_GRID && (
+              <div className="campus-map-grid" aria-hidden="true" />
+            )}
 
             {campusLocations.map((location) => (
               <button
@@ -122,7 +118,7 @@ function CampusMap() {
                   </label>
 
                   <label className="campus-map-detail-field" htmlFor="campus-map-room">
-                    <span className="campus-map-detail-field__label">Room Number</span>
+                    <span className="campus-map-detail-field__label">Room</span>
                     <input
                       id="campus-map-room"
                       className="campus-map-select"

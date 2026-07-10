@@ -155,7 +155,7 @@ function StepLocation({ form, onLocationChange, onFieldChange }) {
                 </label>
 
                 <label className="campus-map-detail-field" htmlFor="cmm-location-room">
-                  <span className="campus-map-detail-field__label">Room Number</span>
+                  <span className="campus-map-detail-field__label">Room</span>
                   <input
                     id="cmm-location-room"
                     className="campus-map-select"
