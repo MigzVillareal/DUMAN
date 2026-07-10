@@ -110,6 +110,7 @@ model Meeting {
   building    String?
   floor       String?
   roomNumber  String?
+  isReminded  Boolean       @default(false)
 
   schedule DateTime
   endsAt   DateTime?
