@@ -133,16 +133,16 @@ export default function CreateGroupModal({
   };
 
   const handleAddMember = (selectedUser) => {
-    if (isSelfSearch(memberSearch, user, invitableUsers)) {
-      setMemberError("You can't add yourself.");
-      return;
-    }
-
     const match =
       selectedUser ??
       findInvitableUser(memberSearch, members, user, invitableUsers);
 
     if (!match) {
+      if (isSelfSearch(memberSearch, user, invitableUsers)) {
+        setMemberError("You can't add yourself.");
+        return;
+      }
+
       setMemberError("No matching user found.");
       return;
     }

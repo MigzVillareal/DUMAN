@@ -107,7 +107,9 @@ export const updateMeeting = async (req, res) => {
             data: {
                 title,
                 description,
-                locationDetail,
+                building,
+                floor,
+                roomNumber,
                 ...(schedule && { schedule: new Data(schedule) }),
                 ...(endsAt && { endsAt: new Data(endsAt) }),
             },
@@ -141,7 +143,7 @@ export const updateMeetingStatus = async (req, res) => {
         const { status } = req.body;
 
         const meeting = await prisma.meeting.update({
-            wjere: { meetingId: parseInt(meetingId) },
+            where: { meetingId: parseInt(meetingId) },
             data: { status }
         });
 

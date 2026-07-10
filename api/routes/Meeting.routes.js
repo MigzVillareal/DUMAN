@@ -18,5 +18,6 @@ router.get("/:meetingId/notifications", authenticateToken, meetingController.get
 
 // Attendance
 router.get("/:meetingId/attendance", authenticateToken, meetingController.getMeetingAttendance);
+// router,patch("/:meetingId/attendance", authenticateToken, meetingController.confirmAttendance);
 
 export default router;

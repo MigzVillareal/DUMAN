@@ -12,6 +12,8 @@ import {
 import {
   createMeeting,
   fetchGroupMeetings,
+  isPastMeetingStatus,
+  isUpcomingMeetingStatus,
   mapMeetingForGroupPage,
 } from "../services/meetingService.js";
 import {
@@ -56,8 +58,8 @@ function getDisplayedGroupMeetings(meetings, filter, isMock) {
   return (meetings ?? [])
     .filter((meeting) =>
       filter === "past"
-        ? meeting.status === "FINISHED"
-        : meeting.status !== "FINISHED"
+        ? isPastMeetingStatus(meeting.status)
+        : isUpcomingMeetingStatus(meeting.status)
     )
     .sort((a, b) => {
       const diff =

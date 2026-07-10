@@ -39,10 +39,10 @@ export type Meeting = $Result.DefaultSelection<Prisma.$MeetingPayload>
  */
 export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
 /**
- * Model Calendar
+ * Model Attendance
  * 
  */
-export type Calendar = $Result.DefaultSelection<Prisma.$CalendarPayload>
+export type Attendance = $Result.DefaultSelection<Prisma.$AttendancePayload>
 
 /**
  * Enums
@@ -66,9 +66,11 @@ export type InviteStatus = (typeof InviteStatus)[keyof typeof InviteStatus]
 
 
 export const MeetingStatus: {
+  PENDING: 'PENDING',
   UPCOMING: 'UPCOMING',
   ONGOING: 'ONGOING',
-  FINISHED: 'FINISHED'
+  FINISHED: 'FINISHED',
+  CANCELLED: 'CANCELLED'
 };
 
 export type MeetingStatus = (typeof MeetingStatus)[keyof typeof MeetingStatus]
@@ -81,6 +83,17 @@ export const NotificationStatus: {
 };
 
 export type NotificationStatus = (typeof NotificationStatus)[keyof typeof NotificationStatus]
+
+
+export const AttendanceStatus: {
+  PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
+  DECLINED: 'DECLINED',
+  ATTENDED: 'ATTENDED',
+  ABSENT: 'ABSENT'
+};
+
+export type AttendanceStatus = (typeof AttendanceStatus)[keyof typeof AttendanceStatus]
 
 }
 
@@ -99,6 +112,10 @@ export const MeetingStatus: typeof $Enums.MeetingStatus
 export type NotificationStatus = $Enums.NotificationStatus
 
 export const NotificationStatus: typeof $Enums.NotificationStatus
+
+export type AttendanceStatus = $Enums.AttendanceStatus
+
+export const AttendanceStatus: typeof $Enums.AttendanceStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -272,14 +289,14 @@ export class PrismaClient<
   get notification(): Prisma.NotificationDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.calendar`: Exposes CRUD operations for the **Calendar** model.
+   * `prisma.attendance`: Exposes CRUD operations for the **Attendance** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Calendars
-    * const calendars = await prisma.calendar.findMany()
+    * // Fetch zero or more Attendances
+    * const attendances = await prisma.attendance.findMany()
     * ```
     */
-  get calendar(): Prisma.CalendarDelegate<ExtArgs, ClientOptions>;
+  get attendance(): Prisma.AttendanceDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -719,7 +736,7 @@ export namespace Prisma {
     GroupMember: 'GroupMember',
     Meeting: 'Meeting',
     Notification: 'Notification',
-    Calendar: 'Calendar'
+    Attendance: 'Attendance'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -735,7 +752,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "group" | "groupMember" | "meeting" | "notification" | "calendar"
+      modelProps: "user" | "group" | "groupMember" | "meeting" | "notification" | "attendance"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1109,77 +1126,77 @@ export namespace Prisma {
           }
         }
       }
-      Calendar: {
-        payload: Prisma.$CalendarPayload<ExtArgs>
-        fields: Prisma.CalendarFieldRefs
+      Attendance: {
+        payload: Prisma.$AttendancePayload<ExtArgs>
+        fields: Prisma.AttendanceFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.CalendarFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CalendarPayload> | null
+            args: Prisma.AttendanceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttendancePayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.CalendarFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CalendarPayload>
+            args: Prisma.AttendanceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttendancePayload>
           }
           findFirst: {
-            args: Prisma.CalendarFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CalendarPayload> | null
+            args: Prisma.AttendanceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttendancePayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.CalendarFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CalendarPayload>
+            args: Prisma.AttendanceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttendancePayload>
           }
           findMany: {
-            args: Prisma.CalendarFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CalendarPayload>[]
+            args: Prisma.AttendanceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttendancePayload>[]
           }
           create: {
-            args: Prisma.CalendarCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CalendarPayload>
+            args: Prisma.AttendanceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttendancePayload>
           }
           createMany: {
-            args: Prisma.CalendarCreateManyArgs<ExtArgs>
+            args: Prisma.AttendanceCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.CalendarCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CalendarPayload>[]
+            args: Prisma.AttendanceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttendancePayload>[]
           }
           delete: {
-            args: Prisma.CalendarDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CalendarPayload>
+            args: Prisma.AttendanceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttendancePayload>
           }
           update: {
-            args: Prisma.CalendarUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CalendarPayload>
+            args: Prisma.AttendanceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttendancePayload>
           }
           deleteMany: {
-            args: Prisma.CalendarDeleteManyArgs<ExtArgs>
+            args: Prisma.AttendanceDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.CalendarUpdateManyArgs<ExtArgs>
+            args: Prisma.AttendanceUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.CalendarUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CalendarPayload>[]
+            args: Prisma.AttendanceUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttendancePayload>[]
           }
           upsert: {
-            args: Prisma.CalendarUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CalendarPayload>
+            args: Prisma.AttendanceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttendancePayload>
           }
           aggregate: {
-            args: Prisma.CalendarAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateCalendar>
+            args: Prisma.AttendanceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAttendance>
           }
           groupBy: {
-            args: Prisma.CalendarGroupByArgs<ExtArgs>
-            result: $Utils.Optional<CalendarGroupByOutputType>[]
+            args: Prisma.AttendanceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AttendanceGroupByOutputType>[]
           }
           count: {
-            args: Prisma.CalendarCountArgs<ExtArgs>
-            result: $Utils.Optional<CalendarCountAggregateOutputType> | number
+            args: Prisma.AttendanceCountArgs<ExtArgs>
+            result: $Utils.Optional<AttendanceCountAggregateOutputType> | number
           }
         }
       }
@@ -1296,7 +1313,7 @@ export namespace Prisma {
     groupMember?: GroupMemberOmit
     meeting?: MeetingOmit
     notification?: NotificationOmit
-    calendar?: CalendarOmit
+    attendance?: AttendanceOmit
   }
 
   /* Types for Logging */
@@ -1380,16 +1397,16 @@ export namespace Prisma {
     ownedGroups: number
     groupMembers: number
     notifications: number
+    attendance: number
     sentInvites: number
-    calendars: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ownedGroups?: boolean | UserCountOutputTypeCountOwnedGroupsArgs
     groupMembers?: boolean | UserCountOutputTypeCountGroupMembersArgs
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+    attendance?: boolean | UserCountOutputTypeCountAttendanceArgs
     sentInvites?: boolean | UserCountOutputTypeCountSentInvitesArgs
-    calendars?: boolean | UserCountOutputTypeCountCalendarsArgs
   }
 
   // Custom InputTypes
@@ -1427,15 +1444,15 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountSentInvitesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: GroupMemberWhereInput
+  export type UserCountOutputTypeCountAttendanceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AttendanceWhereInput
   }
 
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountCalendarsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: CalendarWhereInput
+  export type UserCountOutputTypeCountSentInvitesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GroupMemberWhereInput
   }
 
 
@@ -1447,14 +1464,12 @@ export namespace Prisma {
     members: number
     notifications: number
     meetings: number
-    calendars: number
   }
 
   export type GroupCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     members?: boolean | GroupCountOutputTypeCountMembersArgs
     notifications?: boolean | GroupCountOutputTypeCountNotificationsArgs
     meetings?: boolean | GroupCountOutputTypeCountMeetingsArgs
-    calendars?: boolean | GroupCountOutputTypeCountCalendarsArgs
   }
 
   // Custom InputTypes
@@ -1489,23 +1504,18 @@ export namespace Prisma {
     where?: MeetingWhereInput
   }
 
-  /**
-   * GroupCountOutputType without action
-   */
-  export type GroupCountOutputTypeCountCalendarsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: CalendarWhereInput
-  }
-
 
   /**
    * Count Type MeetingCountOutputType
    */
 
   export type MeetingCountOutputType = {
+    attendance: number
     notifications: number
   }
 
   export type MeetingCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    attendance?: boolean | MeetingCountOutputTypeCountAttendanceArgs
     notifications?: boolean | MeetingCountOutputTypeCountNotificationsArgs
   }
 
@@ -1518,6 +1528,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the MeetingCountOutputType
      */
     select?: MeetingCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * MeetingCountOutputType without action
+   */
+  export type MeetingCountOutputTypeCountAttendanceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AttendanceWhereInput
   }
 
   /**
@@ -1757,8 +1774,8 @@ export namespace Prisma {
     ownedGroups?: boolean | User$ownedGroupsArgs<ExtArgs>
     groupMembers?: boolean | User$groupMembersArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
+    attendance?: boolean | User$attendanceArgs<ExtArgs>
     sentInvites?: boolean | User$sentInvitesArgs<ExtArgs>
-    calendars?: boolean | User$calendarsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1800,8 +1817,8 @@ export namespace Prisma {
     ownedGroups?: boolean | User$ownedGroupsArgs<ExtArgs>
     groupMembers?: boolean | User$groupMembersArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
+    attendance?: boolean | User$attendanceArgs<ExtArgs>
     sentInvites?: boolean | User$sentInvitesArgs<ExtArgs>
-    calendars?: boolean | User$calendarsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1813,8 +1830,8 @@ export namespace Prisma {
       ownedGroups: Prisma.$GroupPayload<ExtArgs>[]
       groupMembers: Prisma.$GroupMemberPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
+      attendance: Prisma.$AttendancePayload<ExtArgs>[]
       sentInvites: Prisma.$GroupMemberPayload<ExtArgs>[]
-      calendars: Prisma.$CalendarPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       userId: number
@@ -2222,8 +2239,8 @@ export namespace Prisma {
     ownedGroups<T extends User$ownedGroupsArgs<ExtArgs> = {}>(args?: Subset<T, User$ownedGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     groupMembers<T extends User$groupMembersArgs<ExtArgs> = {}>(args?: Subset<T, User$groupMembersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    attendance<T extends User$attendanceArgs<ExtArgs> = {}>(args?: Subset<T, User$attendanceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sentInvites<T extends User$sentInvitesArgs<ExtArgs> = {}>(args?: Subset<T, User$sentInvitesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GroupMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    calendars<T extends User$calendarsArgs<ExtArgs> = {}>(args?: Subset<T, User$calendarsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CalendarPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2726,6 +2743,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.attendance
+   */
+  export type User$attendanceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attendance
+     */
+    select?: AttendanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attendance
+     */
+    omit?: AttendanceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceInclude<ExtArgs> | null
+    where?: AttendanceWhereInput
+    orderBy?: AttendanceOrderByWithRelationInput | AttendanceOrderByWithRelationInput[]
+    cursor?: AttendanceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AttendanceScalarFieldEnum | AttendanceScalarFieldEnum[]
+  }
+
+  /**
    * User.sentInvites
    */
   export type User$sentInvitesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2747,30 +2788,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: GroupMemberScalarFieldEnum | GroupMemberScalarFieldEnum[]
-  }
-
-  /**
-   * User.calendars
-   */
-  export type User$calendarsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Calendar
-     */
-    select?: CalendarSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Calendar
-     */
-    omit?: CalendarOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CalendarInclude<ExtArgs> | null
-    where?: CalendarWhereInput
-    orderBy?: CalendarOrderByWithRelationInput | CalendarOrderByWithRelationInput[]
-    cursor?: CalendarWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: CalendarScalarFieldEnum | CalendarScalarFieldEnum[]
   }
 
   /**
@@ -3006,7 +3023,6 @@ export namespace Prisma {
     notifications?: boolean | Group$notificationsArgs<ExtArgs>
     meetings?: boolean | Group$meetingsArgs<ExtArgs>
     user?: boolean | Group$userArgs<ExtArgs>
-    calendars?: boolean | Group$calendarsArgs<ExtArgs>
     _count?: boolean | GroupCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["group"]>
 
@@ -3045,7 +3061,6 @@ export namespace Prisma {
     notifications?: boolean | Group$notificationsArgs<ExtArgs>
     meetings?: boolean | Group$meetingsArgs<ExtArgs>
     user?: boolean | Group$userArgs<ExtArgs>
-    calendars?: boolean | Group$calendarsArgs<ExtArgs>
     _count?: boolean | GroupCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type GroupIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3062,7 +3077,6 @@ export namespace Prisma {
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       meetings: Prisma.$MeetingPayload<ExtArgs>[]
       user: Prisma.$UserPayload<ExtArgs> | null
-      calendars: Prisma.$CalendarPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       groupId: number
@@ -3469,7 +3483,6 @@ export namespace Prisma {
     notifications<T extends Group$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, Group$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     meetings<T extends Group$meetingsArgs<ExtArgs> = {}>(args?: Subset<T, Group$meetingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     user<T extends Group$userArgs<ExtArgs> = {}>(args?: Subset<T, Group$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    calendars<T extends Group$calendarsArgs<ExtArgs> = {}>(args?: Subset<T, Group$calendarsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CalendarPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3994,30 +4007,6 @@ export namespace Prisma {
      */
     include?: UserInclude<ExtArgs> | null
     where?: UserWhereInput
-  }
-
-  /**
-   * Group.calendars
-   */
-  export type Group$calendarsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Calendar
-     */
-    select?: CalendarSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Calendar
-     */
-    omit?: CalendarOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CalendarInclude<ExtArgs> | null
-    where?: CalendarWhereInput
-    orderBy?: CalendarOrderByWithRelationInput | CalendarOrderByWithRelationInput[]
-    cursor?: CalendarWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: CalendarScalarFieldEnum | CalendarScalarFieldEnum[]
   }
 
   /**
@@ -5202,6 +5191,7 @@ export namespace Prisma {
     description: string | null
     status: $Enums.MeetingStatus | null
     building: string | null
+    floor: string | null
     roomNumber: string | null
     schedule: Date | null
     endsAt: Date | null
@@ -5216,6 +5206,7 @@ export namespace Prisma {
     description: string | null
     status: $Enums.MeetingStatus | null
     building: string | null
+    floor: string | null
     roomNumber: string | null
     schedule: Date | null
     endsAt: Date | null
@@ -5230,6 +5221,7 @@ export namespace Prisma {
     description: number
     status: number
     building: number
+    floor: number
     roomNumber: number
     schedule: number
     endsAt: number
@@ -5256,6 +5248,7 @@ export namespace Prisma {
     description?: true
     status?: true
     building?: true
+    floor?: true
     roomNumber?: true
     schedule?: true
     endsAt?: true
@@ -5270,6 +5263,7 @@ export namespace Prisma {
     description?: true
     status?: true
     building?: true
+    floor?: true
     roomNumber?: true
     schedule?: true
     endsAt?: true
@@ -5284,6 +5278,7 @@ export namespace Prisma {
     description?: true
     status?: true
     building?: true
+    floor?: true
     roomNumber?: true
     schedule?: true
     endsAt?: true
@@ -5385,6 +5380,7 @@ export namespace Prisma {
     description: string | null
     status: $Enums.MeetingStatus
     building: string | null
+    floor: string | null
     roomNumber: string | null
     schedule: Date
     endsAt: Date | null
@@ -5418,12 +5414,14 @@ export namespace Prisma {
     description?: boolean
     status?: boolean
     building?: boolean
+    floor?: boolean
     roomNumber?: boolean
     schedule?: boolean
     endsAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     group?: boolean | GroupDefaultArgs<ExtArgs>
+    attendance?: boolean | Meeting$attendanceArgs<ExtArgs>
     notifications?: boolean | Meeting$notificationsArgs<ExtArgs>
     _count?: boolean | MeetingCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["meeting"]>
@@ -5435,6 +5433,7 @@ export namespace Prisma {
     description?: boolean
     status?: boolean
     building?: boolean
+    floor?: boolean
     roomNumber?: boolean
     schedule?: boolean
     endsAt?: boolean
@@ -5450,6 +5449,7 @@ export namespace Prisma {
     description?: boolean
     status?: boolean
     building?: boolean
+    floor?: boolean
     roomNumber?: boolean
     schedule?: boolean
     endsAt?: boolean
@@ -5465,6 +5465,7 @@ export namespace Prisma {
     description?: boolean
     status?: boolean
     building?: boolean
+    floor?: boolean
     roomNumber?: boolean
     schedule?: boolean
     endsAt?: boolean
@@ -5472,9 +5473,10 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type MeetingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"meetingId" | "groupId" | "title" | "description" | "status" | "building" | "roomNumber" | "schedule" | "endsAt" | "createdAt" | "updatedAt", ExtArgs["result"]["meeting"]>
+  export type MeetingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"meetingId" | "groupId" | "title" | "description" | "status" | "building" | "floor" | "roomNumber" | "schedule" | "endsAt" | "createdAt" | "updatedAt", ExtArgs["result"]["meeting"]>
   export type MeetingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     group?: boolean | GroupDefaultArgs<ExtArgs>
+    attendance?: boolean | Meeting$attendanceArgs<ExtArgs>
     notifications?: boolean | Meeting$notificationsArgs<ExtArgs>
     _count?: boolean | MeetingCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -5489,6 +5491,7 @@ export namespace Prisma {
     name: "Meeting"
     objects: {
       group: Prisma.$GroupPayload<ExtArgs>
+      attendance: Prisma.$AttendancePayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -5498,6 +5501,7 @@ export namespace Prisma {
       description: string | null
       status: $Enums.MeetingStatus
       building: string | null
+      floor: string | null
       roomNumber: string | null
       schedule: Date
       endsAt: Date | null
@@ -5898,6 +5902,7 @@ export namespace Prisma {
   export interface Prisma__MeetingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     group<T extends GroupDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GroupDefaultArgs<ExtArgs>>): Prisma__GroupClient<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    attendance<T extends Meeting$attendanceArgs<ExtArgs> = {}>(args?: Subset<T, Meeting$attendanceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends Meeting$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, Meeting$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -5934,6 +5939,7 @@ export namespace Prisma {
     readonly description: FieldRef<"Meeting", 'String'>
     readonly status: FieldRef<"Meeting", 'MeetingStatus'>
     readonly building: FieldRef<"Meeting", 'String'>
+    readonly floor: FieldRef<"Meeting", 'String'>
     readonly roomNumber: FieldRef<"Meeting", 'String'>
     readonly schedule: FieldRef<"Meeting", 'DateTime'>
     readonly endsAt: FieldRef<"Meeting", 'DateTime'>
@@ -6337,6 +6343,30 @@ export namespace Prisma {
      * Limit how many Meetings to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Meeting.attendance
+   */
+  export type Meeting$attendanceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attendance
+     */
+    select?: AttendanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attendance
+     */
+    omit?: AttendanceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceInclude<ExtArgs> | null
+    where?: AttendanceWhereInput
+    orderBy?: AttendanceOrderByWithRelationInput | AttendanceOrderByWithRelationInput[]
+    cursor?: AttendanceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AttendanceScalarFieldEnum | AttendanceScalarFieldEnum[]
   }
 
   /**
@@ -7579,376 +7609,384 @@ export namespace Prisma {
 
 
   /**
-   * Model Calendar
+   * Model Attendance
    */
 
-  export type AggregateCalendar = {
-    _count: CalendarCountAggregateOutputType | null
-    _avg: CalendarAvgAggregateOutputType | null
-    _sum: CalendarSumAggregateOutputType | null
-    _min: CalendarMinAggregateOutputType | null
-    _max: CalendarMaxAggregateOutputType | null
+  export type AggregateAttendance = {
+    _count: AttendanceCountAggregateOutputType | null
+    _avg: AttendanceAvgAggregateOutputType | null
+    _sum: AttendanceSumAggregateOutputType | null
+    _min: AttendanceMinAggregateOutputType | null
+    _max: AttendanceMaxAggregateOutputType | null
   }
 
-  export type CalendarAvgAggregateOutputType = {
-    calendarId: number | null
-    groupId: number | null
-    userId: number | null
+  export type AttendanceAvgAggregateOutputType = {
+    meetingId: number | null
+    memberId: number | null
   }
 
-  export type CalendarSumAggregateOutputType = {
-    calendarId: number | null
-    groupId: number | null
-    userId: number | null
+  export type AttendanceSumAggregateOutputType = {
+    meetingId: number | null
+    memberId: number | null
   }
 
-  export type CalendarMinAggregateOutputType = {
-    calendarId: number | null
-    groupId: number | null
-    userId: number | null
+  export type AttendanceMinAggregateOutputType = {
+    meetingId: number | null
+    memberId: number | null
+    status: $Enums.AttendanceStatus | null
+    respondedAt: Date | null
   }
 
-  export type CalendarMaxAggregateOutputType = {
-    calendarId: number | null
-    groupId: number | null
-    userId: number | null
+  export type AttendanceMaxAggregateOutputType = {
+    meetingId: number | null
+    memberId: number | null
+    status: $Enums.AttendanceStatus | null
+    respondedAt: Date | null
   }
 
-  export type CalendarCountAggregateOutputType = {
-    calendarId: number
-    groupId: number
-    userId: number
+  export type AttendanceCountAggregateOutputType = {
+    meetingId: number
+    memberId: number
+    status: number
+    respondedAt: number
     _all: number
   }
 
 
-  export type CalendarAvgAggregateInputType = {
-    calendarId?: true
-    groupId?: true
-    userId?: true
+  export type AttendanceAvgAggregateInputType = {
+    meetingId?: true
+    memberId?: true
   }
 
-  export type CalendarSumAggregateInputType = {
-    calendarId?: true
-    groupId?: true
-    userId?: true
+  export type AttendanceSumAggregateInputType = {
+    meetingId?: true
+    memberId?: true
   }
 
-  export type CalendarMinAggregateInputType = {
-    calendarId?: true
-    groupId?: true
-    userId?: true
+  export type AttendanceMinAggregateInputType = {
+    meetingId?: true
+    memberId?: true
+    status?: true
+    respondedAt?: true
   }
 
-  export type CalendarMaxAggregateInputType = {
-    calendarId?: true
-    groupId?: true
-    userId?: true
+  export type AttendanceMaxAggregateInputType = {
+    meetingId?: true
+    memberId?: true
+    status?: true
+    respondedAt?: true
   }
 
-  export type CalendarCountAggregateInputType = {
-    calendarId?: true
-    groupId?: true
-    userId?: true
+  export type AttendanceCountAggregateInputType = {
+    meetingId?: true
+    memberId?: true
+    status?: true
+    respondedAt?: true
     _all?: true
   }
 
-  export type CalendarAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AttendanceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Calendar to aggregate.
+     * Filter which Attendance to aggregate.
      */
-    where?: CalendarWhereInput
+    where?: AttendanceWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Calendars to fetch.
+     * Determine the order of Attendances to fetch.
      */
-    orderBy?: CalendarOrderByWithRelationInput | CalendarOrderByWithRelationInput[]
+    orderBy?: AttendanceOrderByWithRelationInput | AttendanceOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: CalendarWhereUniqueInput
+    cursor?: AttendanceWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Calendars from the position of the cursor.
+     * Take `±n` Attendances from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Calendars.
+     * Skip the first `n` Attendances.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Calendars
+     * Count returned Attendances
     **/
-    _count?: true | CalendarCountAggregateInputType
+    _count?: true | AttendanceCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: CalendarAvgAggregateInputType
+    _avg?: AttendanceAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: CalendarSumAggregateInputType
+    _sum?: AttendanceSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: CalendarMinAggregateInputType
+    _min?: AttendanceMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: CalendarMaxAggregateInputType
+    _max?: AttendanceMaxAggregateInputType
   }
 
-  export type GetCalendarAggregateType<T extends CalendarAggregateArgs> = {
-        [P in keyof T & keyof AggregateCalendar]: P extends '_count' | 'count'
+  export type GetAttendanceAggregateType<T extends AttendanceAggregateArgs> = {
+        [P in keyof T & keyof AggregateAttendance]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateCalendar[P]>
-      : GetScalarType<T[P], AggregateCalendar[P]>
+        : GetScalarType<T[P], AggregateAttendance[P]>
+      : GetScalarType<T[P], AggregateAttendance[P]>
   }
 
 
 
 
-  export type CalendarGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: CalendarWhereInput
-    orderBy?: CalendarOrderByWithAggregationInput | CalendarOrderByWithAggregationInput[]
-    by: CalendarScalarFieldEnum[] | CalendarScalarFieldEnum
-    having?: CalendarScalarWhereWithAggregatesInput
+  export type AttendanceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AttendanceWhereInput
+    orderBy?: AttendanceOrderByWithAggregationInput | AttendanceOrderByWithAggregationInput[]
+    by: AttendanceScalarFieldEnum[] | AttendanceScalarFieldEnum
+    having?: AttendanceScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: CalendarCountAggregateInputType | true
-    _avg?: CalendarAvgAggregateInputType
-    _sum?: CalendarSumAggregateInputType
-    _min?: CalendarMinAggregateInputType
-    _max?: CalendarMaxAggregateInputType
+    _count?: AttendanceCountAggregateInputType | true
+    _avg?: AttendanceAvgAggregateInputType
+    _sum?: AttendanceSumAggregateInputType
+    _min?: AttendanceMinAggregateInputType
+    _max?: AttendanceMaxAggregateInputType
   }
 
-  export type CalendarGroupByOutputType = {
-    calendarId: number
-    groupId: number
-    userId: number
-    _count: CalendarCountAggregateOutputType | null
-    _avg: CalendarAvgAggregateOutputType | null
-    _sum: CalendarSumAggregateOutputType | null
-    _min: CalendarMinAggregateOutputType | null
-    _max: CalendarMaxAggregateOutputType | null
+  export type AttendanceGroupByOutputType = {
+    meetingId: number
+    memberId: number
+    status: $Enums.AttendanceStatus
+    respondedAt: Date | null
+    _count: AttendanceCountAggregateOutputType | null
+    _avg: AttendanceAvgAggregateOutputType | null
+    _sum: AttendanceSumAggregateOutputType | null
+    _min: AttendanceMinAggregateOutputType | null
+    _max: AttendanceMaxAggregateOutputType | null
   }
 
-  type GetCalendarGroupByPayload<T extends CalendarGroupByArgs> = Prisma.PrismaPromise<
+  type GetAttendanceGroupByPayload<T extends AttendanceGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<CalendarGroupByOutputType, T['by']> &
+      PickEnumerable<AttendanceGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof CalendarGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof AttendanceGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], CalendarGroupByOutputType[P]>
-            : GetScalarType<T[P], CalendarGroupByOutputType[P]>
+              : GetScalarType<T[P], AttendanceGroupByOutputType[P]>
+            : GetScalarType<T[P], AttendanceGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type CalendarSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    calendarId?: boolean
-    groupId?: boolean
-    userId?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    group?: boolean | GroupDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["calendar"]>
+  export type AttendanceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    meetingId?: boolean
+    memberId?: boolean
+    status?: boolean
+    respondedAt?: boolean
+    meeting?: boolean | MeetingDefaultArgs<ExtArgs>
+    member?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["attendance"]>
 
-  export type CalendarSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    calendarId?: boolean
-    groupId?: boolean
-    userId?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    group?: boolean | GroupDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["calendar"]>
+  export type AttendanceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    meetingId?: boolean
+    memberId?: boolean
+    status?: boolean
+    respondedAt?: boolean
+    meeting?: boolean | MeetingDefaultArgs<ExtArgs>
+    member?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["attendance"]>
 
-  export type CalendarSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    calendarId?: boolean
-    groupId?: boolean
-    userId?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    group?: boolean | GroupDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["calendar"]>
+  export type AttendanceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    meetingId?: boolean
+    memberId?: boolean
+    status?: boolean
+    respondedAt?: boolean
+    meeting?: boolean | MeetingDefaultArgs<ExtArgs>
+    member?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["attendance"]>
 
-  export type CalendarSelectScalar = {
-    calendarId?: boolean
-    groupId?: boolean
-    userId?: boolean
+  export type AttendanceSelectScalar = {
+    meetingId?: boolean
+    memberId?: boolean
+    status?: boolean
+    respondedAt?: boolean
   }
 
-  export type CalendarOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"calendarId" | "groupId" | "userId", ExtArgs["result"]["calendar"]>
-  export type CalendarInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    group?: boolean | GroupDefaultArgs<ExtArgs>
+  export type AttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"meetingId" | "memberId" | "status" | "respondedAt", ExtArgs["result"]["attendance"]>
+  export type AttendanceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    meeting?: boolean | MeetingDefaultArgs<ExtArgs>
+    member?: boolean | UserDefaultArgs<ExtArgs>
   }
-  export type CalendarIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    group?: boolean | GroupDefaultArgs<ExtArgs>
+  export type AttendanceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    meeting?: boolean | MeetingDefaultArgs<ExtArgs>
+    member?: boolean | UserDefaultArgs<ExtArgs>
   }
-  export type CalendarIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    group?: boolean | GroupDefaultArgs<ExtArgs>
+  export type AttendanceIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    meeting?: boolean | MeetingDefaultArgs<ExtArgs>
+    member?: boolean | UserDefaultArgs<ExtArgs>
   }
 
-  export type $CalendarPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Calendar"
+  export type $AttendancePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Attendance"
     objects: {
-      user: Prisma.$UserPayload<ExtArgs>
-      group: Prisma.$GroupPayload<ExtArgs>
+      meeting: Prisma.$MeetingPayload<ExtArgs>
+      member: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
-      calendarId: number
-      groupId: number
-      userId: number
-    }, ExtArgs["result"]["calendar"]>
+      meetingId: number
+      memberId: number
+      status: $Enums.AttendanceStatus
+      respondedAt: Date | null
+    }, ExtArgs["result"]["attendance"]>
     composites: {}
   }
 
-  type CalendarGetPayload<S extends boolean | null | undefined | CalendarDefaultArgs> = $Result.GetResult<Prisma.$CalendarPayload, S>
+  type AttendanceGetPayload<S extends boolean | null | undefined | AttendanceDefaultArgs> = $Result.GetResult<Prisma.$AttendancePayload, S>
 
-  type CalendarCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<CalendarFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: CalendarCountAggregateInputType | true
+  type AttendanceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AttendanceFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AttendanceCountAggregateInputType | true
     }
 
-  export interface CalendarDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Calendar'], meta: { name: 'Calendar' } }
+  export interface AttendanceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Attendance'], meta: { name: 'Attendance' } }
     /**
-     * Find zero or one Calendar that matches the filter.
-     * @param {CalendarFindUniqueArgs} args - Arguments to find a Calendar
+     * Find zero or one Attendance that matches the filter.
+     * @param {AttendanceFindUniqueArgs} args - Arguments to find a Attendance
      * @example
-     * // Get one Calendar
-     * const calendar = await prisma.calendar.findUnique({
+     * // Get one Attendance
+     * const attendance = await prisma.attendance.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends CalendarFindUniqueArgs>(args: SelectSubset<T, CalendarFindUniqueArgs<ExtArgs>>): Prisma__CalendarClient<$Result.GetResult<Prisma.$CalendarPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends AttendanceFindUniqueArgs>(args: SelectSubset<T, AttendanceFindUniqueArgs<ExtArgs>>): Prisma__AttendanceClient<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Calendar that matches the filter or throw an error with `error.code='P2025'`
+     * Find one Attendance that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {CalendarFindUniqueOrThrowArgs} args - Arguments to find a Calendar
+     * @param {AttendanceFindUniqueOrThrowArgs} args - Arguments to find a Attendance
      * @example
-     * // Get one Calendar
-     * const calendar = await prisma.calendar.findUniqueOrThrow({
+     * // Get one Attendance
+     * const attendance = await prisma.attendance.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends CalendarFindUniqueOrThrowArgs>(args: SelectSubset<T, CalendarFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CalendarClient<$Result.GetResult<Prisma.$CalendarPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends AttendanceFindUniqueOrThrowArgs>(args: SelectSubset<T, AttendanceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AttendanceClient<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Calendar that matches the filter.
+     * Find the first Attendance that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CalendarFindFirstArgs} args - Arguments to find a Calendar
+     * @param {AttendanceFindFirstArgs} args - Arguments to find a Attendance
      * @example
-     * // Get one Calendar
-     * const calendar = await prisma.calendar.findFirst({
+     * // Get one Attendance
+     * const attendance = await prisma.attendance.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends CalendarFindFirstArgs>(args?: SelectSubset<T, CalendarFindFirstArgs<ExtArgs>>): Prisma__CalendarClient<$Result.GetResult<Prisma.$CalendarPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends AttendanceFindFirstArgs>(args?: SelectSubset<T, AttendanceFindFirstArgs<ExtArgs>>): Prisma__AttendanceClient<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Calendar that matches the filter or
+     * Find the first Attendance that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CalendarFindFirstOrThrowArgs} args - Arguments to find a Calendar
+     * @param {AttendanceFindFirstOrThrowArgs} args - Arguments to find a Attendance
      * @example
-     * // Get one Calendar
-     * const calendar = await prisma.calendar.findFirstOrThrow({
+     * // Get one Attendance
+     * const attendance = await prisma.attendance.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends CalendarFindFirstOrThrowArgs>(args?: SelectSubset<T, CalendarFindFirstOrThrowArgs<ExtArgs>>): Prisma__CalendarClient<$Result.GetResult<Prisma.$CalendarPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends AttendanceFindFirstOrThrowArgs>(args?: SelectSubset<T, AttendanceFindFirstOrThrowArgs<ExtArgs>>): Prisma__AttendanceClient<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Calendars that matches the filter.
+     * Find zero or more Attendances that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CalendarFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {AttendanceFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Calendars
-     * const calendars = await prisma.calendar.findMany()
+     * // Get all Attendances
+     * const attendances = await prisma.attendance.findMany()
      * 
-     * // Get first 10 Calendars
-     * const calendars = await prisma.calendar.findMany({ take: 10 })
+     * // Get first 10 Attendances
+     * const attendances = await prisma.attendance.findMany({ take: 10 })
      * 
-     * // Only select the `calendarId`
-     * const calendarWithCalendarIdOnly = await prisma.calendar.findMany({ select: { calendarId: true } })
+     * // Only select the `meetingId`
+     * const attendanceWithMeetingIdOnly = await prisma.attendance.findMany({ select: { meetingId: true } })
      * 
      */
-    findMany<T extends CalendarFindManyArgs>(args?: SelectSubset<T, CalendarFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CalendarPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends AttendanceFindManyArgs>(args?: SelectSubset<T, AttendanceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a Calendar.
-     * @param {CalendarCreateArgs} args - Arguments to create a Calendar.
+     * Create a Attendance.
+     * @param {AttendanceCreateArgs} args - Arguments to create a Attendance.
      * @example
-     * // Create one Calendar
-     * const Calendar = await prisma.calendar.create({
+     * // Create one Attendance
+     * const Attendance = await prisma.attendance.create({
      *   data: {
-     *     // ... data to create a Calendar
+     *     // ... data to create a Attendance
      *   }
      * })
      * 
      */
-    create<T extends CalendarCreateArgs>(args: SelectSubset<T, CalendarCreateArgs<ExtArgs>>): Prisma__CalendarClient<$Result.GetResult<Prisma.$CalendarPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends AttendanceCreateArgs>(args: SelectSubset<T, AttendanceCreateArgs<ExtArgs>>): Prisma__AttendanceClient<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Calendars.
-     * @param {CalendarCreateManyArgs} args - Arguments to create many Calendars.
+     * Create many Attendances.
+     * @param {AttendanceCreateManyArgs} args - Arguments to create many Attendances.
      * @example
-     * // Create many Calendars
-     * const calendar = await prisma.calendar.createMany({
+     * // Create many Attendances
+     * const attendance = await prisma.attendance.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends CalendarCreateManyArgs>(args?: SelectSubset<T, CalendarCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends AttendanceCreateManyArgs>(args?: SelectSubset<T, AttendanceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many Calendars and returns the data saved in the database.
-     * @param {CalendarCreateManyAndReturnArgs} args - Arguments to create many Calendars.
+     * Create many Attendances and returns the data saved in the database.
+     * @param {AttendanceCreateManyAndReturnArgs} args - Arguments to create many Attendances.
      * @example
-     * // Create many Calendars
-     * const calendar = await prisma.calendar.createManyAndReturn({
+     * // Create many Attendances
+     * const attendance = await prisma.attendance.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many Calendars and only return the `calendarId`
-     * const calendarWithCalendarIdOnly = await prisma.calendar.createManyAndReturn({
-     *   select: { calendarId: true },
+     * // Create many Attendances and only return the `meetingId`
+     * const attendanceWithMeetingIdOnly = await prisma.attendance.createManyAndReturn({
+     *   select: { meetingId: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -7957,28 +7995,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends CalendarCreateManyAndReturnArgs>(args?: SelectSubset<T, CalendarCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CalendarPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends AttendanceCreateManyAndReturnArgs>(args?: SelectSubset<T, AttendanceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a Calendar.
-     * @param {CalendarDeleteArgs} args - Arguments to delete one Calendar.
+     * Delete a Attendance.
+     * @param {AttendanceDeleteArgs} args - Arguments to delete one Attendance.
      * @example
-     * // Delete one Calendar
-     * const Calendar = await prisma.calendar.delete({
+     * // Delete one Attendance
+     * const Attendance = await prisma.attendance.delete({
      *   where: {
-     *     // ... filter to delete one Calendar
+     *     // ... filter to delete one Attendance
      *   }
      * })
      * 
      */
-    delete<T extends CalendarDeleteArgs>(args: SelectSubset<T, CalendarDeleteArgs<ExtArgs>>): Prisma__CalendarClient<$Result.GetResult<Prisma.$CalendarPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends AttendanceDeleteArgs>(args: SelectSubset<T, AttendanceDeleteArgs<ExtArgs>>): Prisma__AttendanceClient<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one Calendar.
-     * @param {CalendarUpdateArgs} args - Arguments to update one Calendar.
+     * Update one Attendance.
+     * @param {AttendanceUpdateArgs} args - Arguments to update one Attendance.
      * @example
-     * // Update one Calendar
-     * const calendar = await prisma.calendar.update({
+     * // Update one Attendance
+     * const attendance = await prisma.attendance.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -7988,30 +8026,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends CalendarUpdateArgs>(args: SelectSubset<T, CalendarUpdateArgs<ExtArgs>>): Prisma__CalendarClient<$Result.GetResult<Prisma.$CalendarPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends AttendanceUpdateArgs>(args: SelectSubset<T, AttendanceUpdateArgs<ExtArgs>>): Prisma__AttendanceClient<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Calendars.
-     * @param {CalendarDeleteManyArgs} args - Arguments to filter Calendars to delete.
+     * Delete zero or more Attendances.
+     * @param {AttendanceDeleteManyArgs} args - Arguments to filter Attendances to delete.
      * @example
-     * // Delete a few Calendars
-     * const { count } = await prisma.calendar.deleteMany({
+     * // Delete a few Attendances
+     * const { count } = await prisma.attendance.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends CalendarDeleteManyArgs>(args?: SelectSubset<T, CalendarDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends AttendanceDeleteManyArgs>(args?: SelectSubset<T, AttendanceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Calendars.
+     * Update zero or more Attendances.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CalendarUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {AttendanceUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Calendars
-     * const calendar = await prisma.calendar.updateMany({
+     * // Update many Attendances
+     * const attendance = await prisma.attendance.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -8021,14 +8059,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends CalendarUpdateManyArgs>(args: SelectSubset<T, CalendarUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends AttendanceUpdateManyArgs>(args: SelectSubset<T, AttendanceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Calendars and returns the data updated in the database.
-     * @param {CalendarUpdateManyAndReturnArgs} args - Arguments to update many Calendars.
+     * Update zero or more Attendances and returns the data updated in the database.
+     * @param {AttendanceUpdateManyAndReturnArgs} args - Arguments to update many Attendances.
      * @example
-     * // Update many Calendars
-     * const calendar = await prisma.calendar.updateManyAndReturn({
+     * // Update many Attendances
+     * const attendance = await prisma.attendance.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -8037,9 +8075,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Calendars and only return the `calendarId`
-     * const calendarWithCalendarIdOnly = await prisma.calendar.updateManyAndReturn({
-     *   select: { calendarId: true },
+     * // Update zero or more Attendances and only return the `meetingId`
+     * const attendanceWithMeetingIdOnly = await prisma.attendance.updateManyAndReturn({
+     *   select: { meetingId: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -8051,56 +8089,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends CalendarUpdateManyAndReturnArgs>(args: SelectSubset<T, CalendarUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CalendarPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends AttendanceUpdateManyAndReturnArgs>(args: SelectSubset<T, AttendanceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one Calendar.
-     * @param {CalendarUpsertArgs} args - Arguments to update or create a Calendar.
+     * Create or update one Attendance.
+     * @param {AttendanceUpsertArgs} args - Arguments to update or create a Attendance.
      * @example
-     * // Update or create a Calendar
-     * const calendar = await prisma.calendar.upsert({
+     * // Update or create a Attendance
+     * const attendance = await prisma.attendance.upsert({
      *   create: {
-     *     // ... data to create a Calendar
+     *     // ... data to create a Attendance
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Calendar we want to update
+     *     // ... the filter for the Attendance we want to update
      *   }
      * })
      */
-    upsert<T extends CalendarUpsertArgs>(args: SelectSubset<T, CalendarUpsertArgs<ExtArgs>>): Prisma__CalendarClient<$Result.GetResult<Prisma.$CalendarPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends AttendanceUpsertArgs>(args: SelectSubset<T, AttendanceUpsertArgs<ExtArgs>>): Prisma__AttendanceClient<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of Calendars.
+     * Count the number of Attendances.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CalendarCountArgs} args - Arguments to filter Calendars to count.
+     * @param {AttendanceCountArgs} args - Arguments to filter Attendances to count.
      * @example
-     * // Count the number of Calendars
-     * const count = await prisma.calendar.count({
+     * // Count the number of Attendances
+     * const count = await prisma.attendance.count({
      *   where: {
-     *     // ... the filter for the Calendars we want to count
+     *     // ... the filter for the Attendances we want to count
      *   }
      * })
     **/
-    count<T extends CalendarCountArgs>(
-      args?: Subset<T, CalendarCountArgs>,
+    count<T extends AttendanceCountArgs>(
+      args?: Subset<T, AttendanceCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], CalendarCountAggregateOutputType>
+          : GetScalarType<T['select'], AttendanceCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Calendar.
+     * Allows you to perform aggregations operations on a Attendance.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CalendarAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {AttendanceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -8120,13 +8158,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends CalendarAggregateArgs>(args: Subset<T, CalendarAggregateArgs>): Prisma.PrismaPromise<GetCalendarAggregateType<T>>
+    aggregate<T extends AttendanceAggregateArgs>(args: Subset<T, AttendanceAggregateArgs>): Prisma.PrismaPromise<GetAttendanceAggregateType<T>>
 
     /**
-     * Group by Calendar.
+     * Group by Attendance.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CalendarGroupByArgs} args - Group by arguments.
+     * @param {AttendanceGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -8141,14 +8179,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends CalendarGroupByArgs,
+      T extends AttendanceGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: CalendarGroupByArgs['orderBy'] }
-        : { orderBy?: CalendarGroupByArgs['orderBy'] },
+        ? { orderBy: AttendanceGroupByArgs['orderBy'] }
+        : { orderBy?: AttendanceGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -8197,23 +8235,23 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, CalendarGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCalendarGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, AttendanceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAttendanceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Calendar model
+   * Fields of the Attendance model
    */
-  readonly fields: CalendarFieldRefs;
+  readonly fields: AttendanceFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Calendar.
+   * The delegate class that acts as a "Promise-like" for Attendance.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__CalendarClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__AttendanceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    group<T extends GroupDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GroupDefaultArgs<ExtArgs>>): Prisma__GroupClient<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    meeting<T extends MeetingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MeetingDefaultArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    member<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8240,428 +8278,429 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Calendar model
+   * Fields of the Attendance model
    */
-  interface CalendarFieldRefs {
-    readonly calendarId: FieldRef<"Calendar", 'Int'>
-    readonly groupId: FieldRef<"Calendar", 'Int'>
-    readonly userId: FieldRef<"Calendar", 'Int'>
+  interface AttendanceFieldRefs {
+    readonly meetingId: FieldRef<"Attendance", 'Int'>
+    readonly memberId: FieldRef<"Attendance", 'Int'>
+    readonly status: FieldRef<"Attendance", 'AttendanceStatus'>
+    readonly respondedAt: FieldRef<"Attendance", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * Calendar findUnique
+   * Attendance findUnique
    */
-  export type CalendarFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AttendanceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Calendar
+     * Select specific fields to fetch from the Attendance
      */
-    select?: CalendarSelect<ExtArgs> | null
+    select?: AttendanceSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Calendar
+     * Omit specific fields from the Attendance
      */
-    omit?: CalendarOmit<ExtArgs> | null
+    omit?: AttendanceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CalendarInclude<ExtArgs> | null
+    include?: AttendanceInclude<ExtArgs> | null
     /**
-     * Filter, which Calendar to fetch.
+     * Filter, which Attendance to fetch.
      */
-    where: CalendarWhereUniqueInput
+    where: AttendanceWhereUniqueInput
   }
 
   /**
-   * Calendar findUniqueOrThrow
+   * Attendance findUniqueOrThrow
    */
-  export type CalendarFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AttendanceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Calendar
+     * Select specific fields to fetch from the Attendance
      */
-    select?: CalendarSelect<ExtArgs> | null
+    select?: AttendanceSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Calendar
+     * Omit specific fields from the Attendance
      */
-    omit?: CalendarOmit<ExtArgs> | null
+    omit?: AttendanceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CalendarInclude<ExtArgs> | null
+    include?: AttendanceInclude<ExtArgs> | null
     /**
-     * Filter, which Calendar to fetch.
+     * Filter, which Attendance to fetch.
      */
-    where: CalendarWhereUniqueInput
+    where: AttendanceWhereUniqueInput
   }
 
   /**
-   * Calendar findFirst
+   * Attendance findFirst
    */
-  export type CalendarFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AttendanceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Calendar
+     * Select specific fields to fetch from the Attendance
      */
-    select?: CalendarSelect<ExtArgs> | null
+    select?: AttendanceSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Calendar
+     * Omit specific fields from the Attendance
      */
-    omit?: CalendarOmit<ExtArgs> | null
+    omit?: AttendanceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CalendarInclude<ExtArgs> | null
+    include?: AttendanceInclude<ExtArgs> | null
     /**
-     * Filter, which Calendar to fetch.
+     * Filter, which Attendance to fetch.
      */
-    where?: CalendarWhereInput
+    where?: AttendanceWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Calendars to fetch.
+     * Determine the order of Attendances to fetch.
      */
-    orderBy?: CalendarOrderByWithRelationInput | CalendarOrderByWithRelationInput[]
+    orderBy?: AttendanceOrderByWithRelationInput | AttendanceOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Calendars.
+     * Sets the position for searching for Attendances.
      */
-    cursor?: CalendarWhereUniqueInput
+    cursor?: AttendanceWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Calendars from the position of the cursor.
+     * Take `±n` Attendances from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Calendars.
+     * Skip the first `n` Attendances.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Calendars.
+     * Filter by unique combinations of Attendances.
      */
-    distinct?: CalendarScalarFieldEnum | CalendarScalarFieldEnum[]
+    distinct?: AttendanceScalarFieldEnum | AttendanceScalarFieldEnum[]
   }
 
   /**
-   * Calendar findFirstOrThrow
+   * Attendance findFirstOrThrow
    */
-  export type CalendarFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AttendanceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Calendar
+     * Select specific fields to fetch from the Attendance
      */
-    select?: CalendarSelect<ExtArgs> | null
+    select?: AttendanceSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Calendar
+     * Omit specific fields from the Attendance
      */
-    omit?: CalendarOmit<ExtArgs> | null
+    omit?: AttendanceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CalendarInclude<ExtArgs> | null
+    include?: AttendanceInclude<ExtArgs> | null
     /**
-     * Filter, which Calendar to fetch.
+     * Filter, which Attendance to fetch.
      */
-    where?: CalendarWhereInput
+    where?: AttendanceWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Calendars to fetch.
+     * Determine the order of Attendances to fetch.
      */
-    orderBy?: CalendarOrderByWithRelationInput | CalendarOrderByWithRelationInput[]
+    orderBy?: AttendanceOrderByWithRelationInput | AttendanceOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Calendars.
+     * Sets the position for searching for Attendances.
      */
-    cursor?: CalendarWhereUniqueInput
+    cursor?: AttendanceWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Calendars from the position of the cursor.
+     * Take `±n` Attendances from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Calendars.
+     * Skip the first `n` Attendances.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Calendars.
+     * Filter by unique combinations of Attendances.
      */
-    distinct?: CalendarScalarFieldEnum | CalendarScalarFieldEnum[]
+    distinct?: AttendanceScalarFieldEnum | AttendanceScalarFieldEnum[]
   }
 
   /**
-   * Calendar findMany
+   * Attendance findMany
    */
-  export type CalendarFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AttendanceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Calendar
+     * Select specific fields to fetch from the Attendance
      */
-    select?: CalendarSelect<ExtArgs> | null
+    select?: AttendanceSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Calendar
+     * Omit specific fields from the Attendance
      */
-    omit?: CalendarOmit<ExtArgs> | null
+    omit?: AttendanceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CalendarInclude<ExtArgs> | null
+    include?: AttendanceInclude<ExtArgs> | null
     /**
-     * Filter, which Calendars to fetch.
+     * Filter, which Attendances to fetch.
      */
-    where?: CalendarWhereInput
+    where?: AttendanceWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Calendars to fetch.
+     * Determine the order of Attendances to fetch.
      */
-    orderBy?: CalendarOrderByWithRelationInput | CalendarOrderByWithRelationInput[]
+    orderBy?: AttendanceOrderByWithRelationInput | AttendanceOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Calendars.
+     * Sets the position for listing Attendances.
      */
-    cursor?: CalendarWhereUniqueInput
+    cursor?: AttendanceWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Calendars from the position of the cursor.
+     * Take `±n` Attendances from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Calendars.
+     * Skip the first `n` Attendances.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Calendars.
+     * Filter by unique combinations of Attendances.
      */
-    distinct?: CalendarScalarFieldEnum | CalendarScalarFieldEnum[]
+    distinct?: AttendanceScalarFieldEnum | AttendanceScalarFieldEnum[]
   }
 
   /**
-   * Calendar create
+   * Attendance create
    */
-  export type CalendarCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AttendanceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Calendar
+     * Select specific fields to fetch from the Attendance
      */
-    select?: CalendarSelect<ExtArgs> | null
+    select?: AttendanceSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Calendar
+     * Omit specific fields from the Attendance
      */
-    omit?: CalendarOmit<ExtArgs> | null
+    omit?: AttendanceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CalendarInclude<ExtArgs> | null
+    include?: AttendanceInclude<ExtArgs> | null
     /**
-     * The data needed to create a Calendar.
+     * The data needed to create a Attendance.
      */
-    data: XOR<CalendarCreateInput, CalendarUncheckedCreateInput>
+    data: XOR<AttendanceCreateInput, AttendanceUncheckedCreateInput>
   }
 
   /**
-   * Calendar createMany
+   * Attendance createMany
    */
-  export type CalendarCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AttendanceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Calendars.
+     * The data used to create many Attendances.
      */
-    data: CalendarCreateManyInput | CalendarCreateManyInput[]
+    data: AttendanceCreateManyInput | AttendanceCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Calendar createManyAndReturn
+   * Attendance createManyAndReturn
    */
-  export type CalendarCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AttendanceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Calendar
+     * Select specific fields to fetch from the Attendance
      */
-    select?: CalendarSelectCreateManyAndReturn<ExtArgs> | null
+    select?: AttendanceSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Calendar
+     * Omit specific fields from the Attendance
      */
-    omit?: CalendarOmit<ExtArgs> | null
+    omit?: AttendanceOmit<ExtArgs> | null
     /**
-     * The data used to create many Calendars.
+     * The data used to create many Attendances.
      */
-    data: CalendarCreateManyInput | CalendarCreateManyInput[]
+    data: AttendanceCreateManyInput | AttendanceCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CalendarIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: AttendanceIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * Calendar update
+   * Attendance update
    */
-  export type CalendarUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AttendanceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Calendar
+     * Select specific fields to fetch from the Attendance
      */
-    select?: CalendarSelect<ExtArgs> | null
+    select?: AttendanceSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Calendar
+     * Omit specific fields from the Attendance
      */
-    omit?: CalendarOmit<ExtArgs> | null
+    omit?: AttendanceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CalendarInclude<ExtArgs> | null
+    include?: AttendanceInclude<ExtArgs> | null
     /**
-     * The data needed to update a Calendar.
+     * The data needed to update a Attendance.
      */
-    data: XOR<CalendarUpdateInput, CalendarUncheckedUpdateInput>
+    data: XOR<AttendanceUpdateInput, AttendanceUncheckedUpdateInput>
     /**
-     * Choose, which Calendar to update.
+     * Choose, which Attendance to update.
      */
-    where: CalendarWhereUniqueInput
+    where: AttendanceWhereUniqueInput
   }
 
   /**
-   * Calendar updateMany
+   * Attendance updateMany
    */
-  export type CalendarUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AttendanceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Calendars.
+     * The data used to update Attendances.
      */
-    data: XOR<CalendarUpdateManyMutationInput, CalendarUncheckedUpdateManyInput>
+    data: XOR<AttendanceUpdateManyMutationInput, AttendanceUncheckedUpdateManyInput>
     /**
-     * Filter which Calendars to update
+     * Filter which Attendances to update
      */
-    where?: CalendarWhereInput
+    where?: AttendanceWhereInput
     /**
-     * Limit how many Calendars to update.
+     * Limit how many Attendances to update.
      */
     limit?: number
   }
 
   /**
-   * Calendar updateManyAndReturn
+   * Attendance updateManyAndReturn
    */
-  export type CalendarUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AttendanceUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Calendar
+     * Select specific fields to fetch from the Attendance
      */
-    select?: CalendarSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: AttendanceSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Calendar
+     * Omit specific fields from the Attendance
      */
-    omit?: CalendarOmit<ExtArgs> | null
+    omit?: AttendanceOmit<ExtArgs> | null
     /**
-     * The data used to update Calendars.
+     * The data used to update Attendances.
      */
-    data: XOR<CalendarUpdateManyMutationInput, CalendarUncheckedUpdateManyInput>
+    data: XOR<AttendanceUpdateManyMutationInput, AttendanceUncheckedUpdateManyInput>
     /**
-     * Filter which Calendars to update
+     * Filter which Attendances to update
      */
-    where?: CalendarWhereInput
+    where?: AttendanceWhereInput
     /**
-     * Limit how many Calendars to update.
+     * Limit how many Attendances to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CalendarIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: AttendanceIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * Calendar upsert
+   * Attendance upsert
    */
-  export type CalendarUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AttendanceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Calendar
+     * Select specific fields to fetch from the Attendance
      */
-    select?: CalendarSelect<ExtArgs> | null
+    select?: AttendanceSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Calendar
+     * Omit specific fields from the Attendance
      */
-    omit?: CalendarOmit<ExtArgs> | null
+    omit?: AttendanceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CalendarInclude<ExtArgs> | null
+    include?: AttendanceInclude<ExtArgs> | null
     /**
-     * The filter to search for the Calendar to update in case it exists.
+     * The filter to search for the Attendance to update in case it exists.
      */
-    where: CalendarWhereUniqueInput
+    where: AttendanceWhereUniqueInput
     /**
-     * In case the Calendar found by the `where` argument doesn't exist, create a new Calendar with this data.
+     * In case the Attendance found by the `where` argument doesn't exist, create a new Attendance with this data.
      */
-    create: XOR<CalendarCreateInput, CalendarUncheckedCreateInput>
+    create: XOR<AttendanceCreateInput, AttendanceUncheckedCreateInput>
     /**
-     * In case the Calendar was found with the provided `where` argument, update it with this data.
+     * In case the Attendance was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<CalendarUpdateInput, CalendarUncheckedUpdateInput>
+    update: XOR<AttendanceUpdateInput, AttendanceUncheckedUpdateInput>
   }
 
   /**
-   * Calendar delete
+   * Attendance delete
    */
-  export type CalendarDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AttendanceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Calendar
+     * Select specific fields to fetch from the Attendance
      */
-    select?: CalendarSelect<ExtArgs> | null
+    select?: AttendanceSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Calendar
+     * Omit specific fields from the Attendance
      */
-    omit?: CalendarOmit<ExtArgs> | null
+    omit?: AttendanceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CalendarInclude<ExtArgs> | null
+    include?: AttendanceInclude<ExtArgs> | null
     /**
-     * Filter which Calendar to delete.
+     * Filter which Attendance to delete.
      */
-    where: CalendarWhereUniqueInput
+    where: AttendanceWhereUniqueInput
   }
 
   /**
-   * Calendar deleteMany
+   * Attendance deleteMany
    */
-  export type CalendarDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AttendanceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Calendars to delete
+     * Filter which Attendances to delete
      */
-    where?: CalendarWhereInput
+    where?: AttendanceWhereInput
     /**
-     * Limit how many Calendars to delete.
+     * Limit how many Attendances to delete.
      */
     limit?: number
   }
 
   /**
-   * Calendar without action
+   * Attendance without action
    */
-  export type CalendarDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AttendanceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Calendar
+     * Select specific fields to fetch from the Attendance
      */
-    select?: CalendarSelect<ExtArgs> | null
+    select?: AttendanceSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Calendar
+     * Omit specific fields from the Attendance
      */
-    omit?: CalendarOmit<ExtArgs> | null
+    omit?: AttendanceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CalendarInclude<ExtArgs> | null
+    include?: AttendanceInclude<ExtArgs> | null
   }
 
 
@@ -8724,6 +8763,7 @@ export namespace Prisma {
     description: 'description',
     status: 'status',
     building: 'building',
+    floor: 'floor',
     roomNumber: 'roomNumber',
     schedule: 'schedule',
     endsAt: 'endsAt',
@@ -8749,13 +8789,14 @@ export namespace Prisma {
   export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
-  export const CalendarScalarFieldEnum: {
-    calendarId: 'calendarId',
-    groupId: 'groupId',
-    userId: 'userId'
+  export const AttendanceScalarFieldEnum: {
+    meetingId: 'meetingId',
+    memberId: 'memberId',
+    status: 'status',
+    respondedAt: 'respondedAt'
   };
 
-  export type CalendarScalarFieldEnum = (typeof CalendarScalarFieldEnum)[keyof typeof CalendarScalarFieldEnum]
+  export type AttendanceScalarFieldEnum = (typeof AttendanceScalarFieldEnum)[keyof typeof AttendanceScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -8886,6 +8927,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'AttendanceStatus'
+   */
+  export type EnumAttendanceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AttendanceStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'AttendanceStatus[]'
+   */
+  export type ListEnumAttendanceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AttendanceStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -8917,8 +8972,8 @@ export namespace Prisma {
     ownedGroups?: GroupListRelationFilter
     groupMembers?: GroupMemberListRelationFilter
     notifications?: NotificationListRelationFilter
+    attendance?: AttendanceListRelationFilter
     sentInvites?: GroupMemberListRelationFilter
-    calendars?: CalendarListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -8933,8 +8988,8 @@ export namespace Prisma {
     ownedGroups?: GroupOrderByRelationAggregateInput
     groupMembers?: GroupMemberOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
+    attendance?: AttendanceOrderByRelationAggregateInput
     sentInvites?: GroupMemberOrderByRelationAggregateInput
-    calendars?: CalendarOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -8952,8 +9007,8 @@ export namespace Prisma {
     ownedGroups?: GroupListRelationFilter
     groupMembers?: GroupMemberListRelationFilter
     notifications?: NotificationListRelationFilter
+    attendance?: AttendanceListRelationFilter
     sentInvites?: GroupMemberListRelationFilter
-    calendars?: CalendarListRelationFilter
   }, "userId" | "username" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -9000,7 +9055,6 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     meetings?: MeetingListRelationFilter
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    calendars?: CalendarListRelationFilter
   }
 
   export type GroupOrderByWithRelationInput = {
@@ -9014,7 +9068,6 @@ export namespace Prisma {
     notifications?: NotificationOrderByRelationAggregateInput
     meetings?: MeetingOrderByRelationAggregateInput
     user?: UserOrderByWithRelationInput
-    calendars?: CalendarOrderByRelationAggregateInput
   }
 
   export type GroupWhereUniqueInput = Prisma.AtLeast<{
@@ -9032,7 +9085,6 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     meetings?: MeetingListRelationFilter
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    calendars?: CalendarListRelationFilter
   }, "groupId" | "groupId_userId">
 
   export type GroupOrderByWithAggregationInput = {
@@ -9140,12 +9192,14 @@ export namespace Prisma {
     description?: StringNullableFilter<"Meeting"> | string | null
     status?: EnumMeetingStatusFilter<"Meeting"> | $Enums.MeetingStatus
     building?: StringNullableFilter<"Meeting"> | string | null
+    floor?: StringNullableFilter<"Meeting"> | string | null
     roomNumber?: StringNullableFilter<"Meeting"> | string | null
     schedule?: DateTimeFilter<"Meeting"> | Date | string
     endsAt?: DateTimeNullableFilter<"Meeting"> | Date | string | null
     createdAt?: DateTimeFilter<"Meeting"> | Date | string
     updatedAt?: DateTimeFilter<"Meeting"> | Date | string
     group?: XOR<GroupScalarRelationFilter, GroupWhereInput>
+    attendance?: AttendanceListRelationFilter
     notifications?: NotificationListRelationFilter
   }
 
@@ -9156,12 +9210,14 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     status?: SortOrder
     building?: SortOrderInput | SortOrder
+    floor?: SortOrderInput | SortOrder
     roomNumber?: SortOrderInput | SortOrder
     schedule?: SortOrder
     endsAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     group?: GroupOrderByWithRelationInput
+    attendance?: AttendanceOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
   }
 
@@ -9175,12 +9231,14 @@ export namespace Prisma {
     description?: StringNullableFilter<"Meeting"> | string | null
     status?: EnumMeetingStatusFilter<"Meeting"> | $Enums.MeetingStatus
     building?: StringNullableFilter<"Meeting"> | string | null
+    floor?: StringNullableFilter<"Meeting"> | string | null
     roomNumber?: StringNullableFilter<"Meeting"> | string | null
     schedule?: DateTimeFilter<"Meeting"> | Date | string
     endsAt?: DateTimeNullableFilter<"Meeting"> | Date | string | null
     createdAt?: DateTimeFilter<"Meeting"> | Date | string
     updatedAt?: DateTimeFilter<"Meeting"> | Date | string
     group?: XOR<GroupScalarRelationFilter, GroupWhereInput>
+    attendance?: AttendanceListRelationFilter
     notifications?: NotificationListRelationFilter
   }, "meetingId">
 
@@ -9191,6 +9249,7 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     status?: SortOrder
     building?: SortOrderInput | SortOrder
+    floor?: SortOrderInput | SortOrder
     roomNumber?: SortOrderInput | SortOrder
     schedule?: SortOrder
     endsAt?: SortOrderInput | SortOrder
@@ -9213,6 +9272,7 @@ export namespace Prisma {
     description?: StringNullableWithAggregatesFilter<"Meeting"> | string | null
     status?: EnumMeetingStatusWithAggregatesFilter<"Meeting"> | $Enums.MeetingStatus
     building?: StringNullableWithAggregatesFilter<"Meeting"> | string | null
+    floor?: StringNullableWithAggregatesFilter<"Meeting"> | string | null
     roomNumber?: StringNullableWithAggregatesFilter<"Meeting"> | string | null
     schedule?: DateTimeWithAggregatesFilter<"Meeting"> | Date | string
     endsAt?: DateTimeNullableWithAggregatesFilter<"Meeting"> | Date | string | null
@@ -9303,54 +9363,60 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
   }
 
-  export type CalendarWhereInput = {
-    AND?: CalendarWhereInput | CalendarWhereInput[]
-    OR?: CalendarWhereInput[]
-    NOT?: CalendarWhereInput | CalendarWhereInput[]
-    calendarId?: IntFilter<"Calendar"> | number
-    groupId?: IntFilter<"Calendar"> | number
-    userId?: IntFilter<"Calendar"> | number
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
-    group?: XOR<GroupScalarRelationFilter, GroupWhereInput>
+  export type AttendanceWhereInput = {
+    AND?: AttendanceWhereInput | AttendanceWhereInput[]
+    OR?: AttendanceWhereInput[]
+    NOT?: AttendanceWhereInput | AttendanceWhereInput[]
+    meetingId?: IntFilter<"Attendance"> | number
+    memberId?: IntFilter<"Attendance"> | number
+    status?: EnumAttendanceStatusFilter<"Attendance"> | $Enums.AttendanceStatus
+    respondedAt?: DateTimeNullableFilter<"Attendance"> | Date | string | null
+    meeting?: XOR<MeetingScalarRelationFilter, MeetingWhereInput>
+    member?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
-  export type CalendarOrderByWithRelationInput = {
-    calendarId?: SortOrder
-    groupId?: SortOrder
-    userId?: SortOrder
-    user?: UserOrderByWithRelationInput
-    group?: GroupOrderByWithRelationInput
+  export type AttendanceOrderByWithRelationInput = {
+    meetingId?: SortOrder
+    memberId?: SortOrder
+    status?: SortOrder
+    respondedAt?: SortOrderInput | SortOrder
+    meeting?: MeetingOrderByWithRelationInput
+    member?: UserOrderByWithRelationInput
   }
 
-  export type CalendarWhereUniqueInput = Prisma.AtLeast<{
-    calendarId?: number
-    AND?: CalendarWhereInput | CalendarWhereInput[]
-    OR?: CalendarWhereInput[]
-    NOT?: CalendarWhereInput | CalendarWhereInput[]
-    groupId?: IntFilter<"Calendar"> | number
-    userId?: IntFilter<"Calendar"> | number
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
-    group?: XOR<GroupScalarRelationFilter, GroupWhereInput>
-  }, "calendarId">
+  export type AttendanceWhereUniqueInput = Prisma.AtLeast<{
+    meetingId_memberId?: AttendanceMeetingIdMemberIdCompoundUniqueInput
+    AND?: AttendanceWhereInput | AttendanceWhereInput[]
+    OR?: AttendanceWhereInput[]
+    NOT?: AttendanceWhereInput | AttendanceWhereInput[]
+    meetingId?: IntFilter<"Attendance"> | number
+    memberId?: IntFilter<"Attendance"> | number
+    status?: EnumAttendanceStatusFilter<"Attendance"> | $Enums.AttendanceStatus
+    respondedAt?: DateTimeNullableFilter<"Attendance"> | Date | string | null
+    meeting?: XOR<MeetingScalarRelationFilter, MeetingWhereInput>
+    member?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "meetingId_memberId">
 
-  export type CalendarOrderByWithAggregationInput = {
-    calendarId?: SortOrder
-    groupId?: SortOrder
-    userId?: SortOrder
-    _count?: CalendarCountOrderByAggregateInput
-    _avg?: CalendarAvgOrderByAggregateInput
-    _max?: CalendarMaxOrderByAggregateInput
-    _min?: CalendarMinOrderByAggregateInput
-    _sum?: CalendarSumOrderByAggregateInput
+  export type AttendanceOrderByWithAggregationInput = {
+    meetingId?: SortOrder
+    memberId?: SortOrder
+    status?: SortOrder
+    respondedAt?: SortOrderInput | SortOrder
+    _count?: AttendanceCountOrderByAggregateInput
+    _avg?: AttendanceAvgOrderByAggregateInput
+    _max?: AttendanceMaxOrderByAggregateInput
+    _min?: AttendanceMinOrderByAggregateInput
+    _sum?: AttendanceSumOrderByAggregateInput
   }
 
-  export type CalendarScalarWhereWithAggregatesInput = {
-    AND?: CalendarScalarWhereWithAggregatesInput | CalendarScalarWhereWithAggregatesInput[]
-    OR?: CalendarScalarWhereWithAggregatesInput[]
-    NOT?: CalendarScalarWhereWithAggregatesInput | CalendarScalarWhereWithAggregatesInput[]
-    calendarId?: IntWithAggregatesFilter<"Calendar"> | number
-    groupId?: IntWithAggregatesFilter<"Calendar"> | number
-    userId?: IntWithAggregatesFilter<"Calendar"> | number
+  export type AttendanceScalarWhereWithAggregatesInput = {
+    AND?: AttendanceScalarWhereWithAggregatesInput | AttendanceScalarWhereWithAggregatesInput[]
+    OR?: AttendanceScalarWhereWithAggregatesInput[]
+    NOT?: AttendanceScalarWhereWithAggregatesInput | AttendanceScalarWhereWithAggregatesInput[]
+    meetingId?: IntWithAggregatesFilter<"Attendance"> | number
+    memberId?: IntWithAggregatesFilter<"Attendance"> | number
+    status?: EnumAttendanceStatusWithAggregatesFilter<"Attendance"> | $Enums.AttendanceStatus
+    respondedAt?: DateTimeNullableWithAggregatesFilter<"Attendance"> | Date | string | null
   }
 
   export type UserCreateInput = {
@@ -9364,8 +9430,8 @@ export namespace Prisma {
     ownedGroups?: GroupCreateNestedManyWithoutUserInput
     groupMembers?: GroupMemberCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    attendance?: AttendanceCreateNestedManyWithoutMemberInput
     sentInvites?: GroupMemberCreateNestedManyWithoutInviterInput
-    calendars?: CalendarCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -9380,8 +9446,8 @@ export namespace Prisma {
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutUserInput
     groupMembers?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
     sentInvites?: GroupMemberUncheckedCreateNestedManyWithoutInviterInput
-    calendars?: CalendarUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -9395,8 +9461,8 @@ export namespace Prisma {
     ownedGroups?: GroupUpdateManyWithoutUserNestedInput
     groupMembers?: GroupMemberUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    attendance?: AttendanceUpdateManyWithoutMemberNestedInput
     sentInvites?: GroupMemberUpdateManyWithoutInviterNestedInput
-    calendars?: CalendarUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -9411,8 +9477,8 @@ export namespace Prisma {
     ownedGroups?: GroupUncheckedUpdateManyWithoutUserNestedInput
     groupMembers?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
     sentInvites?: GroupMemberUncheckedUpdateManyWithoutInviterNestedInput
-    calendars?: CalendarUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -9456,7 +9522,6 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutGroupInput
     meetings?: MeetingCreateNestedManyWithoutGroupInput
     user?: UserCreateNestedOneWithoutOwnedGroupsInput
-    calendars?: CalendarCreateNestedManyWithoutGroupInput
   }
 
   export type GroupUncheckedCreateInput = {
@@ -9469,7 +9534,6 @@ export namespace Prisma {
     members?: GroupMemberUncheckedCreateNestedManyWithoutGroupInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutGroupInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutGroupInput
-    calendars?: CalendarUncheckedCreateNestedManyWithoutGroupInput
   }
 
   export type GroupUpdateInput = {
@@ -9481,7 +9545,6 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutGroupNestedInput
     meetings?: MeetingUpdateManyWithoutGroupNestedInput
     user?: UserUpdateOneWithoutOwnedGroupsNestedInput
-    calendars?: CalendarUpdateManyWithoutGroupNestedInput
   }
 
   export type GroupUncheckedUpdateInput = {
@@ -9494,7 +9557,6 @@ export namespace Prisma {
     members?: GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutGroupNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutGroupNestedInput
-    calendars?: CalendarUncheckedUpdateManyWithoutGroupNestedInput
   }
 
   export type GroupCreateManyInput = {
@@ -9587,12 +9649,14 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.MeetingStatus
     building?: string | null
+    floor?: string | null
     roomNumber?: string | null
     schedule: Date | string
     endsAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     group: GroupCreateNestedOneWithoutMeetingsInput
+    attendance?: AttendanceCreateNestedManyWithoutMeetingInput
     notifications?: NotificationCreateNestedManyWithoutMeetingInput
   }
 
@@ -9603,11 +9667,13 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.MeetingStatus
     building?: string | null
+    floor?: string | null
     roomNumber?: string | null
     schedule: Date | string
     endsAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutMeetingInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutMeetingInput
   }
 
@@ -9616,12 +9682,14 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumMeetingStatusFieldUpdateOperationsInput | $Enums.MeetingStatus
     building?: NullableStringFieldUpdateOperationsInput | string | null
+    floor?: NullableStringFieldUpdateOperationsInput | string | null
     roomNumber?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     group?: GroupUpdateOneRequiredWithoutMeetingsNestedInput
+    attendance?: AttendanceUpdateManyWithoutMeetingNestedInput
     notifications?: NotificationUpdateManyWithoutMeetingNestedInput
   }
 
@@ -9632,11 +9700,13 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumMeetingStatusFieldUpdateOperationsInput | $Enums.MeetingStatus
     building?: NullableStringFieldUpdateOperationsInput | string | null
+    floor?: NullableStringFieldUpdateOperationsInput | string | null
     roomNumber?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attendance?: AttendanceUncheckedUpdateManyWithoutMeetingNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutMeetingNestedInput
   }
 
@@ -9647,6 +9717,7 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.MeetingStatus
     building?: string | null
+    floor?: string | null
     roomNumber?: string | null
     schedule: Date | string
     endsAt?: Date | string | null
@@ -9659,6 +9730,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumMeetingStatusFieldUpdateOperationsInput | $Enums.MeetingStatus
     building?: NullableStringFieldUpdateOperationsInput | string | null
+    floor?: NullableStringFieldUpdateOperationsInput | string | null
     roomNumber?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -9673,6 +9745,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumMeetingStatusFieldUpdateOperationsInput | $Enums.MeetingStatus
     building?: NullableStringFieldUpdateOperationsInput | string | null
+    floor?: NullableStringFieldUpdateOperationsInput | string | null
     roomNumber?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -9758,42 +9831,51 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type CalendarCreateInput = {
-    user: UserCreateNestedOneWithoutCalendarsInput
-    group: GroupCreateNestedOneWithoutCalendarsInput
+  export type AttendanceCreateInput = {
+    status?: $Enums.AttendanceStatus
+    respondedAt?: Date | string | null
+    meeting: MeetingCreateNestedOneWithoutAttendanceInput
+    member: UserCreateNestedOneWithoutAttendanceInput
   }
 
-  export type CalendarUncheckedCreateInput = {
-    calendarId?: number
-    groupId: number
-    userId: number
+  export type AttendanceUncheckedCreateInput = {
+    meetingId: number
+    memberId: number
+    status?: $Enums.AttendanceStatus
+    respondedAt?: Date | string | null
   }
 
-  export type CalendarUpdateInput = {
-    user?: UserUpdateOneRequiredWithoutCalendarsNestedInput
-    group?: GroupUpdateOneRequiredWithoutCalendarsNestedInput
+  export type AttendanceUpdateInput = {
+    status?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    meeting?: MeetingUpdateOneRequiredWithoutAttendanceNestedInput
+    member?: UserUpdateOneRequiredWithoutAttendanceNestedInput
   }
 
-  export type CalendarUncheckedUpdateInput = {
-    calendarId?: IntFieldUpdateOperationsInput | number
-    groupId?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
+  export type AttendanceUncheckedUpdateInput = {
+    meetingId?: IntFieldUpdateOperationsInput | number
+    memberId?: IntFieldUpdateOperationsInput | number
+    status?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type CalendarCreateManyInput = {
-    calendarId?: number
-    groupId: number
-    userId: number
+  export type AttendanceCreateManyInput = {
+    meetingId: number
+    memberId: number
+    status?: $Enums.AttendanceStatus
+    respondedAt?: Date | string | null
   }
 
-  export type CalendarUpdateManyMutationInput = {
-
+  export type AttendanceUpdateManyMutationInput = {
+    status?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type CalendarUncheckedUpdateManyInput = {
-    calendarId?: IntFieldUpdateOperationsInput | number
-    groupId?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
+  export type AttendanceUncheckedUpdateManyInput = {
+    meetingId?: IntFieldUpdateOperationsInput | number
+    memberId?: IntFieldUpdateOperationsInput | number
+    status?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -9851,10 +9933,10 @@ export namespace Prisma {
     none?: NotificationWhereInput
   }
 
-  export type CalendarListRelationFilter = {
-    every?: CalendarWhereInput
-    some?: CalendarWhereInput
-    none?: CalendarWhereInput
+  export type AttendanceListRelationFilter = {
+    every?: AttendanceWhereInput
+    some?: AttendanceWhereInput
+    none?: AttendanceWhereInput
   }
 
   export type GroupOrderByRelationAggregateInput = {
@@ -9869,7 +9951,7 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type CalendarOrderByRelationAggregateInput = {
+  export type AttendanceOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -10211,6 +10293,7 @@ export namespace Prisma {
     description?: SortOrder
     status?: SortOrder
     building?: SortOrder
+    floor?: SortOrder
     roomNumber?: SortOrder
     schedule?: SortOrder
     endsAt?: SortOrder
@@ -10230,6 +10313,7 @@ export namespace Prisma {
     description?: SortOrder
     status?: SortOrder
     building?: SortOrder
+    floor?: SortOrder
     roomNumber?: SortOrder
     schedule?: SortOrder
     endsAt?: SortOrder
@@ -10244,6 +10328,7 @@ export namespace Prisma {
     description?: SortOrder
     status?: SortOrder
     building?: SortOrder
+    floor?: SortOrder
     roomNumber?: SortOrder
     schedule?: SortOrder
     endsAt?: SortOrder
@@ -10338,34 +10423,62 @@ export namespace Prisma {
     _max?: NestedEnumNotificationStatusFilter<$PrismaModel>
   }
 
-  export type CalendarCountOrderByAggregateInput = {
-    calendarId?: SortOrder
-    groupId?: SortOrder
-    userId?: SortOrder
+  export type EnumAttendanceStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.AttendanceStatus | EnumAttendanceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAttendanceStatusFilter<$PrismaModel> | $Enums.AttendanceStatus
   }
 
-  export type CalendarAvgOrderByAggregateInput = {
-    calendarId?: SortOrder
-    groupId?: SortOrder
-    userId?: SortOrder
+  export type MeetingScalarRelationFilter = {
+    is?: MeetingWhereInput
+    isNot?: MeetingWhereInput
   }
 
-  export type CalendarMaxOrderByAggregateInput = {
-    calendarId?: SortOrder
-    groupId?: SortOrder
-    userId?: SortOrder
+  export type AttendanceMeetingIdMemberIdCompoundUniqueInput = {
+    meetingId: number
+    memberId: number
   }
 
-  export type CalendarMinOrderByAggregateInput = {
-    calendarId?: SortOrder
-    groupId?: SortOrder
-    userId?: SortOrder
+  export type AttendanceCountOrderByAggregateInput = {
+    meetingId?: SortOrder
+    memberId?: SortOrder
+    status?: SortOrder
+    respondedAt?: SortOrder
   }
 
-  export type CalendarSumOrderByAggregateInput = {
-    calendarId?: SortOrder
-    groupId?: SortOrder
-    userId?: SortOrder
+  export type AttendanceAvgOrderByAggregateInput = {
+    meetingId?: SortOrder
+    memberId?: SortOrder
+  }
+
+  export type AttendanceMaxOrderByAggregateInput = {
+    meetingId?: SortOrder
+    memberId?: SortOrder
+    status?: SortOrder
+    respondedAt?: SortOrder
+  }
+
+  export type AttendanceMinOrderByAggregateInput = {
+    meetingId?: SortOrder
+    memberId?: SortOrder
+    status?: SortOrder
+    respondedAt?: SortOrder
+  }
+
+  export type AttendanceSumOrderByAggregateInput = {
+    meetingId?: SortOrder
+    memberId?: SortOrder
+  }
+
+  export type EnumAttendanceStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AttendanceStatus | EnumAttendanceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAttendanceStatusWithAggregatesFilter<$PrismaModel> | $Enums.AttendanceStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAttendanceStatusFilter<$PrismaModel>
+    _max?: NestedEnumAttendanceStatusFilter<$PrismaModel>
   }
 
   export type GroupCreateNestedManyWithoutUserInput = {
@@ -10389,18 +10502,18 @@ export namespace Prisma {
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
+  export type AttendanceCreateNestedManyWithoutMemberInput = {
+    create?: XOR<AttendanceCreateWithoutMemberInput, AttendanceUncheckedCreateWithoutMemberInput> | AttendanceCreateWithoutMemberInput[] | AttendanceUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: AttendanceCreateOrConnectWithoutMemberInput | AttendanceCreateOrConnectWithoutMemberInput[]
+    createMany?: AttendanceCreateManyMemberInputEnvelope
+    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+  }
+
   export type GroupMemberCreateNestedManyWithoutInviterInput = {
     create?: XOR<GroupMemberCreateWithoutInviterInput, GroupMemberUncheckedCreateWithoutInviterInput> | GroupMemberCreateWithoutInviterInput[] | GroupMemberUncheckedCreateWithoutInviterInput[]
     connectOrCreate?: GroupMemberCreateOrConnectWithoutInviterInput | GroupMemberCreateOrConnectWithoutInviterInput[]
     createMany?: GroupMemberCreateManyInviterInputEnvelope
     connect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
-  }
-
-  export type CalendarCreateNestedManyWithoutUserInput = {
-    create?: XOR<CalendarCreateWithoutUserInput, CalendarUncheckedCreateWithoutUserInput> | CalendarCreateWithoutUserInput[] | CalendarUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: CalendarCreateOrConnectWithoutUserInput | CalendarCreateOrConnectWithoutUserInput[]
-    createMany?: CalendarCreateManyUserInputEnvelope
-    connect?: CalendarWhereUniqueInput | CalendarWhereUniqueInput[]
   }
 
   export type GroupUncheckedCreateNestedManyWithoutUserInput = {
@@ -10424,18 +10537,18 @@ export namespace Prisma {
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
+  export type AttendanceUncheckedCreateNestedManyWithoutMemberInput = {
+    create?: XOR<AttendanceCreateWithoutMemberInput, AttendanceUncheckedCreateWithoutMemberInput> | AttendanceCreateWithoutMemberInput[] | AttendanceUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: AttendanceCreateOrConnectWithoutMemberInput | AttendanceCreateOrConnectWithoutMemberInput[]
+    createMany?: AttendanceCreateManyMemberInputEnvelope
+    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+  }
+
   export type GroupMemberUncheckedCreateNestedManyWithoutInviterInput = {
     create?: XOR<GroupMemberCreateWithoutInviterInput, GroupMemberUncheckedCreateWithoutInviterInput> | GroupMemberCreateWithoutInviterInput[] | GroupMemberUncheckedCreateWithoutInviterInput[]
     connectOrCreate?: GroupMemberCreateOrConnectWithoutInviterInput | GroupMemberCreateOrConnectWithoutInviterInput[]
     createMany?: GroupMemberCreateManyInviterInputEnvelope
     connect?: GroupMemberWhereUniqueInput | GroupMemberWhereUniqueInput[]
-  }
-
-  export type CalendarUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<CalendarCreateWithoutUserInput, CalendarUncheckedCreateWithoutUserInput> | CalendarCreateWithoutUserInput[] | CalendarUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: CalendarCreateOrConnectWithoutUserInput | CalendarCreateOrConnectWithoutUserInput[]
-    createMany?: CalendarCreateManyUserInputEnvelope
-    connect?: CalendarWhereUniqueInput | CalendarWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -10488,6 +10601,20 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
+  export type AttendanceUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<AttendanceCreateWithoutMemberInput, AttendanceUncheckedCreateWithoutMemberInput> | AttendanceCreateWithoutMemberInput[] | AttendanceUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: AttendanceCreateOrConnectWithoutMemberInput | AttendanceCreateOrConnectWithoutMemberInput[]
+    upsert?: AttendanceUpsertWithWhereUniqueWithoutMemberInput | AttendanceUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: AttendanceCreateManyMemberInputEnvelope
+    set?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    disconnect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    delete?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    update?: AttendanceUpdateWithWhereUniqueWithoutMemberInput | AttendanceUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: AttendanceUpdateManyWithWhereWithoutMemberInput | AttendanceUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
+  }
+
   export type GroupMemberUpdateManyWithoutInviterNestedInput = {
     create?: XOR<GroupMemberCreateWithoutInviterInput, GroupMemberUncheckedCreateWithoutInviterInput> | GroupMemberCreateWithoutInviterInput[] | GroupMemberUncheckedCreateWithoutInviterInput[]
     connectOrCreate?: GroupMemberCreateOrConnectWithoutInviterInput | GroupMemberCreateOrConnectWithoutInviterInput[]
@@ -10500,20 +10627,6 @@ export namespace Prisma {
     update?: GroupMemberUpdateWithWhereUniqueWithoutInviterInput | GroupMemberUpdateWithWhereUniqueWithoutInviterInput[]
     updateMany?: GroupMemberUpdateManyWithWhereWithoutInviterInput | GroupMemberUpdateManyWithWhereWithoutInviterInput[]
     deleteMany?: GroupMemberScalarWhereInput | GroupMemberScalarWhereInput[]
-  }
-
-  export type CalendarUpdateManyWithoutUserNestedInput = {
-    create?: XOR<CalendarCreateWithoutUserInput, CalendarUncheckedCreateWithoutUserInput> | CalendarCreateWithoutUserInput[] | CalendarUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: CalendarCreateOrConnectWithoutUserInput | CalendarCreateOrConnectWithoutUserInput[]
-    upsert?: CalendarUpsertWithWhereUniqueWithoutUserInput | CalendarUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: CalendarCreateManyUserInputEnvelope
-    set?: CalendarWhereUniqueInput | CalendarWhereUniqueInput[]
-    disconnect?: CalendarWhereUniqueInput | CalendarWhereUniqueInput[]
-    delete?: CalendarWhereUniqueInput | CalendarWhereUniqueInput[]
-    connect?: CalendarWhereUniqueInput | CalendarWhereUniqueInput[]
-    update?: CalendarUpdateWithWhereUniqueWithoutUserInput | CalendarUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: CalendarUpdateManyWithWhereWithoutUserInput | CalendarUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: CalendarScalarWhereInput | CalendarScalarWhereInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -10566,6 +10679,20 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
+  export type AttendanceUncheckedUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<AttendanceCreateWithoutMemberInput, AttendanceUncheckedCreateWithoutMemberInput> | AttendanceCreateWithoutMemberInput[] | AttendanceUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: AttendanceCreateOrConnectWithoutMemberInput | AttendanceCreateOrConnectWithoutMemberInput[]
+    upsert?: AttendanceUpsertWithWhereUniqueWithoutMemberInput | AttendanceUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: AttendanceCreateManyMemberInputEnvelope
+    set?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    disconnect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    delete?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    update?: AttendanceUpdateWithWhereUniqueWithoutMemberInput | AttendanceUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: AttendanceUpdateManyWithWhereWithoutMemberInput | AttendanceUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
+  }
+
   export type GroupMemberUncheckedUpdateManyWithoutInviterNestedInput = {
     create?: XOR<GroupMemberCreateWithoutInviterInput, GroupMemberUncheckedCreateWithoutInviterInput> | GroupMemberCreateWithoutInviterInput[] | GroupMemberUncheckedCreateWithoutInviterInput[]
     connectOrCreate?: GroupMemberCreateOrConnectWithoutInviterInput | GroupMemberCreateOrConnectWithoutInviterInput[]
@@ -10578,20 +10705,6 @@ export namespace Prisma {
     update?: GroupMemberUpdateWithWhereUniqueWithoutInviterInput | GroupMemberUpdateWithWhereUniqueWithoutInviterInput[]
     updateMany?: GroupMemberUpdateManyWithWhereWithoutInviterInput | GroupMemberUpdateManyWithWhereWithoutInviterInput[]
     deleteMany?: GroupMemberScalarWhereInput | GroupMemberScalarWhereInput[]
-  }
-
-  export type CalendarUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<CalendarCreateWithoutUserInput, CalendarUncheckedCreateWithoutUserInput> | CalendarCreateWithoutUserInput[] | CalendarUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: CalendarCreateOrConnectWithoutUserInput | CalendarCreateOrConnectWithoutUserInput[]
-    upsert?: CalendarUpsertWithWhereUniqueWithoutUserInput | CalendarUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: CalendarCreateManyUserInputEnvelope
-    set?: CalendarWhereUniqueInput | CalendarWhereUniqueInput[]
-    disconnect?: CalendarWhereUniqueInput | CalendarWhereUniqueInput[]
-    delete?: CalendarWhereUniqueInput | CalendarWhereUniqueInput[]
-    connect?: CalendarWhereUniqueInput | CalendarWhereUniqueInput[]
-    update?: CalendarUpdateWithWhereUniqueWithoutUserInput | CalendarUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: CalendarUpdateManyWithWhereWithoutUserInput | CalendarUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: CalendarScalarWhereInput | CalendarScalarWhereInput[]
   }
 
   export type GroupMemberCreateNestedManyWithoutGroupInput = {
@@ -10621,13 +10734,6 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type CalendarCreateNestedManyWithoutGroupInput = {
-    create?: XOR<CalendarCreateWithoutGroupInput, CalendarUncheckedCreateWithoutGroupInput> | CalendarCreateWithoutGroupInput[] | CalendarUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: CalendarCreateOrConnectWithoutGroupInput | CalendarCreateOrConnectWithoutGroupInput[]
-    createMany?: CalendarCreateManyGroupInputEnvelope
-    connect?: CalendarWhereUniqueInput | CalendarWhereUniqueInput[]
-  }
-
   export type GroupMemberUncheckedCreateNestedManyWithoutGroupInput = {
     create?: XOR<GroupMemberCreateWithoutGroupInput, GroupMemberUncheckedCreateWithoutGroupInput> | GroupMemberCreateWithoutGroupInput[] | GroupMemberUncheckedCreateWithoutGroupInput[]
     connectOrCreate?: GroupMemberCreateOrConnectWithoutGroupInput | GroupMemberCreateOrConnectWithoutGroupInput[]
@@ -10647,13 +10753,6 @@ export namespace Prisma {
     connectOrCreate?: MeetingCreateOrConnectWithoutGroupInput | MeetingCreateOrConnectWithoutGroupInput[]
     createMany?: MeetingCreateManyGroupInputEnvelope
     connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
-  }
-
-  export type CalendarUncheckedCreateNestedManyWithoutGroupInput = {
-    create?: XOR<CalendarCreateWithoutGroupInput, CalendarUncheckedCreateWithoutGroupInput> | CalendarCreateWithoutGroupInput[] | CalendarUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: CalendarCreateOrConnectWithoutGroupInput | CalendarCreateOrConnectWithoutGroupInput[]
-    createMany?: CalendarCreateManyGroupInputEnvelope
-    connect?: CalendarWhereUniqueInput | CalendarWhereUniqueInput[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -10712,20 +10811,6 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOwnedGroupsInput, UserUpdateWithoutOwnedGroupsInput>, UserUncheckedUpdateWithoutOwnedGroupsInput>
   }
 
-  export type CalendarUpdateManyWithoutGroupNestedInput = {
-    create?: XOR<CalendarCreateWithoutGroupInput, CalendarUncheckedCreateWithoutGroupInput> | CalendarCreateWithoutGroupInput[] | CalendarUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: CalendarCreateOrConnectWithoutGroupInput | CalendarCreateOrConnectWithoutGroupInput[]
-    upsert?: CalendarUpsertWithWhereUniqueWithoutGroupInput | CalendarUpsertWithWhereUniqueWithoutGroupInput[]
-    createMany?: CalendarCreateManyGroupInputEnvelope
-    set?: CalendarWhereUniqueInput | CalendarWhereUniqueInput[]
-    disconnect?: CalendarWhereUniqueInput | CalendarWhereUniqueInput[]
-    delete?: CalendarWhereUniqueInput | CalendarWhereUniqueInput[]
-    connect?: CalendarWhereUniqueInput | CalendarWhereUniqueInput[]
-    update?: CalendarUpdateWithWhereUniqueWithoutGroupInput | CalendarUpdateWithWhereUniqueWithoutGroupInput[]
-    updateMany?: CalendarUpdateManyWithWhereWithoutGroupInput | CalendarUpdateManyWithWhereWithoutGroupInput[]
-    deleteMany?: CalendarScalarWhereInput | CalendarScalarWhereInput[]
-  }
-
   export type NullableIntFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -10774,20 +10859,6 @@ export namespace Prisma {
     update?: MeetingUpdateWithWhereUniqueWithoutGroupInput | MeetingUpdateWithWhereUniqueWithoutGroupInput[]
     updateMany?: MeetingUpdateManyWithWhereWithoutGroupInput | MeetingUpdateManyWithWhereWithoutGroupInput[]
     deleteMany?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
-  }
-
-  export type CalendarUncheckedUpdateManyWithoutGroupNestedInput = {
-    create?: XOR<CalendarCreateWithoutGroupInput, CalendarUncheckedCreateWithoutGroupInput> | CalendarCreateWithoutGroupInput[] | CalendarUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: CalendarCreateOrConnectWithoutGroupInput | CalendarCreateOrConnectWithoutGroupInput[]
-    upsert?: CalendarUpsertWithWhereUniqueWithoutGroupInput | CalendarUpsertWithWhereUniqueWithoutGroupInput[]
-    createMany?: CalendarCreateManyGroupInputEnvelope
-    set?: CalendarWhereUniqueInput | CalendarWhereUniqueInput[]
-    disconnect?: CalendarWhereUniqueInput | CalendarWhereUniqueInput[]
-    delete?: CalendarWhereUniqueInput | CalendarWhereUniqueInput[]
-    connect?: CalendarWhereUniqueInput | CalendarWhereUniqueInput[]
-    update?: CalendarUpdateWithWhereUniqueWithoutGroupInput | CalendarUpdateWithWhereUniqueWithoutGroupInput[]
-    updateMany?: CalendarUpdateManyWithWhereWithoutGroupInput | CalendarUpdateManyWithWhereWithoutGroupInput[]
-    deleteMany?: CalendarScalarWhereInput | CalendarScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutGroupMembersInput = {
@@ -10850,11 +10921,25 @@ export namespace Prisma {
     connect?: GroupWhereUniqueInput
   }
 
+  export type AttendanceCreateNestedManyWithoutMeetingInput = {
+    create?: XOR<AttendanceCreateWithoutMeetingInput, AttendanceUncheckedCreateWithoutMeetingInput> | AttendanceCreateWithoutMeetingInput[] | AttendanceUncheckedCreateWithoutMeetingInput[]
+    connectOrCreate?: AttendanceCreateOrConnectWithoutMeetingInput | AttendanceCreateOrConnectWithoutMeetingInput[]
+    createMany?: AttendanceCreateManyMeetingInputEnvelope
+    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+  }
+
   export type NotificationCreateNestedManyWithoutMeetingInput = {
     create?: XOR<NotificationCreateWithoutMeetingInput, NotificationUncheckedCreateWithoutMeetingInput> | NotificationCreateWithoutMeetingInput[] | NotificationUncheckedCreateWithoutMeetingInput[]
     connectOrCreate?: NotificationCreateOrConnectWithoutMeetingInput | NotificationCreateOrConnectWithoutMeetingInput[]
     createMany?: NotificationCreateManyMeetingInputEnvelope
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
+  export type AttendanceUncheckedCreateNestedManyWithoutMeetingInput = {
+    create?: XOR<AttendanceCreateWithoutMeetingInput, AttendanceUncheckedCreateWithoutMeetingInput> | AttendanceCreateWithoutMeetingInput[] | AttendanceUncheckedCreateWithoutMeetingInput[]
+    connectOrCreate?: AttendanceCreateOrConnectWithoutMeetingInput | AttendanceCreateOrConnectWithoutMeetingInput[]
+    createMany?: AttendanceCreateManyMeetingInputEnvelope
+    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
   }
 
   export type NotificationUncheckedCreateNestedManyWithoutMeetingInput = {
@@ -10876,6 +10961,20 @@ export namespace Prisma {
     update?: XOR<XOR<GroupUpdateToOneWithWhereWithoutMeetingsInput, GroupUpdateWithoutMeetingsInput>, GroupUncheckedUpdateWithoutMeetingsInput>
   }
 
+  export type AttendanceUpdateManyWithoutMeetingNestedInput = {
+    create?: XOR<AttendanceCreateWithoutMeetingInput, AttendanceUncheckedCreateWithoutMeetingInput> | AttendanceCreateWithoutMeetingInput[] | AttendanceUncheckedCreateWithoutMeetingInput[]
+    connectOrCreate?: AttendanceCreateOrConnectWithoutMeetingInput | AttendanceCreateOrConnectWithoutMeetingInput[]
+    upsert?: AttendanceUpsertWithWhereUniqueWithoutMeetingInput | AttendanceUpsertWithWhereUniqueWithoutMeetingInput[]
+    createMany?: AttendanceCreateManyMeetingInputEnvelope
+    set?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    disconnect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    delete?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    update?: AttendanceUpdateWithWhereUniqueWithoutMeetingInput | AttendanceUpdateWithWhereUniqueWithoutMeetingInput[]
+    updateMany?: AttendanceUpdateManyWithWhereWithoutMeetingInput | AttendanceUpdateManyWithWhereWithoutMeetingInput[]
+    deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
+  }
+
   export type NotificationUpdateManyWithoutMeetingNestedInput = {
     create?: XOR<NotificationCreateWithoutMeetingInput, NotificationUncheckedCreateWithoutMeetingInput> | NotificationCreateWithoutMeetingInput[] | NotificationUncheckedCreateWithoutMeetingInput[]
     connectOrCreate?: NotificationCreateOrConnectWithoutMeetingInput | NotificationCreateOrConnectWithoutMeetingInput[]
@@ -10888,6 +10987,20 @@ export namespace Prisma {
     update?: NotificationUpdateWithWhereUniqueWithoutMeetingInput | NotificationUpdateWithWhereUniqueWithoutMeetingInput[]
     updateMany?: NotificationUpdateManyWithWhereWithoutMeetingInput | NotificationUpdateManyWithWhereWithoutMeetingInput[]
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
+  export type AttendanceUncheckedUpdateManyWithoutMeetingNestedInput = {
+    create?: XOR<AttendanceCreateWithoutMeetingInput, AttendanceUncheckedCreateWithoutMeetingInput> | AttendanceCreateWithoutMeetingInput[] | AttendanceUncheckedCreateWithoutMeetingInput[]
+    connectOrCreate?: AttendanceCreateOrConnectWithoutMeetingInput | AttendanceCreateOrConnectWithoutMeetingInput[]
+    upsert?: AttendanceUpsertWithWhereUniqueWithoutMeetingInput | AttendanceUpsertWithWhereUniqueWithoutMeetingInput[]
+    createMany?: AttendanceCreateManyMeetingInputEnvelope
+    set?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    disconnect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    delete?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    update?: AttendanceUpdateWithWhereUniqueWithoutMeetingInput | AttendanceUpdateWithWhereUniqueWithoutMeetingInput[]
+    updateMany?: AttendanceUpdateManyWithWhereWithoutMeetingInput | AttendanceUpdateManyWithWhereWithoutMeetingInput[]
+    deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
   }
 
   export type NotificationUncheckedUpdateManyWithoutMeetingNestedInput = {
@@ -10952,32 +11065,36 @@ export namespace Prisma {
     update?: XOR<XOR<MeetingUpdateToOneWithWhereWithoutNotificationsInput, MeetingUpdateWithoutNotificationsInput>, MeetingUncheckedUpdateWithoutNotificationsInput>
   }
 
-  export type UserCreateNestedOneWithoutCalendarsInput = {
-    create?: XOR<UserCreateWithoutCalendarsInput, UserUncheckedCreateWithoutCalendarsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutCalendarsInput
+  export type MeetingCreateNestedOneWithoutAttendanceInput = {
+    create?: XOR<MeetingCreateWithoutAttendanceInput, MeetingUncheckedCreateWithoutAttendanceInput>
+    connectOrCreate?: MeetingCreateOrConnectWithoutAttendanceInput
+    connect?: MeetingWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutAttendanceInput = {
+    create?: XOR<UserCreateWithoutAttendanceInput, UserUncheckedCreateWithoutAttendanceInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAttendanceInput
     connect?: UserWhereUniqueInput
   }
 
-  export type GroupCreateNestedOneWithoutCalendarsInput = {
-    create?: XOR<GroupCreateWithoutCalendarsInput, GroupUncheckedCreateWithoutCalendarsInput>
-    connectOrCreate?: GroupCreateOrConnectWithoutCalendarsInput
-    connect?: GroupWhereUniqueInput
+  export type EnumAttendanceStatusFieldUpdateOperationsInput = {
+    set?: $Enums.AttendanceStatus
   }
 
-  export type UserUpdateOneRequiredWithoutCalendarsNestedInput = {
-    create?: XOR<UserCreateWithoutCalendarsInput, UserUncheckedCreateWithoutCalendarsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutCalendarsInput
-    upsert?: UserUpsertWithoutCalendarsInput
+  export type MeetingUpdateOneRequiredWithoutAttendanceNestedInput = {
+    create?: XOR<MeetingCreateWithoutAttendanceInput, MeetingUncheckedCreateWithoutAttendanceInput>
+    connectOrCreate?: MeetingCreateOrConnectWithoutAttendanceInput
+    upsert?: MeetingUpsertWithoutAttendanceInput
+    connect?: MeetingWhereUniqueInput
+    update?: XOR<XOR<MeetingUpdateToOneWithWhereWithoutAttendanceInput, MeetingUpdateWithoutAttendanceInput>, MeetingUncheckedUpdateWithoutAttendanceInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutAttendanceNestedInput = {
+    create?: XOR<UserCreateWithoutAttendanceInput, UserUncheckedCreateWithoutAttendanceInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAttendanceInput
+    upsert?: UserUpsertWithoutAttendanceInput
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCalendarsInput, UserUpdateWithoutCalendarsInput>, UserUncheckedUpdateWithoutCalendarsInput>
-  }
-
-  export type GroupUpdateOneRequiredWithoutCalendarsNestedInput = {
-    create?: XOR<GroupCreateWithoutCalendarsInput, GroupUncheckedCreateWithoutCalendarsInput>
-    connectOrCreate?: GroupCreateOrConnectWithoutCalendarsInput
-    upsert?: GroupUpsertWithoutCalendarsInput
-    connect?: GroupWhereUniqueInput
-    update?: XOR<XOR<GroupUpdateToOneWithWhereWithoutCalendarsInput, GroupUpdateWithoutCalendarsInput>, GroupUncheckedUpdateWithoutCalendarsInput>
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAttendanceInput, UserUpdateWithoutAttendanceInput>, UserUncheckedUpdateWithoutAttendanceInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -11236,6 +11353,23 @@ export namespace Prisma {
     _max?: NestedEnumNotificationStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumAttendanceStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.AttendanceStatus | EnumAttendanceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAttendanceStatusFilter<$PrismaModel> | $Enums.AttendanceStatus
+  }
+
+  export type NestedEnumAttendanceStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AttendanceStatus | EnumAttendanceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAttendanceStatusWithAggregatesFilter<$PrismaModel> | $Enums.AttendanceStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAttendanceStatusFilter<$PrismaModel>
+    _max?: NestedEnumAttendanceStatusFilter<$PrismaModel>
+  }
+
   export type GroupCreateWithoutUserInput = {
     name: string
     description?: string | null
@@ -11244,7 +11378,6 @@ export namespace Prisma {
     members?: GroupMemberCreateNestedManyWithoutGroupInput
     notifications?: NotificationCreateNestedManyWithoutGroupInput
     meetings?: MeetingCreateNestedManyWithoutGroupInput
-    calendars?: CalendarCreateNestedManyWithoutGroupInput
   }
 
   export type GroupUncheckedCreateWithoutUserInput = {
@@ -11256,7 +11389,6 @@ export namespace Prisma {
     members?: GroupMemberUncheckedCreateNestedManyWithoutGroupInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutGroupInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutGroupInput
-    calendars?: CalendarUncheckedCreateNestedManyWithoutGroupInput
   }
 
   export type GroupCreateOrConnectWithoutUserInput = {
@@ -11326,6 +11458,28 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type AttendanceCreateWithoutMemberInput = {
+    status?: $Enums.AttendanceStatus
+    respondedAt?: Date | string | null
+    meeting: MeetingCreateNestedOneWithoutAttendanceInput
+  }
+
+  export type AttendanceUncheckedCreateWithoutMemberInput = {
+    meetingId: number
+    status?: $Enums.AttendanceStatus
+    respondedAt?: Date | string | null
+  }
+
+  export type AttendanceCreateOrConnectWithoutMemberInput = {
+    where: AttendanceWhereUniqueInput
+    create: XOR<AttendanceCreateWithoutMemberInput, AttendanceUncheckedCreateWithoutMemberInput>
+  }
+
+  export type AttendanceCreateManyMemberInputEnvelope = {
+    data: AttendanceCreateManyMemberInput | AttendanceCreateManyMemberInput[]
+    skipDuplicates?: boolean
+  }
+
   export type GroupMemberCreateWithoutInviterInput = {
     role?: $Enums.Role
     status?: $Enums.InviteStatus
@@ -11349,25 +11503,6 @@ export namespace Prisma {
 
   export type GroupMemberCreateManyInviterInputEnvelope = {
     data: GroupMemberCreateManyInviterInput | GroupMemberCreateManyInviterInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type CalendarCreateWithoutUserInput = {
-    group: GroupCreateNestedOneWithoutCalendarsInput
-  }
-
-  export type CalendarUncheckedCreateWithoutUserInput = {
-    calendarId?: number
-    groupId: number
-  }
-
-  export type CalendarCreateOrConnectWithoutUserInput = {
-    where: CalendarWhereUniqueInput
-    create: XOR<CalendarCreateWithoutUserInput, CalendarUncheckedCreateWithoutUserInput>
-  }
-
-  export type CalendarCreateManyUserInputEnvelope = {
-    data: CalendarCreateManyUserInput | CalendarCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -11458,6 +11593,32 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Notification"> | Date | string
   }
 
+  export type AttendanceUpsertWithWhereUniqueWithoutMemberInput = {
+    where: AttendanceWhereUniqueInput
+    update: XOR<AttendanceUpdateWithoutMemberInput, AttendanceUncheckedUpdateWithoutMemberInput>
+    create: XOR<AttendanceCreateWithoutMemberInput, AttendanceUncheckedCreateWithoutMemberInput>
+  }
+
+  export type AttendanceUpdateWithWhereUniqueWithoutMemberInput = {
+    where: AttendanceWhereUniqueInput
+    data: XOR<AttendanceUpdateWithoutMemberInput, AttendanceUncheckedUpdateWithoutMemberInput>
+  }
+
+  export type AttendanceUpdateManyWithWhereWithoutMemberInput = {
+    where: AttendanceScalarWhereInput
+    data: XOR<AttendanceUpdateManyMutationInput, AttendanceUncheckedUpdateManyWithoutMemberInput>
+  }
+
+  export type AttendanceScalarWhereInput = {
+    AND?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
+    OR?: AttendanceScalarWhereInput[]
+    NOT?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
+    meetingId?: IntFilter<"Attendance"> | number
+    memberId?: IntFilter<"Attendance"> | number
+    status?: EnumAttendanceStatusFilter<"Attendance"> | $Enums.AttendanceStatus
+    respondedAt?: DateTimeNullableFilter<"Attendance"> | Date | string | null
+  }
+
   export type GroupMemberUpsertWithWhereUniqueWithoutInviterInput = {
     where: GroupMemberWhereUniqueInput
     update: XOR<GroupMemberUpdateWithoutInviterInput, GroupMemberUncheckedUpdateWithoutInviterInput>
@@ -11472,31 +11633,6 @@ export namespace Prisma {
   export type GroupMemberUpdateManyWithWhereWithoutInviterInput = {
     where: GroupMemberScalarWhereInput
     data: XOR<GroupMemberUpdateManyMutationInput, GroupMemberUncheckedUpdateManyWithoutInviterInput>
-  }
-
-  export type CalendarUpsertWithWhereUniqueWithoutUserInput = {
-    where: CalendarWhereUniqueInput
-    update: XOR<CalendarUpdateWithoutUserInput, CalendarUncheckedUpdateWithoutUserInput>
-    create: XOR<CalendarCreateWithoutUserInput, CalendarUncheckedCreateWithoutUserInput>
-  }
-
-  export type CalendarUpdateWithWhereUniqueWithoutUserInput = {
-    where: CalendarWhereUniqueInput
-    data: XOR<CalendarUpdateWithoutUserInput, CalendarUncheckedUpdateWithoutUserInput>
-  }
-
-  export type CalendarUpdateManyWithWhereWithoutUserInput = {
-    where: CalendarScalarWhereInput
-    data: XOR<CalendarUpdateManyMutationInput, CalendarUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type CalendarScalarWhereInput = {
-    AND?: CalendarScalarWhereInput | CalendarScalarWhereInput[]
-    OR?: CalendarScalarWhereInput[]
-    NOT?: CalendarScalarWhereInput | CalendarScalarWhereInput[]
-    calendarId?: IntFilter<"Calendar"> | number
-    groupId?: IntFilter<"Calendar"> | number
-    userId?: IntFilter<"Calendar"> | number
   }
 
   export type GroupMemberCreateWithoutGroupInput = {
@@ -11561,11 +11697,13 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.MeetingStatus
     building?: string | null
+    floor?: string | null
     roomNumber?: string | null
     schedule: Date | string
     endsAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    attendance?: AttendanceCreateNestedManyWithoutMeetingInput
     notifications?: NotificationCreateNestedManyWithoutMeetingInput
   }
 
@@ -11575,11 +11713,13 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.MeetingStatus
     building?: string | null
+    floor?: string | null
     roomNumber?: string | null
     schedule: Date | string
     endsAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutMeetingInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutMeetingInput
   }
 
@@ -11603,8 +11743,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     groupMembers?: GroupMemberCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    attendance?: AttendanceCreateNestedManyWithoutMemberInput
     sentInvites?: GroupMemberCreateNestedManyWithoutInviterInput
-    calendars?: CalendarCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOwnedGroupsInput = {
@@ -11618,32 +11758,13 @@ export namespace Prisma {
     updatedAt?: Date | string
     groupMembers?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
     sentInvites?: GroupMemberUncheckedCreateNestedManyWithoutInviterInput
-    calendars?: CalendarUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOwnedGroupsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutOwnedGroupsInput, UserUncheckedCreateWithoutOwnedGroupsInput>
-  }
-
-  export type CalendarCreateWithoutGroupInput = {
-    user: UserCreateNestedOneWithoutCalendarsInput
-  }
-
-  export type CalendarUncheckedCreateWithoutGroupInput = {
-    calendarId?: number
-    userId: number
-  }
-
-  export type CalendarCreateOrConnectWithoutGroupInput = {
-    where: CalendarWhereUniqueInput
-    create: XOR<CalendarCreateWithoutGroupInput, CalendarUncheckedCreateWithoutGroupInput>
-  }
-
-  export type CalendarCreateManyGroupInputEnvelope = {
-    data: CalendarCreateManyGroupInput | CalendarCreateManyGroupInput[]
-    skipDuplicates?: boolean
   }
 
   export type GroupMemberUpsertWithWhereUniqueWithoutGroupInput = {
@@ -11704,6 +11825,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Meeting"> | string | null
     status?: EnumMeetingStatusFilter<"Meeting"> | $Enums.MeetingStatus
     building?: StringNullableFilter<"Meeting"> | string | null
+    floor?: StringNullableFilter<"Meeting"> | string | null
     roomNumber?: StringNullableFilter<"Meeting"> | string | null
     schedule?: DateTimeFilter<"Meeting"> | Date | string
     endsAt?: DateTimeNullableFilter<"Meeting"> | Date | string | null
@@ -11732,8 +11854,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groupMembers?: GroupMemberUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    attendance?: AttendanceUpdateManyWithoutMemberNestedInput
     sentInvites?: GroupMemberUpdateManyWithoutInviterNestedInput
-    calendars?: CalendarUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnedGroupsInput = {
@@ -11747,24 +11869,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groupMembers?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
     sentInvites?: GroupMemberUncheckedUpdateManyWithoutInviterNestedInput
-    calendars?: CalendarUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type CalendarUpsertWithWhereUniqueWithoutGroupInput = {
-    where: CalendarWhereUniqueInput
-    update: XOR<CalendarUpdateWithoutGroupInput, CalendarUncheckedUpdateWithoutGroupInput>
-    create: XOR<CalendarCreateWithoutGroupInput, CalendarUncheckedCreateWithoutGroupInput>
-  }
-
-  export type CalendarUpdateWithWhereUniqueWithoutGroupInput = {
-    where: CalendarWhereUniqueInput
-    data: XOR<CalendarUpdateWithoutGroupInput, CalendarUncheckedUpdateWithoutGroupInput>
-  }
-
-  export type CalendarUpdateManyWithWhereWithoutGroupInput = {
-    where: CalendarScalarWhereInput
-    data: XOR<CalendarUpdateManyMutationInput, CalendarUncheckedUpdateManyWithoutGroupInput>
   }
 
   export type UserCreateWithoutGroupMembersInput = {
@@ -11777,8 +11883,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     ownedGroups?: GroupCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    attendance?: AttendanceCreateNestedManyWithoutMemberInput
     sentInvites?: GroupMemberCreateNestedManyWithoutInviterInput
-    calendars?: CalendarCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutGroupMembersInput = {
@@ -11792,8 +11898,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
     sentInvites?: GroupMemberUncheckedCreateNestedManyWithoutInviterInput
-    calendars?: CalendarUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutGroupMembersInput = {
@@ -11809,7 +11915,6 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutGroupInput
     meetings?: MeetingCreateNestedManyWithoutGroupInput
     user?: UserCreateNestedOneWithoutOwnedGroupsInput
-    calendars?: CalendarCreateNestedManyWithoutGroupInput
   }
 
   export type GroupUncheckedCreateWithoutMembersInput = {
@@ -11821,7 +11926,6 @@ export namespace Prisma {
     userId?: number | null
     notifications?: NotificationUncheckedCreateNestedManyWithoutGroupInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutGroupInput
-    calendars?: CalendarUncheckedCreateNestedManyWithoutGroupInput
   }
 
   export type GroupCreateOrConnectWithoutMembersInput = {
@@ -11840,7 +11944,7 @@ export namespace Prisma {
     ownedGroups?: GroupCreateNestedManyWithoutUserInput
     groupMembers?: GroupMemberCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
-    calendars?: CalendarCreateNestedManyWithoutUserInput
+    attendance?: AttendanceCreateNestedManyWithoutMemberInput
   }
 
   export type UserUncheckedCreateWithoutSentInvitesInput = {
@@ -11855,7 +11959,7 @@ export namespace Prisma {
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutUserInput
     groupMembers?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
-    calendars?: CalendarUncheckedCreateNestedManyWithoutUserInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type UserCreateOrConnectWithoutSentInvitesInput = {
@@ -11884,8 +11988,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    attendance?: AttendanceUpdateManyWithoutMemberNestedInput
     sentInvites?: GroupMemberUpdateManyWithoutInviterNestedInput
-    calendars?: CalendarUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGroupMembersInput = {
@@ -11899,8 +12003,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
     sentInvites?: GroupMemberUncheckedUpdateManyWithoutInviterNestedInput
-    calendars?: CalendarUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type GroupUpsertWithoutMembersInput = {
@@ -11922,7 +12026,6 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutGroupNestedInput
     meetings?: MeetingUpdateManyWithoutGroupNestedInput
     user?: UserUpdateOneWithoutOwnedGroupsNestedInput
-    calendars?: CalendarUpdateManyWithoutGroupNestedInput
   }
 
   export type GroupUncheckedUpdateWithoutMembersInput = {
@@ -11934,7 +12037,6 @@ export namespace Prisma {
     userId?: NullableIntFieldUpdateOperationsInput | number | null
     notifications?: NotificationUncheckedUpdateManyWithoutGroupNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutGroupNestedInput
-    calendars?: CalendarUncheckedUpdateManyWithoutGroupNestedInput
   }
 
   export type UserUpsertWithoutSentInvitesInput = {
@@ -11959,7 +12061,7 @@ export namespace Prisma {
     ownedGroups?: GroupUpdateManyWithoutUserNestedInput
     groupMembers?: GroupMemberUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
-    calendars?: CalendarUpdateManyWithoutUserNestedInput
+    attendance?: AttendanceUpdateManyWithoutMemberNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSentInvitesInput = {
@@ -11974,7 +12076,7 @@ export namespace Prisma {
     ownedGroups?: GroupUncheckedUpdateManyWithoutUserNestedInput
     groupMembers?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
-    calendars?: CalendarUncheckedUpdateManyWithoutUserNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type GroupCreateWithoutMeetingsInput = {
@@ -11985,7 +12087,6 @@ export namespace Prisma {
     members?: GroupMemberCreateNestedManyWithoutGroupInput
     notifications?: NotificationCreateNestedManyWithoutGroupInput
     user?: UserCreateNestedOneWithoutOwnedGroupsInput
-    calendars?: CalendarCreateNestedManyWithoutGroupInput
   }
 
   export type GroupUncheckedCreateWithoutMeetingsInput = {
@@ -11997,12 +12098,33 @@ export namespace Prisma {
     userId?: number | null
     members?: GroupMemberUncheckedCreateNestedManyWithoutGroupInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutGroupInput
-    calendars?: CalendarUncheckedCreateNestedManyWithoutGroupInput
   }
 
   export type GroupCreateOrConnectWithoutMeetingsInput = {
     where: GroupWhereUniqueInput
     create: XOR<GroupCreateWithoutMeetingsInput, GroupUncheckedCreateWithoutMeetingsInput>
+  }
+
+  export type AttendanceCreateWithoutMeetingInput = {
+    status?: $Enums.AttendanceStatus
+    respondedAt?: Date | string | null
+    member: UserCreateNestedOneWithoutAttendanceInput
+  }
+
+  export type AttendanceUncheckedCreateWithoutMeetingInput = {
+    memberId: number
+    status?: $Enums.AttendanceStatus
+    respondedAt?: Date | string | null
+  }
+
+  export type AttendanceCreateOrConnectWithoutMeetingInput = {
+    where: AttendanceWhereUniqueInput
+    create: XOR<AttendanceCreateWithoutMeetingInput, AttendanceUncheckedCreateWithoutMeetingInput>
+  }
+
+  export type AttendanceCreateManyMeetingInputEnvelope = {
+    data: AttendanceCreateManyMeetingInput | AttendanceCreateManyMeetingInput[]
+    skipDuplicates?: boolean
   }
 
   export type NotificationCreateWithoutMeetingInput = {
@@ -12055,7 +12177,6 @@ export namespace Prisma {
     members?: GroupMemberUpdateManyWithoutGroupNestedInput
     notifications?: NotificationUpdateManyWithoutGroupNestedInput
     user?: UserUpdateOneWithoutOwnedGroupsNestedInput
-    calendars?: CalendarUpdateManyWithoutGroupNestedInput
   }
 
   export type GroupUncheckedUpdateWithoutMeetingsInput = {
@@ -12067,7 +12188,22 @@ export namespace Prisma {
     userId?: NullableIntFieldUpdateOperationsInput | number | null
     members?: GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutGroupNestedInput
-    calendars?: CalendarUncheckedUpdateManyWithoutGroupNestedInput
+  }
+
+  export type AttendanceUpsertWithWhereUniqueWithoutMeetingInput = {
+    where: AttendanceWhereUniqueInput
+    update: XOR<AttendanceUpdateWithoutMeetingInput, AttendanceUncheckedUpdateWithoutMeetingInput>
+    create: XOR<AttendanceCreateWithoutMeetingInput, AttendanceUncheckedCreateWithoutMeetingInput>
+  }
+
+  export type AttendanceUpdateWithWhereUniqueWithoutMeetingInput = {
+    where: AttendanceWhereUniqueInput
+    data: XOR<AttendanceUpdateWithoutMeetingInput, AttendanceUncheckedUpdateWithoutMeetingInput>
+  }
+
+  export type AttendanceUpdateManyWithWhereWithoutMeetingInput = {
+    where: AttendanceScalarWhereInput
+    data: XOR<AttendanceUpdateManyMutationInput, AttendanceUncheckedUpdateManyWithoutMeetingInput>
   }
 
   export type NotificationUpsertWithWhereUniqueWithoutMeetingInput = {
@@ -12096,8 +12232,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     ownedGroups?: GroupCreateNestedManyWithoutUserInput
     groupMembers?: GroupMemberCreateNestedManyWithoutUserInput
+    attendance?: AttendanceCreateNestedManyWithoutMemberInput
     sentInvites?: GroupMemberCreateNestedManyWithoutInviterInput
-    calendars?: CalendarCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -12111,8 +12247,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     ownedGroups?: GroupUncheckedCreateNestedManyWithoutUserInput
     groupMembers?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
     sentInvites?: GroupMemberUncheckedCreateNestedManyWithoutInviterInput
-    calendars?: CalendarUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -12128,7 +12264,6 @@ export namespace Prisma {
     members?: GroupMemberCreateNestedManyWithoutGroupInput
     meetings?: MeetingCreateNestedManyWithoutGroupInput
     user?: UserCreateNestedOneWithoutOwnedGroupsInput
-    calendars?: CalendarCreateNestedManyWithoutGroupInput
   }
 
   export type GroupUncheckedCreateWithoutNotificationsInput = {
@@ -12140,7 +12275,6 @@ export namespace Prisma {
     userId?: number | null
     members?: GroupMemberUncheckedCreateNestedManyWithoutGroupInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutGroupInput
-    calendars?: CalendarUncheckedCreateNestedManyWithoutGroupInput
   }
 
   export type GroupCreateOrConnectWithoutNotificationsInput = {
@@ -12153,12 +12287,14 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.MeetingStatus
     building?: string | null
+    floor?: string | null
     roomNumber?: string | null
     schedule: Date | string
     endsAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     group: GroupCreateNestedOneWithoutMeetingsInput
+    attendance?: AttendanceCreateNestedManyWithoutMeetingInput
   }
 
   export type MeetingUncheckedCreateWithoutNotificationsInput = {
@@ -12168,11 +12304,13 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.MeetingStatus
     building?: string | null
+    floor?: string | null
     roomNumber?: string | null
     schedule: Date | string
     endsAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutMeetingInput
   }
 
   export type MeetingCreateOrConnectWithoutNotificationsInput = {
@@ -12201,8 +12339,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUpdateManyWithoutUserNestedInput
     groupMembers?: GroupMemberUpdateManyWithoutUserNestedInput
+    attendance?: AttendanceUpdateManyWithoutMemberNestedInput
     sentInvites?: GroupMemberUpdateManyWithoutInviterNestedInput
-    calendars?: CalendarUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -12216,8 +12354,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ownedGroups?: GroupUncheckedUpdateManyWithoutUserNestedInput
     groupMembers?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
     sentInvites?: GroupMemberUncheckedUpdateManyWithoutInviterNestedInput
-    calendars?: CalendarUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type GroupUpsertWithoutNotificationsInput = {
@@ -12239,7 +12377,6 @@ export namespace Prisma {
     members?: GroupMemberUpdateManyWithoutGroupNestedInput
     meetings?: MeetingUpdateManyWithoutGroupNestedInput
     user?: UserUpdateOneWithoutOwnedGroupsNestedInput
-    calendars?: CalendarUpdateManyWithoutGroupNestedInput
   }
 
   export type GroupUncheckedUpdateWithoutNotificationsInput = {
@@ -12251,7 +12388,6 @@ export namespace Prisma {
     userId?: NullableIntFieldUpdateOperationsInput | number | null
     members?: GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutGroupNestedInput
-    calendars?: CalendarUncheckedUpdateManyWithoutGroupNestedInput
   }
 
   export type MeetingUpsertWithoutNotificationsInput = {
@@ -12270,12 +12406,14 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumMeetingStatusFieldUpdateOperationsInput | $Enums.MeetingStatus
     building?: NullableStringFieldUpdateOperationsInput | string | null
+    floor?: NullableStringFieldUpdateOperationsInput | string | null
     roomNumber?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     group?: GroupUpdateOneRequiredWithoutMeetingsNestedInput
+    attendance?: AttendanceUpdateManyWithoutMeetingNestedInput
   }
 
   export type MeetingUncheckedUpdateWithoutNotificationsInput = {
@@ -12285,14 +12423,52 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumMeetingStatusFieldUpdateOperationsInput | $Enums.MeetingStatus
     building?: NullableStringFieldUpdateOperationsInput | string | null
+    floor?: NullableStringFieldUpdateOperationsInput | string | null
     roomNumber?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attendance?: AttendanceUncheckedUpdateManyWithoutMeetingNestedInput
   }
 
-  export type UserCreateWithoutCalendarsInput = {
+  export type MeetingCreateWithoutAttendanceInput = {
+    title: string
+    description?: string | null
+    status?: $Enums.MeetingStatus
+    building?: string | null
+    floor?: string | null
+    roomNumber?: string | null
+    schedule: Date | string
+    endsAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    group: GroupCreateNestedOneWithoutMeetingsInput
+    notifications?: NotificationCreateNestedManyWithoutMeetingInput
+  }
+
+  export type MeetingUncheckedCreateWithoutAttendanceInput = {
+    meetingId?: number
+    groupId: number
+    title: string
+    description?: string | null
+    status?: $Enums.MeetingStatus
+    building?: string | null
+    floor?: string | null
+    roomNumber?: string | null
+    schedule: Date | string
+    endsAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMeetingInput
+  }
+
+  export type MeetingCreateOrConnectWithoutAttendanceInput = {
+    where: MeetingWhereUniqueInput
+    create: XOR<MeetingCreateWithoutAttendanceInput, MeetingUncheckedCreateWithoutAttendanceInput>
+  }
+
+  export type UserCreateWithoutAttendanceInput = {
     username: string
     email: string
     firstname: string
@@ -12306,7 +12482,7 @@ export namespace Prisma {
     sentInvites?: GroupMemberCreateNestedManyWithoutInviterInput
   }
 
-  export type UserUncheckedCreateWithoutCalendarsInput = {
+  export type UserUncheckedCreateWithoutAttendanceInput = {
     userId?: number
     username: string
     email: string
@@ -12321,51 +12497,65 @@ export namespace Prisma {
     sentInvites?: GroupMemberUncheckedCreateNestedManyWithoutInviterInput
   }
 
-  export type UserCreateOrConnectWithoutCalendarsInput = {
+  export type UserCreateOrConnectWithoutAttendanceInput = {
     where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutCalendarsInput, UserUncheckedCreateWithoutCalendarsInput>
+    create: XOR<UserCreateWithoutAttendanceInput, UserUncheckedCreateWithoutAttendanceInput>
   }
 
-  export type GroupCreateWithoutCalendarsInput = {
-    name: string
-    description?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    members?: GroupMemberCreateNestedManyWithoutGroupInput
-    notifications?: NotificationCreateNestedManyWithoutGroupInput
-    meetings?: MeetingCreateNestedManyWithoutGroupInput
-    user?: UserCreateNestedOneWithoutOwnedGroupsInput
+  export type MeetingUpsertWithoutAttendanceInput = {
+    update: XOR<MeetingUpdateWithoutAttendanceInput, MeetingUncheckedUpdateWithoutAttendanceInput>
+    create: XOR<MeetingCreateWithoutAttendanceInput, MeetingUncheckedCreateWithoutAttendanceInput>
+    where?: MeetingWhereInput
   }
 
-  export type GroupUncheckedCreateWithoutCalendarsInput = {
-    groupId?: number
-    name: string
-    description?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    userId?: number | null
-    members?: GroupMemberUncheckedCreateNestedManyWithoutGroupInput
-    notifications?: NotificationUncheckedCreateNestedManyWithoutGroupInput
-    meetings?: MeetingUncheckedCreateNestedManyWithoutGroupInput
+  export type MeetingUpdateToOneWithWhereWithoutAttendanceInput = {
+    where?: MeetingWhereInput
+    data: XOR<MeetingUpdateWithoutAttendanceInput, MeetingUncheckedUpdateWithoutAttendanceInput>
   }
 
-  export type GroupCreateOrConnectWithoutCalendarsInput = {
-    where: GroupWhereUniqueInput
-    create: XOR<GroupCreateWithoutCalendarsInput, GroupUncheckedCreateWithoutCalendarsInput>
+  export type MeetingUpdateWithoutAttendanceInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumMeetingStatusFieldUpdateOperationsInput | $Enums.MeetingStatus
+    building?: NullableStringFieldUpdateOperationsInput | string | null
+    floor?: NullableStringFieldUpdateOperationsInput | string | null
+    roomNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    group?: GroupUpdateOneRequiredWithoutMeetingsNestedInput
+    notifications?: NotificationUpdateManyWithoutMeetingNestedInput
   }
 
-  export type UserUpsertWithoutCalendarsInput = {
-    update: XOR<UserUpdateWithoutCalendarsInput, UserUncheckedUpdateWithoutCalendarsInput>
-    create: XOR<UserCreateWithoutCalendarsInput, UserUncheckedCreateWithoutCalendarsInput>
+  export type MeetingUncheckedUpdateWithoutAttendanceInput = {
+    meetingId?: IntFieldUpdateOperationsInput | number
+    groupId?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumMeetingStatusFieldUpdateOperationsInput | $Enums.MeetingStatus
+    building?: NullableStringFieldUpdateOperationsInput | string | null
+    floor?: NullableStringFieldUpdateOperationsInput | string | null
+    roomNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notifications?: NotificationUncheckedUpdateManyWithoutMeetingNestedInput
+  }
+
+  export type UserUpsertWithoutAttendanceInput = {
+    update: XOR<UserUpdateWithoutAttendanceInput, UserUncheckedUpdateWithoutAttendanceInput>
+    create: XOR<UserCreateWithoutAttendanceInput, UserUncheckedCreateWithoutAttendanceInput>
     where?: UserWhereInput
   }
 
-  export type UserUpdateToOneWithWhereWithoutCalendarsInput = {
+  export type UserUpdateToOneWithWhereWithoutAttendanceInput = {
     where?: UserWhereInput
-    data: XOR<UserUpdateWithoutCalendarsInput, UserUncheckedUpdateWithoutCalendarsInput>
+    data: XOR<UserUpdateWithoutAttendanceInput, UserUncheckedUpdateWithoutAttendanceInput>
   }
 
-  export type UserUpdateWithoutCalendarsInput = {
+  export type UserUpdateWithoutAttendanceInput = {
     username?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     firstname?: StringFieldUpdateOperationsInput | string
@@ -12379,7 +12569,7 @@ export namespace Prisma {
     sentInvites?: GroupMemberUpdateManyWithoutInviterNestedInput
   }
 
-  export type UserUncheckedUpdateWithoutCalendarsInput = {
+  export type UserUncheckedUpdateWithoutAttendanceInput = {
     userId?: IntFieldUpdateOperationsInput | number
     username?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -12392,40 +12582,6 @@ export namespace Prisma {
     groupMembers?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sentInvites?: GroupMemberUncheckedUpdateManyWithoutInviterNestedInput
-  }
-
-  export type GroupUpsertWithoutCalendarsInput = {
-    update: XOR<GroupUpdateWithoutCalendarsInput, GroupUncheckedUpdateWithoutCalendarsInput>
-    create: XOR<GroupCreateWithoutCalendarsInput, GroupUncheckedCreateWithoutCalendarsInput>
-    where?: GroupWhereInput
-  }
-
-  export type GroupUpdateToOneWithWhereWithoutCalendarsInput = {
-    where?: GroupWhereInput
-    data: XOR<GroupUpdateWithoutCalendarsInput, GroupUncheckedUpdateWithoutCalendarsInput>
-  }
-
-  export type GroupUpdateWithoutCalendarsInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    members?: GroupMemberUpdateManyWithoutGroupNestedInput
-    notifications?: NotificationUpdateManyWithoutGroupNestedInput
-    meetings?: MeetingUpdateManyWithoutGroupNestedInput
-    user?: UserUpdateOneWithoutOwnedGroupsNestedInput
-  }
-
-  export type GroupUncheckedUpdateWithoutCalendarsInput = {
-    groupId?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: NullableIntFieldUpdateOperationsInput | number | null
-    members?: GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
-    notifications?: NotificationUncheckedUpdateManyWithoutGroupNestedInput
-    meetings?: MeetingUncheckedUpdateManyWithoutGroupNestedInput
   }
 
   export type GroupCreateManyUserInput = {
@@ -12455,17 +12611,18 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type AttendanceCreateManyMemberInput = {
+    meetingId: number
+    status?: $Enums.AttendanceStatus
+    respondedAt?: Date | string | null
+  }
+
   export type GroupMemberCreateManyInviterInput = {
     memberId: number
     groupId: number
     role?: $Enums.Role
     status?: $Enums.InviteStatus
     joinedAt?: Date | string | null
-  }
-
-  export type CalendarCreateManyUserInput = {
-    calendarId?: number
-    groupId: number
   }
 
   export type GroupUpdateWithoutUserInput = {
@@ -12476,7 +12633,6 @@ export namespace Prisma {
     members?: GroupMemberUpdateManyWithoutGroupNestedInput
     notifications?: NotificationUpdateManyWithoutGroupNestedInput
     meetings?: MeetingUpdateManyWithoutGroupNestedInput
-    calendars?: CalendarUpdateManyWithoutGroupNestedInput
   }
 
   export type GroupUncheckedUpdateWithoutUserInput = {
@@ -12488,7 +12644,6 @@ export namespace Prisma {
     members?: GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutGroupNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutGroupNestedInput
-    calendars?: CalendarUncheckedUpdateManyWithoutGroupNestedInput
   }
 
   export type GroupUncheckedUpdateManyWithoutUserInput = {
@@ -12555,6 +12710,24 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type AttendanceUpdateWithoutMemberInput = {
+    status?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    meeting?: MeetingUpdateOneRequiredWithoutAttendanceNestedInput
+  }
+
+  export type AttendanceUncheckedUpdateWithoutMemberInput = {
+    meetingId?: IntFieldUpdateOperationsInput | number
+    status?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AttendanceUncheckedUpdateManyWithoutMemberInput = {
+    meetingId?: IntFieldUpdateOperationsInput | number
+    status?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type GroupMemberUpdateWithoutInviterInput = {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     status?: EnumInviteStatusFieldUpdateOperationsInput | $Enums.InviteStatus
@@ -12577,20 +12750,6 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     status?: EnumInviteStatusFieldUpdateOperationsInput | $Enums.InviteStatus
     joinedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type CalendarUpdateWithoutUserInput = {
-    group?: GroupUpdateOneRequiredWithoutCalendarsNestedInput
-  }
-
-  export type CalendarUncheckedUpdateWithoutUserInput = {
-    calendarId?: IntFieldUpdateOperationsInput | number
-    groupId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type CalendarUncheckedUpdateManyWithoutUserInput = {
-    calendarId?: IntFieldUpdateOperationsInput | number
-    groupId?: IntFieldUpdateOperationsInput | number
   }
 
   export type GroupMemberCreateManyGroupInput = {
@@ -12618,16 +12777,12 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.MeetingStatus
     building?: string | null
+    floor?: string | null
     roomNumber?: string | null
     schedule: Date | string
     endsAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-  }
-
-  export type CalendarCreateManyGroupInput = {
-    calendarId?: number
-    userId: number
   }
 
   export type GroupMemberUpdateWithoutGroupInput = {
@@ -12691,11 +12846,13 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumMeetingStatusFieldUpdateOperationsInput | $Enums.MeetingStatus
     building?: NullableStringFieldUpdateOperationsInput | string | null
+    floor?: NullableStringFieldUpdateOperationsInput | string | null
     roomNumber?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attendance?: AttendanceUpdateManyWithoutMeetingNestedInput
     notifications?: NotificationUpdateManyWithoutMeetingNestedInput
   }
 
@@ -12705,11 +12862,13 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumMeetingStatusFieldUpdateOperationsInput | $Enums.MeetingStatus
     building?: NullableStringFieldUpdateOperationsInput | string | null
+    floor?: NullableStringFieldUpdateOperationsInput | string | null
     roomNumber?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attendance?: AttendanceUncheckedUpdateManyWithoutMeetingNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutMeetingNestedInput
   }
 
@@ -12719,6 +12878,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumMeetingStatusFieldUpdateOperationsInput | $Enums.MeetingStatus
     building?: NullableStringFieldUpdateOperationsInput | string | null
+    floor?: NullableStringFieldUpdateOperationsInput | string | null
     roomNumber?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12726,18 +12886,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type CalendarUpdateWithoutGroupInput = {
-    user?: UserUpdateOneRequiredWithoutCalendarsNestedInput
-  }
-
-  export type CalendarUncheckedUpdateWithoutGroupInput = {
-    calendarId?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type CalendarUncheckedUpdateManyWithoutGroupInput = {
-    calendarId?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
+  export type AttendanceCreateManyMeetingInput = {
+    memberId: number
+    status?: $Enums.AttendanceStatus
+    respondedAt?: Date | string | null
   }
 
   export type NotificationCreateManyMeetingInput = {
@@ -12749,6 +12901,24 @@ export namespace Prisma {
     status?: $Enums.NotificationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type AttendanceUpdateWithoutMeetingInput = {
+    status?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    member?: UserUpdateOneRequiredWithoutAttendanceNestedInput
+  }
+
+  export type AttendanceUncheckedUpdateWithoutMeetingInput = {
+    memberId?: IntFieldUpdateOperationsInput | number
+    status?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AttendanceUncheckedUpdateManyWithoutMeetingInput = {
+    memberId?: IntFieldUpdateOperationsInput | number
+    status?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
+    respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type NotificationUpdateWithoutMeetingInput = {

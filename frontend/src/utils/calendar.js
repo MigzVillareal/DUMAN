@@ -74,9 +74,6 @@ export function getDateKey(schedule) {
   return schedule.slice(0, 10);
 }
 
-const MUTED_BAR_COLOR = "#c8c8c8";
-const EVENT_BAR_COLOR = "#273c8d";
-
 /**
  * @param {import('../data/calendarMock.js').CalendarEvent[]} events
  * @param {string} dateKey YYYY-MM-DD
@@ -92,17 +89,19 @@ export function getEventsForDate(events, dateKey) {
 /**
  * @param {import('../data/calendarMock.js').CalendarEvent[]} events
  * @param {string} dateKey
- * @returns {Array<{ meetingId: number, color: string, muted: boolean }>}
+ * @returns {Array<{ meetingId: number, muted: boolean, pending: boolean }>}
  */
 export function getDayEventBars(events, dateKey) {
   return getEventsForDate(events, dateKey).map((event) => {
     const muted =
-      event.status === "VOTING" || event.status === "FINISHED";
+      event.status === "VOTING" ||
+      event.status === "FINISHED" ||
+      event.status === "CANCELLED";
 
     return {
       meetingId: event.meetingId,
-      color: muted ? MUTED_BAR_COLOR : EVENT_BAR_COLOR,
       muted,
+      pending: event.status === "PENDING",
     };
   });
 }

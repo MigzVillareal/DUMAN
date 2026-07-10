@@ -239,6 +239,10 @@
   background-color: #c8c8c8;
 }
 
+.calendar-day__bar--pending {
+  background-color: #d4a017;
+}
+
 /* ── Event detail panel ─────────────────────────────────────────── */
 .calendar-event-panel {
   display: flex;

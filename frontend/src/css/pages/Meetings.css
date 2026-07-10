@@ -489,6 +489,11 @@
   color: var(--color-gold-text);
 }
 
+.meetings-badge--cancelled {
+  background-color: #fde8e8;
+  color: #b42318;
+}
+
 /* ── Right: Detail Panel ─────────────────────────────────────────── */
 .meetings-detail-panel {
   background-color: var(--color-panel);

@@ -156,6 +156,7 @@ exports.Prisma.MeetingScalarFieldEnum = {
   description: 'description',
   status: 'status',
   building: 'building',
+  floor: 'floor',
   roomNumber: 'roomNumber',
   schedule: 'schedule',
   endsAt: 'endsAt',
@@ -175,10 +176,11 @@ exports.Prisma.NotificationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.CalendarScalarFieldEnum = {
-  calendarId: 'calendarId',
-  groupId: 'groupId',
-  userId: 'userId'
+exports.Prisma.AttendanceScalarFieldEnum = {
+  meetingId: 'meetingId',
+  memberId: 'memberId',
+  status: 'status',
+  respondedAt: 'respondedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -207,9 +209,11 @@ exports.InviteStatus = exports.$Enums.InviteStatus = {
 };
 
 exports.MeetingStatus = exports.$Enums.MeetingStatus = {
+  PENDING: 'PENDING',
   UPCOMING: 'UPCOMING',
   ONGOING: 'ONGOING',
-  FINISHED: 'FINISHED'
+  FINISHED: 'FINISHED',
+  CANCELLED: 'CANCELLED'
 };
 
 exports.NotificationStatus = exports.$Enums.NotificationStatus = {
@@ -218,13 +222,21 @@ exports.NotificationStatus = exports.$Enums.NotificationStatus = {
   FAILED: 'FAILED'
 };
 
+exports.AttendanceStatus = exports.$Enums.AttendanceStatus = {
+  PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
+  DECLINED: 'DECLINED',
+  ATTENDED: 'ATTENDED',
+  ABSENT: 'ABSENT'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Group: 'Group',
   GroupMember: 'GroupMember',
   Meeting: 'Meeting',
   Notification: 'Notification',
-  Calendar: 'Calendar'
+  Attendance: 'Attendance'
 };
 
 /**
