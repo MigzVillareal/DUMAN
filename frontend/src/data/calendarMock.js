@@ -55,6 +55,7 @@ const GROUP_BY_NAME = {
 /** @type {Record<string, MeetingStatus>} */
 const STATUS_FROM_MEETINGS = {
   upcoming: "UPCOMING",
+  pending: "PENDING",
   voting: "VOTING",
   past: "FINISHED",
 };
