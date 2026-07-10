@@ -15,7 +15,12 @@ import {
 
 // ── Status badge ──────────────────────────────────────────────────────────────
 function StatusBadge({ status }) {
-  const labels = { upcoming: "Upcoming", past: "Past", pending: "Pending" };
+  const labels = {
+    upcoming: "Upcoming",
+    past: "Finished",
+    pending: "Pending",
+    cancelled: "Cancelled",
+  };
   return (
     <span className={`meetings-badge meetings-badge--${status}`}>
       {labels[status] ?? status}
@@ -147,7 +152,8 @@ const FILTERS = [
   { key: "all", label: "All Meetings" },
   { key: "upcoming", label: "Upcoming" },
   { key: "pending", label: "Pending" },
-  { key: "past", label: "Past" },
+  { key: "past", label: "Finished" },
+  { key: "cancelled", label: "Cancelled" },
 ];
 
 // ── Main Page ─────────────────────────────────────────────────────────────────

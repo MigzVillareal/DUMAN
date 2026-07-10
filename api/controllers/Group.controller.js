@@ -18,7 +18,8 @@ export const createGroup = async (req, res) => {
                         memberId: userId,
                         invitedBy: userId,
                         role: "ADMIN",
-                        status: "ACCEPTED"
+                        status: "ACCEPTED",
+                        joinedAt: new Date(),
                     }
                 }
             },
@@ -236,7 +237,7 @@ export const acceptInvite = async (req, res) => {
             },
             data: {
                 status: "ACCEPTED",
-                joinedAt: new Date()
+                joinedAt: new Date(),
             }
         });
 

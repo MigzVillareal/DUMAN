@@ -88,10 +88,9 @@ function CalendarMonthView({
                   {visibleBars.map((bar) => (
                     <span
                       key={bar.meetingId}
-                      className={`calendar-day__bar${bar.muted ? " calendar-day__bar--muted" : ""}`}
-                      style={
-                        bar.muted ? undefined : { backgroundColor: bar.color }
-                      }
+                      className={`calendar-day__bar${
+                        bar.muted ? " calendar-day__bar--muted" : ""
+                      }${bar.pending ? " calendar-day__bar--pending" : ""}`}
                     />
                   ))}
                   {hiddenBarCount > 0 && (

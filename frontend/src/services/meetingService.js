@@ -51,9 +51,32 @@ export function formatMeetingSchedule(schedule, endsAt) {
   return `${dateLabel}, ${startTime} – ${timeFmt.format(new Date(endsAt))}`;
 }
 
-function mapMeetingUiStatus(status) {
-  if (status === "FINISHED") return "past";
-  return "upcoming";
+export function mapMeetingUiStatus(status) {
+  switch (status) {
+    case "PENDING":
+      return "pending";
+    case "UPCOMING":
+    case "ONGOING":
+      return "upcoming";
+    case "FINISHED":
+      return "past";
+    case "CANCELLED":
+      return "cancelled";
+    default:
+      return "pending";
+  }
+}
+
+export function isPastMeetingStatus(status) {
+  return status === "FINISHED";
+}
+
+export function isUpcomingMeetingStatus(status) {
+  return status === "UPCOMING" || status === "ONGOING";
+}
+
+export function isCancelledMeetingStatus(status) {
+  return status === "CANCELLED";
 }
 
 export function buildCreateMeetingPayload(form) {
@@ -107,7 +130,7 @@ export function mapMeetingForMeetingsList(meeting) {
     schedule: formatMeetingSchedule(meeting.schedule, meeting.endsAt),
     date: new Date(meeting.schedule).toISOString().slice(0, 10),
     status: mapMeetingUiStatus(meeting.status),
-    finalized: meeting.status !== "FINISHED",
+    finalized: meeting.status !== "PENDING",
     description: meeting.description ?? "",
     attending: [],
     notAttending: [],
