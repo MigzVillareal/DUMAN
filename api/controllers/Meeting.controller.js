@@ -184,3 +184,35 @@ export const getMeetingAttendance = async (req, res) => {
         res.status(500).json({ errorMessage: "Unable to get Meeting Attendance" });
     }
 };
+
+export const confirmAttendance = async (req, res) => {
+    try {
+        const { meetingId } = req.params;
+        const { status } =req.body;
+        const memberId = req.user.userId;
+
+        if (!["CONFIRMED", "DECLINED"].includes(status)) {
+            return res.status(400).json({ errorMessage: "Invalid status." });
+        }
+
+        const attendance =await prisma.attendance.upsert({
+            where: {
+                meetingId_memberId: {
+                    meetingId: parseInt(meetingId),
+                    memberId
+                }
+            },
+            update: { status, respondedAt: new Date() },
+            create: {
+                meetingId: parseInt(meetingid), 
+                memberId,
+                status,
+                respondedAt: newDate()
+            }
+        })
+
+        res.status(200).json({ attendance });
+    } catch (error) {
+        res.status(500).json({ errorMessage: "Unable to update attendance." });
+    }
+};
