@@ -32,14 +32,14 @@ export function createOpenLocation({ id, building, col, row }) {
 export const campusLocations = [
   createBuildingLocation({
     id: "alingal-building",
-    building: "Alingal Building",
+    building: "Alingal SJ, Building",
     col: 15,
     row: 10,
     floors: ["1", "2", "3", "4", "5"],
   }),
   createBuildingLocation({
     id: "phelan-building",
-    building: "Phelan Building",
+    building: "Phelan SJ, Building",
     col: 7,
     row: 7,
     floors: ["1", "2", "3"],
@@ -66,7 +66,7 @@ export const campusLocations = [
   }),
   createBuildingLocation({
     id: "burns-building",
-    building: "Burns Building",
+    building: "Burns SJ, Building",
     col: 11,
     row: 12,
     floors: ["1", "2", "3"],
@@ -80,10 +80,16 @@ export const campusLocations = [
   }),
   createBuildingLocation({
     id: "bonoan-building",
-    building: "Bonoan Building",
+    building: "Bonoan SJ, Building",
     col: 13,
     row: 10,
     floors: ["1", "2", "3", "4"],
+  }),
+  createOpenLocation({
+    id: "richie-sj-hall",
+    building: "Richie SJ, Hall",
+    col: 14,
+    row: 9,
   }),
   createBuildingLocation({
     id: "dolan-building",
@@ -100,11 +106,45 @@ export const campusLocations = [
     floors: ["1", "2", "3"],
   }),
   createBuildingLocation({
+    id: "ricci-sj-hall",
+    building: "Ricci SJ, Hall",
+    col: 13,
+    row: 13,
+    floors: ["1", "2"],
+  }),
+  createBuildingLocation({
     id: "arrupe-building",
     building: "Arrupe Building",
     col: 15,
     row: 6,
     floors: ["1", "2", "3"],
+  }),
+  createBuildingLocation({
+    id: "belardo-shs-building",
+    building: "Belardo SJ, SHS Building",
+    col: 5,
+    row: 5,
+    floors: ["1", "2", "3", "4", "5"],
+  }),
+  createBuildingLocation({
+    id: "engineering-building",
+    building: "Engineering Building",
+    col: 6,
+    row: 4,
+    floors: ["1", "2", "3"],
+  }),
+  createBuildingLocation({
+    id: "administration-building",
+    building: "Administration Building",
+    col: 9,
+    row: 11,
+    floors: ["1", "2"],
+  }),
+  createOpenLocation({
+    id: "university-gymnasium",
+    building: "University Gymnasium",
+    col: 3,
+    row: 9,
   }),
   createOpenLocation({
     id: "xavier-grounds",

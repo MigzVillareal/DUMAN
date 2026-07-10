@@ -122,7 +122,7 @@ function CampusMap() {
                   </label>
 
                   <label className="campus-map-detail-field" htmlFor="campus-map-room">
-                    <span className="campus-map-detail-field__label">Room Number</span>
+                    <span className="campus-map-detail-field__label">Room</span>
                     <input
                       id="campus-map-room"
                       className="campus-map-select"
