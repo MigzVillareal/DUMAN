@@ -62,7 +62,7 @@ export const createMeeting = async (req, res) => {
                         <li><strong>Group:</strong> ${meeting.group.name}</li>
                         <li><strong>Date:</strong> ${format(new Date(schedule), 'MMMM d, yyyy')}</li>
                         <li><strong>Time:</strong> ${format(new Date(schedule), `h:mma'-${fEndsAt}'`)}</li>
-                        <li><strong>Building:</strong> ${building}${roomNumber ? ` Room ${roomNumber}` : ""}</li>
+                        <li><strong>Building:</strong> ${building}${roomNumber ? `, Room ${roomNumber}` : ""}</li>
                     </ul>
                     `,
         });
