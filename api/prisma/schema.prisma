@@ -24,9 +24,11 @@ enum InviteStatus {
 }
 
 enum MeetingStatus {
+  PENDING
   UPCOMING
   ONGOING
   FINISHED
+  CANCELLED
 }
 
 enum NotificationStatus {
@@ -104,7 +106,7 @@ model Meeting {
   groupId     Int
   title       String
   description String?
-  status      MeetingStatus @default(UPCOMING)
+  status      MeetingStatus @default(PENDING)
   building    String?
   floor       String?
   roomNumber  String?
