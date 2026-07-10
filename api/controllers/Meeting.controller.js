@@ -100,7 +100,7 @@ export const getMeetingById = async (req, res) => {
 export const updateMeeting = async (req, res) => {
     try { 
         const { meetingId } = req.params;
-        const { title, description, locationDetail, schedule, endsAt } = req.body;
+        const { title, description } = req.body;
 
         const meeting = await prisma.meeting.update({
             where: { meetingid: parseInt(meetingId) },
