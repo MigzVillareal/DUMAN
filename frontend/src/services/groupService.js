@@ -112,3 +112,20 @@ export async function declineGroupInvite(groupId) {
 
   return parseJson(response);
 }
+
+export async function updateGroup(groupId, { name, description }) {
+  const response = await fetch(`/api/v1/groups/${groupId}`, {
+    method: "PATCH",
+    headers: getAuthHeaders(true),
+    body: JSON.stringify({ name, description }),
+  });
+  return parseJson(response);
+}
+
+export async function deleteGroup(groupId) {
+  const response = await fetch(`/api/v1/groups/${groupId}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+  return parseJson(response);
+}
