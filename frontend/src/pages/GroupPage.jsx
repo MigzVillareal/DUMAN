@@ -34,7 +34,7 @@ import "../css/pages/Meetings.css";
 
 const MEETING_FILTERS = [
   { key: "upcoming", label: "Upcoming" },
-  { key: "past", label: "Past" },
+  { key: "past", label: "Finished" },
 ];
 
 function getDisplayedGroupMeetings(meetings, filter, isMock) {
@@ -385,7 +385,7 @@ export default function GroupPage() {
         <section className="dashboard-panel">
           <div className="group-page__meetings-header">
             <h2 className="dashboard-panel__title">
-              {meetingFilter === "past" ? "Past Group Meetings" : "Upcoming Group Meetings"}
+              {meetingFilter === "past" ? "Finished Group Meetings" : "Upcoming Group Meetings"}
             </h2>
             <nav className="meetings-filters" aria-label="Meeting filters">
               {MEETING_FILTERS.map((item) => (
@@ -406,7 +406,7 @@ export default function GroupPage() {
             ) : displayedMeetings.length === 0 ? (
               <p className="group-page__empty">
                 {meetingFilter === "past"
-                  ? "No past meetings."
+                  ? "No finished meetings."
                   : "No upcoming meetings scheduled."}
               </p>
             ) : (

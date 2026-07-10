@@ -106,14 +106,40 @@
   gap: 0.75rem;
 }
 
+.calendar-month__header-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  flex: 1;
+  min-width: 0;
+}
+
 .calendar-month__title {
   font-family: var(--font-display);
   font-size: 1.125rem;
   font-weight: var(--weight-bold);
   color: var(--color-text);
   margin: 0;
-  flex: 1;
   text-align: center;
+}
+
+.calendar-month__today-btn {
+  padding: 0.2rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background-color: var(--color-panel);
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: var(--weight-semibold);
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.calendar-month__today-btn:hover {
+  background-color: var(--color-hover-surface);
+  border-color: var(--color-primary);
 }
 
 .calendar-month__nav {
@@ -198,6 +224,14 @@
 .calendar-day--selected {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.calendar-day--today:not(.calendar-day--selected) {
+  border-color: var(--color-primary);
+}
+
+.calendar-day--today .calendar-day__number {
+  color: var(--color-primary);
 }
 
 .calendar-day__number {

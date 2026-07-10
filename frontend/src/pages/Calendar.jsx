@@ -85,6 +85,15 @@ function Calendar() {
     setVisibleMonth((m) => m - 1);
   };
 
+  const handleGoToToday = () => {
+    const now = new Date();
+    setVisibleYear(now.getFullYear());
+    setVisibleMonth(now.getMonth());
+    setSelectedDate(
+      toISODate(now.getFullYear(), now.getMonth(), now.getDate())
+    );
+  };
+
   const handleNextMonth = () => {
     if (visibleMonth === 11) {
       setVisibleYear((y) => y + 1);
@@ -152,9 +161,15 @@ function Calendar() {
               month={visibleMonth}
               events={events}
               selectedDate={selectedDate}
+              todayDate={toISODate(
+                today.getFullYear(),
+                today.getMonth(),
+                today.getDate()
+              )}
               onSelectDate={setSelectedDate}
               onPrevMonth={handlePrevMonth}
               onNextMonth={handleNextMonth}
+              onGoToToday={handleGoToToday}
             />
           )}
         </section>

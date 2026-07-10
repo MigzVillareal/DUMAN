@@ -13,9 +13,11 @@ function CalendarMonthView({
   month,
   events,
   selectedDate,
+  todayDate,
   onSelectDate,
   onPrevMonth,
   onNextMonth,
+  onGoToToday,
 }) {
   const cells = getMonthGrid(year, month);
 
@@ -30,7 +32,16 @@ function CalendarMonthView({
         >
           ‹
         </button>
-        <h2 className="calendar-month__title">{formatMonthYear(year, month)}</h2>
+        <div className="calendar-month__header-center">
+          <h2 className="calendar-month__title">{formatMonthYear(year, month)}</h2>
+          <button
+            type="button"
+            className="calendar-month__today-btn"
+            onClick={onGoToToday}
+          >
+            Today
+          </button>
+        </div>
         <button
           type="button"
           className="calendar-month__nav"
@@ -67,6 +78,7 @@ function CalendarMonthView({
           const hiddenBarCount = bars.length - visibleBars.length;
           const dayEvents = getEventsForDate(events, cell.date);
           const isSelected = selectedDate === cell.date;
+          const isToday = todayDate === cell.date;
           const ariaLabel =
             dayEvents.length === 0
               ? cell.date
@@ -79,7 +91,7 @@ function CalendarMonthView({
               role="gridcell"
               aria-selected={isSelected}
               aria-label={ariaLabel}
-              className={`calendar-day${isSelected ? " calendar-day--selected" : ""}${bars.length > 0 ? " calendar-day--has-events" : ""}`}
+              className={`calendar-day${isSelected ? " calendar-day--selected" : ""}${isToday ? " calendar-day--today" : ""}${bars.length > 0 ? " calendar-day--has-events" : ""}`}
               onClick={() => onSelectDate(cell.date)}
             >
               <span className="calendar-day__number">{cell.day}</span>
