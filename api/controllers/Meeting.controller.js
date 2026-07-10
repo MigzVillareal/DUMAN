@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 // import { dmmfToRuntimeDataModel } from '../prisma/generated/runtime/client';
 // import { sendNotificationEmail } from '../services/email.service.js';
 import supabase from "../lib/supabase.js";
+import { sendCancellationNoticeForMeeting } from "../services/Notification.service.js";
 
 // Meeting CRUD
 
@@ -136,15 +137,31 @@ export const updateMeetingStatus = async (req, res) => {
     try {
         const { meetingId } = req.params;
         const { status } = req.body;
+        const id = parseInt(meetingId);
+
+        const existing = await prisma.meeting.findUnique({ where: { meetingId: id } });
+        if (!existing) {
+            return res.status(404).json({ errorMessage: "Meeting not found." });
+        }
 
         const meeting = await prisma.meeting.update({
-            where: { meetingId: parseInt(meetingId) },
+            where: { meetingId: id },
             data: { status }
         });
 
+        // only fire on a fresh transition into CANCELLED
+        if (status === "CANCELLED" && existing.status !== "CANCELLED") {
+            try {
+                await sendCancellationNoticeForMeeting(meeting.meetingId);
+            } catch (err) {
+                console.log(`Failed to send cancellation notice for meeting ${meeting.meetingId}:`, err);
+            }
+        }
+
         res.status(200).json({ meeting });
     } catch (error) {
-        res.status(500).json({ errorMessage: "Unable to get meeting status." });
+        console.log(error);
+        res.status(500).json({ errorMessage: "Unable to update meeting status." });
     }
 };
 

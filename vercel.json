@@ -14,10 +14,6 @@
     {
       "path": "/api/cron/check-24h-meetings",
       "schedule": "*/15 * * * *"
-    },
-    {
-      "path": "/api/cron/check-cancelled-meetings",
-      "schedule": "*/5 * * * *"
     }
   ]
 }
