@@ -6,9 +6,8 @@ import Icon from "../components/Icon.jsx";
 import PageHeader from "../components/PageHeader.jsx";
 import FinalizeMeetingModal from "../components/FinalizeMeetingModal.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
-import { MEETINGS_LIST } from "../data/meetingsMock.js";
-import { USE_MOCK_MEETINGS } from "../data/mock.js";
 import {
+  attachAttendanceToMeeting,
   fetchUserMeetings,
   mapMeetingForMeetingsList,
   updateMeeting,
@@ -395,8 +394,8 @@ const FILTERS = [
 function Meetings() {
   const { user } = useAuth();
   const location = useLocation();
-  const [meetings, setMeetings] = useState(USE_MOCK_MEETINGS ? MEETINGS_LIST : []);
-  const [loading, setLoading] = useState(!USE_MOCK_MEETINGS);
+  const [meetings, setMeetings] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState(null);
@@ -406,8 +405,6 @@ function Meetings() {
   const [deletingMeeting, setDeletingMeeting] = useState(null);
 
   const loadMeetings = useCallback(async () => {
-    if (USE_MOCK_MEETINGS) return;
-
     if (!user?.userId) {
       setMeetings([]);
       setLoading(false);
@@ -441,6 +438,27 @@ function Meetings() {
     }
   }, [location.state?.meetingId, meetings]);
 
+  useEffect(() => {
+    if (!selected?.id) return;
+
+    let cancelled = false;
+
+    attachAttendanceToMeeting(selected)
+      .then((updated) => {
+        if (cancelled) return;
+
+        setSelected(updated);
+        setMeetings((prev) =>
+          prev.map((meeting) => (meeting.id === updated.id ? updated : meeting))
+        );
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selected?.id]);
+
   const openFinalizeModal = (meeting = null) => {
     setModalMeeting(meeting);
     setShowModal(true);
@@ -470,15 +488,6 @@ function Meetings() {
   }, [filter, search]);
 
   const handleFinalized = async (meeting) => {
-    if (USE_MOCK_MEETINGS) {
-      applyMeetingUpdate({
-        ...meeting,
-        finalized: true,
-        status: "upcoming",
-      });
-      return;
-    }
-
     const data = await updateMeetingStatus(meeting.id, "UPCOMING");
     const mapped = mapMeetingForMeetingsList(data.meeting);
     applyMeetingUpdate({
@@ -491,15 +500,6 @@ function Meetings() {
   };
 
   const handleCancelMeeting = async (meeting) => {
-    if (USE_MOCK_MEETINGS) {
-      applyMeetingUpdate({
-        ...meeting,
-        finalized: true,
-        status: "cancelled",
-      });
-      return;
-    }
-
     const data = await updateMeetingStatus(meeting.id, "CANCELLED");
     const mapped = mapMeetingForMeetingsList(data.meeting);
     applyMeetingUpdate({
@@ -533,11 +533,6 @@ function Meetings() {
 
   // ── Edit handler ────────────────────────────────────────────────────────────
   const handleEditSave = async (updated) => {
-    if (USE_MOCK_MEETINGS) {
-      applyMeetingUpdate(updated);
-      return;
-    }
-
     const data = await updateMeeting(updated.id, {
       title: updated.title,
       description: updated.description,
@@ -552,11 +547,6 @@ function Meetings() {
 
   // ── Delete handler ──────────────────────────────────────────────────────────
   const handleDeleteConfirm = async (meeting) => {
-    if (USE_MOCK_MEETINGS) {
-      removeMeeting(meeting.id);
-      return;
-    }
-
     await deleteMeeting(meeting.id);
     removeMeeting(meeting.id);
   };

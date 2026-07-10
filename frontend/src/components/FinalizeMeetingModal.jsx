@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { UNFINALIZED_MEETINGS } from "../data/meetingsMock.js";
+import { attachAttendanceToMeeting } from "../services/meetingService.js";
 
 function MemberList({ title, members, emptyLabel }) {
   return (
@@ -145,7 +145,7 @@ export default function FinalizeMeetingModal({
   onFinalized,
   onCancelMeeting,
   initialMeeting = null,
-  meetings = UNFINALIZED_MEETINGS,
+  meetings = [],
 }) {
   const [step, setStep] = useState(initialMeeting ? 2 : 1);
   const [selectedMeeting, setSelectedMeeting] = useState(initialMeeting);
@@ -166,10 +166,33 @@ export default function FinalizeMeetingModal({
     return () => window.removeEventListener("keydown", handleKey);
   }, [onClose, saving]);
 
-  const handleSelect = (meeting) => {
+  const handleSelect = async (meeting) => {
     setSelectedMeeting(meeting);
     setStep(2);
+
+    try {
+      const withAttendance = await attachAttendanceToMeeting(meeting);
+      setSelectedMeeting(withAttendance);
+    } catch {
+      // Keep meeting visible without attendance lists.
+    }
   };
+
+  useEffect(() => {
+    if (!initialMeeting?.id) return;
+
+    let cancelled = false;
+
+    attachAttendanceToMeeting(initialMeeting)
+      .then((withAttendance) => {
+        if (!cancelled) setSelectedMeeting(withAttendance);
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+  }, [initialMeeting?.id]);
 
   const handleConfirm = async (meeting) => {
     if (saving) return;

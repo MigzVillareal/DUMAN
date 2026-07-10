@@ -183,28 +183,28 @@ export const getMeetingAttendance = async (req, res) => {
 export const confirmAttendance = async (req, res) => {
     try {
         const { meetingId } = req.params;
-        const { status } =req.body;
-        const memberId = req.user.userId;
+        const { status } = req.body;
+        const memberId = parseInt(req.user.userId);
 
         if (!["CONFIRMED", "DECLINED"].includes(status)) {
             return res.status(400).json({ errorMessage: "Invalid status." });
         }
 
-        const attendance =await prisma.attendance.upsert({
+        const attendance = await prisma.attendance.upsert({
             where: {
                 meetingId_memberId: {
                     meetingId: parseInt(meetingId),
-                    memberId
-                }
+                    memberId,
+                },
             },
             update: { status, respondedAt: new Date() },
             create: {
-                meetingId: parseInt(meetingid), 
+                meetingId: parseInt(meetingId),
                 memberId,
                 status,
-                respondedAt: newDate()
-            }
-        })
+                respondedAt: new Date(),
+            },
+        });
 
         res.status(200).json({ attendance });
     } catch (error) {

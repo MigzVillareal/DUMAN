@@ -14,7 +14,7 @@ function formatSelectedLocation(form) {
   if (!location) return "";
 
   if (locationHasRoomSelection(location) && form.floor && form.room) {
-    return `${location.building} · Floor ${form.floor} · ${form.room}`;
+    return `${location.building} - Floor ${form.floor} - ${form.room}`;
   }
 
   return location.building;

@@ -1,4 +1,5 @@
 import { getAuthHeaders } from "../utils/authStorage.js";
+import { getDateKey } from "../utils/calendar.js";
 import {
   campusLocations,
   locationHasRoomSelection,
@@ -17,15 +18,15 @@ export function formatMeetingLocation({ building, floor, roomNumber }) {
   if (!building) return "";
 
   if (floor && roomNumber) {
-    return `${building} · Floor ${floor} · ${roomNumber}`;
+    return `${building} - Floor ${floor} - ${roomNumber}`;
   }
 
   if (floor) {
-    return `${building} · Floor ${floor}`;
+    return `${building} - Floor ${floor}`;
   }
 
   if (roomNumber) {
-    return `${building} · ${roomNumber}`;
+    return `${building} - ${roomNumber}`;
   }
 
   return building;
@@ -98,11 +99,35 @@ export function buildCreateMeetingPayload(form) {
   };
 }
 
+export function mapAttendanceToRsvpStatus(status) {
+  switch (status) {
+    case "CONFIRMED":
+    case "ATTENDED":
+      return "ATTENDING";
+    case "DECLINED":
+    case "ABSENT":
+      return "DECLINED";
+    default:
+      return "PENDING";
+  }
+}
+
+export function mapRsvpToAttendanceStatus(status) {
+  switch (status) {
+    case "ATTENDING":
+      return "CONFIRMED";
+    case "DECLINED":
+      return "DECLINED";
+    default:
+      return "PENDING";
+  }
+}
+
 export function normalizeMeetingForCalendar(meeting, rsvp = null) {
   const group = meeting.group;
 
   return {
-    meetingId: meeting.meetingId,
+    meetingId: meeting.meetingId ?? meeting.id,
     title: meeting.title,
     description: meeting.description ?? null,
     status: meeting.status,
@@ -117,7 +142,9 @@ export function normalizeMeetingForCalendar(meeting, rsvp = null) {
           name: group.name,
         }
       : null,
-    rsvp: { status: rsvp?.status ?? "PENDING" },
+    rsvp: {
+      status: mapAttendanceToRsvpStatus(rsvp?.status ?? "PENDING"),
+    },
   };
 }
 
@@ -128,7 +155,7 @@ export function mapMeetingForMeetingsList(meeting) {
     title: meeting.title,
     location: formatMeetingLocation(meeting),
     schedule: formatMeetingSchedule(meeting.schedule, meeting.endsAt),
-    date: new Date(meeting.schedule).toISOString().slice(0, 10),
+    date: getDateKey(meeting.schedule),
     status: mapMeetingUiStatus(meeting.status),
     finalized: meeting.status !== "PENDING",
     description: meeting.description ?? "",
@@ -137,13 +164,57 @@ export function mapMeetingForMeetingsList(meeting) {
   };
 }
 
+function formatMemberName(member, memberId) {
+  if (!member) return `Member ${memberId}`;
+
+  const fullName = `${member.firstname ?? ""} ${member.lastname ?? ""}`.trim();
+  return fullName || member.username || `Member ${memberId}`;
+}
+
+export function mapAttendanceLists(attendance = []) {
+  const attending = [];
+  const notAttending = [];
+
+  for (const record of attendance) {
+    const name = formatMemberName(record.member, record.memberId);
+
+    if (record.status === "CONFIRMED" || record.status === "ATTENDED") {
+      attending.push(name);
+    } else if (record.status === "DECLINED" || record.status === "ABSENT") {
+      notAttending.push(name);
+    }
+  }
+
+  return { attending, notAttending };
+}
+
+export async function fetchMeetingAttendance(meetingId) {
+  const response = await fetch(`/api/v1/meetings/${meetingId}/attendance`, {
+    headers: getAuthHeaders(),
+  });
+
+  const data = await parseJson(response);
+
+  if (!response.ok || data.errorMessage) {
+    throw new Error(data.errorMessage ?? "Unable to load attendance.");
+  }
+
+  return data.attendance ?? [];
+}
+
+export async function attachAttendanceToMeeting(meeting) {
+  const attendance = await fetchMeetingAttendance(meeting.id);
+  const { attending, notAttending } = mapAttendanceLists(attendance);
+  return { ...meeting, attending, notAttending };
+}
+
 export function mapMeetingForGroupPage(meeting, index = 0) {
   return {
     id: meeting.meetingId,
     title: meeting.title,
     location: formatMeetingLocation(meeting),
     schedule: formatMeetingSchedule(meeting.schedule, meeting.endsAt),
-    date: new Date(meeting.schedule).toISOString().slice(0, 10),
+    date: getDateKey(meeting.schedule),
     description: meeting.description ?? "",
     defaultExpanded: index === 0,
   };

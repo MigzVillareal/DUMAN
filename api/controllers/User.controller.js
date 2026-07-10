@@ -101,6 +101,9 @@ export const getUserMeetings = async (req, res) => {
             include: {
                 group: true,
                 notifications: true,
+                attendance: {
+                    where: { memberId: parseInt(userId) },
+                },
             },
         });
 

@@ -273,6 +273,10 @@
   background-color: #c8c8c8;
 }
 
+.calendar-day__bar--cancelled {
+  background-color: var(--color-destructive);
+}
+
 .calendar-day__bar--pending {
   background-color: #d4a017;
 }
@@ -350,6 +354,26 @@
   font-family: var(--font-ui);
 }
 
+.calendar-event-card--upcoming {
+  background-color: #eef3fc;
+  border-color: #c5d4f0;
+}
+
+.calendar-event-card--pending {
+  background-color: #fff8e6;
+  border-color: #e6c84a;
+}
+
+.calendar-event-card--cancelled {
+  background-color: #fde8e8;
+  border-color: #f5b4b4;
+}
+
+.calendar-event-card--muted {
+  background-color: #f5f5f5;
+  border-color: #e0e0e0;
+}
+
 .calendar-event-card__info {
   display: flex;
   flex-direction: column;
@@ -407,6 +431,30 @@
 .calendar-rsvp-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.calendar-rsvp-btn--loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.calendar-rsvp-status {
+  margin: 0;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: var(--weight-semibold);
+  text-align: center;
+}
+
+.calendar-rsvp-status--confirmed {
+  background-color: #dce5f8;
+  color: var(--color-primary);
+}
+
+.calendar-rsvp-status--declined {
+  background-color: var(--color-inset);
+  color: #666;
 }
 
 .calendar-rsvp-btn--attending {

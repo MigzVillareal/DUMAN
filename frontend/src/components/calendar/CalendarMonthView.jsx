@@ -101,8 +101,10 @@ function CalendarMonthView({
                     <span
                       key={bar.meetingId}
                       className={`calendar-day__bar${
-                        bar.muted ? " calendar-day__bar--muted" : ""
-                      }${bar.pending ? " calendar-day__bar--pending" : ""}`}
+                        bar.cancelled ? " calendar-day__bar--cancelled" : ""
+                      }${bar.muted ? " calendar-day__bar--muted" : ""}${
+                        bar.pending ? " calendar-day__bar--pending" : ""
+                      }`}
                     />
                   ))}
                   {hiddenBarCount > 0 && (

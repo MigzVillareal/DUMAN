@@ -104,14 +104,17 @@ function Calendar() {
   };
 
   const handleRsvp = async (meetingId, status) => {
+    if (meetingId == null || updatingMeetingId != null) return;
+
     setUpdatingMeetingId(meetingId);
+    setError(null);
 
     try {
-      await updateMeetingRsvp(meetingId, status);
+      const result = await updateMeetingRsvp(meetingId, status);
       setEvents((prev) =>
         prev.map((event) =>
           event.meetingId === meetingId
-            ? { ...event, rsvp: { status } }
+            ? { ...event, rsvp: { status: result.status } }
             : event
         )
       );

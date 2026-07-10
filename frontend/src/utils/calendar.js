@@ -71,7 +71,9 @@ export function formatEventTime(isoDateTime, endsAt) {
 
 /** @param {string} schedule ISO DateTime */
 export function getDateKey(schedule) {
-  return schedule.slice(0, 10);
+  const date = new Date(schedule);
+  if (Number.isNaN(date.getTime())) return "";
+  return toISODate(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
 /**
@@ -89,21 +91,15 @@ export function getEventsForDate(events, dateKey) {
 /**
  * @param {import('../data/calendarMock.js').CalendarEvent[]} events
  * @param {string} dateKey
- * @returns {Array<{ meetingId: number, muted: boolean, pending: boolean }>}
+ * @returns {Array<{ meetingId: number, muted: boolean, pending: boolean, cancelled: boolean }>}
  */
 export function getDayEventBars(events, dateKey) {
-  return getEventsForDate(events, dateKey).map((event) => {
-    const muted =
-      event.status === "VOTING" ||
-      event.status === "FINISHED" ||
-      event.status === "CANCELLED";
-
-    return {
-      meetingId: event.meetingId,
-      muted,
-      pending: event.status === "PENDING",
-    };
-  });
+  return getEventsForDate(events, dateKey).map((event) => ({
+    meetingId: event.meetingId,
+    muted: event.status === "VOTING" || event.status === "FINISHED",
+    pending: event.status === "PENDING",
+    cancelled: event.status === "CANCELLED",
+  }));
 }
 
 /** @param {string|null|undefined} groupFilter */

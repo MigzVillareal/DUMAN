@@ -2,7 +2,11 @@ import { CALENDAR_MOCK_EVENTS } from "../data/calendarMock.js";
 import { getDateKey } from "../utils/calendar.js";
 import { USE_MOCK_CALENDAR } from "../data/mock.js";
 import { getAuthHeaders } from "../utils/authStorage.js";
-import { normalizeMeetingForCalendar } from "./meetingService.js";
+import {
+  mapAttendanceToRsvpStatus,
+  mapRsvpToAttendanceStatus,
+  normalizeMeetingForCalendar,
+} from "./meetingService.js";
 
 export { normalizeMeetingForCalendar };
 
@@ -50,7 +54,10 @@ export async function fetchCalendarEvents({
 
   return {
     events: (data.meetings ?? []).map((meeting) =>
-      normalizeMeetingForCalendar(meeting, meeting.myRsvp)
+      normalizeMeetingForCalendar(
+        meeting,
+        meeting.attendance?.[0] ?? meeting.myRsvp
+      )
     ),
   };
 }
@@ -65,10 +72,10 @@ export async function updateMeetingRsvp(meetingId, status) {
     return { meetingId, status };
   }
 
-  const response = await fetch(`/api/v1/meetings/${meetingId}/rsvp`, {
+  const response = await fetch(`/api/v1/meetings/${meetingId}/attendance`, {
     method: "PATCH",
     headers: getAuthHeaders(true),
-    body: JSON.stringify({ status }),
+    body: JSON.stringify({ status: mapRsvpToAttendanceStatus(status) }),
   });
 
   const data = await response.json();
@@ -77,7 +84,10 @@ export async function updateMeetingRsvp(meetingId, status) {
     throw new Error(data.errorMessage ?? "Unable to update RSVP.");
   }
 
-  return data;
+  return {
+    meetingId,
+    status: mapAttendanceToRsvpStatus(data.attendance?.status ?? status),
+  };
 }
 
 function filterMockEvents({ from, to, groupFilter }) {

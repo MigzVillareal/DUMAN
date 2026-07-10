@@ -2,13 +2,30 @@ import { Link } from "react-router-dom";
 import { formatEventTime, formatLongDate } from "../../utils/calendar.js";
 import "../../css/pages/Meetings.css";
 
+function getEventStatusClass(status) {
+  switch (status) {
+    case "PENDING":
+      return "calendar-event-card--pending";
+    case "CANCELLED":
+      return "calendar-event-card--cancelled";
+    case "FINISHED":
+    case "VOTING":
+      return "calendar-event-card--muted";
+    default:
+      return "calendar-event-card--upcoming";
+  }
+}
+
 function CalendarEventCard({ event, onRsvp, isUpdating }) {
-  const { status: rsvpStatus } = event.rsvp;
+  const rsvpStatus = event.rsvp?.status ?? "PENDING";
+  const isFinalized = event.status !== "PENDING";
   const schedule =
     event.scheduleLabel ?? formatEventTime(event.schedule, event.endsAt);
 
   return (
-    <article className="calendar-event-card">
+    <article
+      className={`calendar-event-card ${getEventStatusClass(event.status)}`}
+    >
       <div className="calendar-event-card__info">
         <p className="meetings-list-item__name">
           {event.group?.name ?? "—"} &mdash; {event.title}
@@ -28,24 +45,36 @@ function CalendarEventCard({ event, onRsvp, isUpdating }) {
           View Details
         </Link>
 
-        <div className="calendar-event-card__actions">
-          <button
-            type="button"
-            className={`calendar-rsvp-btn calendar-rsvp-btn--attending${rsvpStatus === "ATTENDING" ? " calendar-rsvp-btn--active" : ""}`}
-            disabled={isUpdating}
-            onClick={() => onRsvp(event.meetingId, "ATTENDING")}
-          >
-            Attending
-          </button>
-          <button
-            type="button"
-            className={`calendar-rsvp-btn calendar-rsvp-btn--decline${rsvpStatus === "DECLINED" ? " calendar-rsvp-btn--active" : ""}`}
-            disabled={isUpdating}
-            onClick={() => onRsvp(event.meetingId, "DECLINED")}
-          >
-            Decline
-          </button>
-        </div>
+        {rsvpStatus === "ATTENDING" && (
+          <p className="calendar-rsvp-status calendar-rsvp-status--confirmed">
+            Confirmed
+          </p>
+        )}
+
+        {rsvpStatus === "DECLINED" && (
+          <p className="calendar-rsvp-status calendar-rsvp-status--declined">
+            Declined
+          </p>
+        )}
+
+        {!isFinalized && rsvpStatus === "PENDING" && (
+          <div className="calendar-event-card__actions">
+            <button
+              type="button"
+              className={`calendar-rsvp-btn calendar-rsvp-btn--attending${isUpdating ? " calendar-rsvp-btn--loading" : ""}`}
+              onClick={() => onRsvp(event.meetingId, "ATTENDING")}
+            >
+              {isUpdating ? "Saving..." : "Attending"}
+            </button>
+            <button
+              type="button"
+              className={`calendar-rsvp-btn calendar-rsvp-btn--decline${isUpdating ? " calendar-rsvp-btn--loading" : ""}`}
+              onClick={() => onRsvp(event.meetingId, "DECLINED")}
+            >
+              {isUpdating ? "Saving..." : "Decline"}
+            </button>
+          </div>
+        )}
       </div>
     </article>
   );
@@ -80,7 +109,10 @@ function CalendarEventPanel({ selectedDate, events, onRsvp, updatingMeetingId })
               key={event.meetingId}
               event={event}
               onRsvp={onRsvp}
-              isUpdating={updatingMeetingId === event.meetingId}
+              isUpdating={
+                updatingMeetingId != null &&
+                Number(updatingMeetingId) === Number(event.meetingId)
+              }
             />
           ))
         )}
