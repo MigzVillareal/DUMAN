@@ -69,29 +69,49 @@ export function mapMeetingUiStatus(status) {
 }
 
 export function isMeetingTimeFinished(meeting) {
-  if (!meeting?.schedule) return false;
+  if (!meeting?.schedule && !meeting?.scheduleAt) return false;
 
-  const endTime = new Date(meeting.endsAt ?? meeting.schedule);
+  const schedule = meeting.scheduleAt ?? meeting.schedule;
+  const endTime = new Date(meeting.endsAt ?? schedule);
   return endTime.getTime() < Date.now();
 }
 
 export function resolveMeetingUiStatus(meeting) {
-  const status = meeting?.status;
-
-  if (status === "CANCELLED") return "cancelled";
-  if (isMeetingTimeFinished(meeting)) return "finished";
-
-  return mapMeetingUiStatus(status);
+  return mapMeetingUiStatus(meeting?.status);
 }
 
-export function isFinishedMeetingStatus(status, meeting = null) {
-  if (status === "CANCELLED" || meeting?.status === "CANCELLED") return false;
-  if (meeting && isMeetingTimeFinished(meeting)) return true;
+export function canMarkMeetingFinished(meeting) {
+  if (!meeting) return false;
+
+  const apiStatus = meeting.apiStatus ?? meeting.status;
+  return apiStatus === "UPCOMING" || apiStatus === "ONGOING";
+}
+
+export function isMeetingTimeOngoing(meeting) {
+  const schedule = meeting.scheduleAt ?? meeting.schedule;
+  if (!schedule) return false;
+
+  const start = new Date(schedule);
+  const end = new Date(meeting.endsAt ?? schedule);
+  const now = Date.now();
+
+  return start.getTime() <= now && now < end.getTime();
+}
+
+export function isOngoingMeeting(meeting) {
+  const status = meeting.apiStatus ?? meeting.status;
+
+  if (status === "ONGOING") return true;
+  if (status !== "UPCOMING") return false;
+
+  return isMeetingTimeOngoing(meeting);
+}
+
+export function isFinishedMeetingStatus(status) {
   return status === "FINISHED";
 }
 
-export function isUpcomingMeetingStatus(status, meeting = null) {
-  if (meeting && isMeetingTimeFinished(meeting)) return false;
+export function isUpcomingMeetingStatus(status) {
   return status === "UPCOMING" || status === "ONGOING";
 }
 
@@ -179,7 +199,8 @@ export function mapMeetingForMeetingsList(meeting) {
     scheduleAt: meeting.schedule,
     endsAt: meeting.endsAt ?? null,
     date: getDateKey(meeting.schedule),
-    status: resolveMeetingUiStatus(meeting),
+    status: mapMeetingUiStatus(meeting.status),
+    apiStatus: meeting.status,
     finalized: meeting.status !== "PENDING",
     description: meeting.description ?? "",
     attending: [],
@@ -238,7 +259,11 @@ export function mapMeetingForGroupPage(meeting, index = 0) {
     title: meeting.title,
     location: formatMeetingLocation(meeting),
     schedule: formatMeetingSchedule(meeting.schedule, meeting.endsAt),
+    scheduleAt: meeting.schedule,
+    endsAt: meeting.endsAt ?? null,
     date: getDateKey(meeting.schedule),
+    status: mapMeetingUiStatus(meeting.status),
+    apiStatus: meeting.status,
     description: meeting.description ?? "",
     defaultExpanded: index === 0,
   };

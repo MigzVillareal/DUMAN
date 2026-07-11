@@ -69,6 +69,8 @@ export const createMeeting = async (req, res) => {
                     `,
         });
 
+        const memberIds = members.map((member) => member.memberId);
+
         await createInAppNotification(memberIds, {
             groupId: parseInt(groupId),
             meetingId: meeting.meetingId,
@@ -170,6 +172,12 @@ export const updateMeetingStatus = async (req, res) => {
             data: { status }
         });
 
+        const members = await prisma.groupMember.findMany({
+            where: { groupId: meeting.groupId, status: "ACCEPTED" }
+        });
+
+        const memberIds = members.map((member) => member.memberId);
+
         if (status === "UPCOMING" && existing.status === "PENDING") {
             await createInAppNotification(memberIds, {
                 groupId: meeting.groupId,
@@ -178,12 +186,6 @@ export const updateMeetingStatus = async (req, res) => {
                 body: `The details for "${meeting.title}" have been finalized.`
             });
         }
-
-        const members = await prisma.groupMember.findMany({
-                where: { groupId: meeting.groupId, status: "ACCEPTED"}
-            });
-
-            const memberIds = members.map(member => member.memberId);
 
         if (status === "CANCELLED" && existing.status !== "CANCELLED") {
             try {

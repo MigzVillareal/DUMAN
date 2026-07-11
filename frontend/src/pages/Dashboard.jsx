@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import "../css/pages/Login.css";
 import "../css/pages/Dashboard.css";
+import "../css/pages/Meetings.css";
 import Icon from "../components/Icon.jsx";
 import PageHeader from "../components/PageHeader.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -13,6 +14,7 @@ import {
 } from "../services/groupService.js";
 import {
   fetchUserMeetings,
+  isOngoingMeeting,
   isUpcomingMeetingStatus,
   mapMeetingForMeetingsList,
 } from "../services/meetingService.js";
@@ -35,18 +37,32 @@ function MeetingCard({ meeting }) {
 
   return (
     <article
-      className={`auth-card dashboard-meeting-card${isToday(meeting.date) ? " meeting-card--today" : ""}`}
+      className={`auth-card dashboard-meeting-card${
+        isOngoingMeeting(meeting)
+          ? " meeting-card--ongoing"
+          : isToday(meeting.date)
+            ? " meeting-card--today"
+            : ""
+      }`}
     >
       <div className="dashboard-meeting-card__header">
         <div className="dashboard-meeting-card__info">
-          <h3 className="dashboard-meeting-card__title">
-            {meeting.group} — {meeting.title}
-          </h3>
+          <div className="dashboard-meeting-card__title-row">
+            <h3 className="dashboard-meeting-card__title">
+              {meeting.group} — {meeting.title}
+            </h3>
+            {isOngoingMeeting(meeting) && (
+              <span className="meetings-badge meetings-badge--ongoing">Ongoing</span>
+            )}
+          </div>
           <p className="dashboard-meeting-card__meta">{meeting.location}</p>
           <p className="dashboard-meeting-card__meta">{meeting.schedule}</p>
         </div>
         <div className="dashboard-meeting-card__actions">
-          <button type="button" className="btn-primary dashboard-btn-pill dashboard-btn-pill--soft">
+          <button
+            type="button"
+            className="meetings-detail__action-btn meetings-detail__action-btn--location"
+          >
             View Location
           </button>
           <button
@@ -96,7 +112,7 @@ function Dashboard() {
     try {
       const data = await fetchUserMeetings(user.userId);
       const upcomingMeetings = (data.meetings ?? [])
-        .filter((meeting) => isUpcomingMeetingStatus(meeting.status, meeting))
+        .filter((meeting) => isUpcomingMeetingStatus(meeting.status))
         .map(mapMeetingForMeetingsList)
         .sort((a, b) => a.date.localeCompare(b.date))
         .map((meeting, index) => ({

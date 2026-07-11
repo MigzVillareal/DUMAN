@@ -6,6 +6,7 @@ const ICONS = {
   plus: "fa-plus",
   pen: "fa-pen",
   trash: "fa-trash",
+  check: "fa-check",
   xmark: "fa-xmark",
   "chevron-down": "fa-chevron-down",
   signout: "fa-arrow-right-from-bracket",

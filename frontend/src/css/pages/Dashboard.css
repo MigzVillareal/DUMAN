@@ -52,6 +52,18 @@
   gap: 1rem;
 }
 
+.dashboard-meeting-card__title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.25rem;
+}
+
+.dashboard-meeting-card__title-row .dashboard-meeting-card__title {
+  margin-bottom: 0;
+}
+
 .dashboard-meeting-card__title {
   font-size: 0.9375rem;
   font-weight: var(--weight-bold);

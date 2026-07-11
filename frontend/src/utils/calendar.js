@@ -1,5 +1,3 @@
-import { isMeetingTimeFinished } from "../services/meetingService.js";
-
 /**
  * @param {number} year
  * @param {number} month 0-indexed
@@ -13,8 +11,7 @@ export function toISODate(year, month, day) {
  * @param {number} month 0-indexed
  * @returns {{ from: string, to: string }}
  */
-export function getMonthRange(year, month) {
-  const lastDay = new Date(year, month + 1, 0).getDate();
+export function getMonthRange(year, month) {  const lastDay = new Date(year, month + 1, 0).getDate();
   return {
     from: toISODate(year, month, 1),
     to: toISODate(year, month, lastDay),
@@ -98,10 +95,8 @@ export function getEventsForDate(events, dateKey) {
 export function getDayEventBars(events, dateKey) {
   return getEventsForDate(events, dateKey).map((event) => ({
     meetingId: event.meetingId,
-    muted:
-      event.status === "FINISHED" ||
-      (isMeetingTimeFinished(event) && event.status !== "CANCELLED"),
-    pending: event.status === "PENDING" && !isMeetingTimeFinished(event),
+    muted: event.status === "VOTING" || event.status === "FINISHED",
+    pending: event.status === "PENDING",
     cancelled: event.status === "CANCELLED",
   }));
 }

@@ -42,4 +42,6 @@
   --color-hover-surface: var(--color-hover);
   --color-meeting-today: var(--color-green);
   --color-meeting-today-text: var(--color-green-text);
+  --color-meeting-ongoing: var(--color-primary);
+  --color-meeting-ongoing-text: var(--color-primary);
 }

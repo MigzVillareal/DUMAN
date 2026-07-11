@@ -439,8 +439,8 @@
 }
 
 .calendar-rsvp-status--declined {
-  background-color: var(--color-inset);
-  color: #666;
+  background-color: #fde8e8;
+  color: #991b1b;
 }
 
 .calendar-rsvp-btn--attending {

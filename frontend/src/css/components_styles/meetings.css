@@ -7,3 +7,13 @@
 .meeting-card--today .dashboard-meeting-card__title {
   color: var(--color-meeting-today-text);
 }
+
+.meeting-card--ongoing {
+  border-color: var(--color-meeting-ongoing);
+  background-color: color-mix(in srgb, var(--color-meeting-ongoing) 8%, var(--color-inset));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-meeting-ongoing) 20%, transparent);
+}
+
+.meeting-card--ongoing .dashboard-meeting-card__title {
+  color: var(--color-meeting-ongoing-text);
+}

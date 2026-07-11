@@ -54,6 +54,7 @@ export default function Navbar() {
             navigate("/notifications");
           }}
           title="Notifications"
+          aria-label="Notifications"
         >
           <Icon icon="bell" />
           {hasNotification && <span className="navbar__notif-dot" />}
@@ -74,6 +75,7 @@ export default function Navbar() {
             className="navbar__signout-btn"
             onClick={() => setShowSignOutModal(true)}
             title="Sign Out"
+            aria-label="Sign out"
           >
             <Icon icon="signout" />
           </button>

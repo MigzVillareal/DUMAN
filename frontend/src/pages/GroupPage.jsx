@@ -11,12 +11,15 @@ import {
 } from "../services/groupService.js";
 import {
   createMeeting,
+  canMarkMeetingFinished,
   deleteMeeting,
   fetchGroupMeetings,
   isFinishedMeetingStatus,
+  isOngoingMeeting,
   isUpcomingMeetingStatus,
   mapMeetingForGroupPage,
   updateMeeting,
+  updateMeetingStatus,
 } from "../services/meetingService.js";
 import {
   canRemoveGroupMember,
@@ -189,8 +192,8 @@ function getDisplayedGroupMeetings(meetings, filter, isMock) {
   return (meetings ?? [])
     .filter((meeting) =>
       filter === "finished"
-        ? isFinishedMeetingStatus(meeting.status, meeting)
-        : isUpcomingMeetingStatus(meeting.status, meeting)
+        ? isFinishedMeetingStatus(meeting.status)
+        : isUpcomingMeetingStatus(meeting.status)
     )
     .sort((a, b) => {
       const diff =
@@ -325,22 +328,54 @@ function DeleteMeetingModal({ meeting, onClose, onConfirm }) {
   );
 }
 
-function GroupMeetingCard({ meeting, canManage, onEdit, onDelete }) {
+function GroupMeetingCard({ meeting, canManage, onEdit, onDelete, onMarkFinished, markingFinishedId }) {
   const [expanded, setExpanded] = useState(meeting.defaultExpanded);
+  const showFinishedAction =
+    canManage && canMarkMeetingFinished(meeting);
+  const isMarkingFinished = markingFinishedId === meeting.id;
 
   return (
     <article
-      className={`auth-card dashboard-meeting-card${isToday(meeting.date) ? " meeting-card--today" : ""}`}
+      className={`auth-card dashboard-meeting-card${
+        isOngoingMeeting(meeting)
+          ? " meeting-card--ongoing"
+          : isToday(meeting.date)
+            ? " meeting-card--today"
+            : ""
+      }`}
     >
       <div className="dashboard-meeting-card__header">
         <div className="dashboard-meeting-card__info">
-          <h3 className="dashboard-meeting-card__title">{meeting.title}</h3>
+          <div className="dashboard-meeting-card__title-row">
+            <h3 className="dashboard-meeting-card__title">{meeting.title}</h3>
+            {isOngoingMeeting(meeting) && (
+              <span className="meetings-badge meetings-badge--ongoing">Ongoing</span>
+            )}
+            {isFinishedMeetingStatus(meeting.status) && (
+              <span className="meetings-badge meetings-badge--finished">
+                <Icon icon="check" size="xs" /> Finished
+              </span>
+            )}
+          </div>
           <p className="dashboard-meeting-card__meta">{meeting.location}</p>
           <p className="dashboard-meeting-card__meta">{meeting.schedule}</p>
         </div>
         <div className="dashboard-meeting-card__actions">
           {canManage && (
             <>
+              {showFinishedAction && (
+                <button
+                  type="button"
+                  className="meetings-detail__action-btn meetings-detail__action-btn--finished"
+                  onClick={() => onMarkFinished(meeting)}
+                  disabled={isMarkingFinished}
+                  title="Mark meeting finished"
+                  aria-label={`Mark ${meeting.title} as finished`}
+                >
+                  <Icon icon="check" size="xs" />{" "}
+                  {isMarkingFinished ? "Updating..." : "Finish"}
+                </button>
+              )}
               <button
                 type="button"
                 className="meetings-detail__action-btn meetings-detail__action-btn--edit"
@@ -361,7 +396,10 @@ function GroupMeetingCard({ meeting, canManage, onEdit, onDelete }) {
               </button>
             </>
           )}
-          <button type="button" className="btn-primary group-page__btn-pill group-page__btn-pill--soft">
+          <button
+            type="button"
+            className="meetings-detail__action-btn meetings-detail__action-btn--location"
+          >
             View Location
           </button>
           <button
@@ -407,6 +445,7 @@ export default function GroupPage() {
   const [meetingToDelete, setMeetingToDelete] = useState(null);
   const [meetingFilter, setMeetingFilter] = useState("upcoming");
   const [meetingsLoading, setMeetingsLoading] = useState(!USE_MOCK_GROUPS);
+  const [markingFinishedId, setMarkingFinishedId] = useState(null);
 
   const displayedMeetings = useMemo(
     () => getDisplayedGroupMeetings(allMeetings, meetingFilter, USE_MOCK_GROUPS),
@@ -554,6 +593,18 @@ export default function GroupPage() {
     await deleteMeeting(meetingId);
     const result = await fetchGroupMeetings(group.groupId);
     setAllMeetings(result.meetings ?? []);
+  }, [group?.groupId]);
+
+  const handleMarkMeetingFinished = useCallback(async (meeting) => {
+    setMarkingFinishedId(meeting.id);
+    try {
+      await updateMeetingStatus(meeting.id, "FINISHED");
+      const result = await fetchGroupMeetings(group.groupId);
+      setAllMeetings(result.meetings ?? []);
+      setMeetingFilter("finished");
+    } finally {
+      setMarkingFinishedId(null);
+    }
   }, [group?.groupId]);
 
   const handleEditGroup = useCallback(async (id, payload) => {
@@ -749,6 +800,8 @@ export default function GroupPage() {
                   canManage={userIsLeader}
                   onEdit={(m) => setMeetingToEdit(m)}
                   onDelete={(m) => setMeetingToDelete(m)}
+                  onMarkFinished={handleMarkMeetingFinished}
+                  markingFinishedId={markingFinishedId}
                 />
               ))
             )}

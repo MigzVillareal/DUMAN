@@ -9,6 +9,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { useGroups } from "../context/GroupsContext.jsx";
 import {
   attachAttendanceToMeeting,
+  canMarkMeetingFinished,
   fetchUserMeetings,
   mapMeetingForMeetingsList,
   updateMeeting,
@@ -300,7 +301,15 @@ function DeleteConfirmModal({ meeting, onClose, onConfirm }) {
 }
 
 // ── Meeting detail panel ──────────────────────────────────────────────────────
-function MeetingDetailPanel({ meeting, canManage, onFinalize, onEdit, onDelete }) {
+function MeetingDetailPanel({
+  meeting,
+  canManage,
+  onFinalize,
+  onEdit,
+  onDelete,
+  onMarkFinished,
+  markingFinished,
+}) {
   if (!meeting) {
     return (
       <div className="meetings-detail meetings-detail--empty">
@@ -324,16 +333,39 @@ function MeetingDetailPanel({ meeting, canManage, onFinalize, onEdit, onDelete }
           </div>
           {canManage && (
             <div className="meetings-detail__actions">
+              {meeting.status === "pending" && (
+                <button
+                  type="button"
+                  className="meetings-detail__action-btn meetings-detail__action-btn--finalize"
+                  onClick={() => onFinalize(meeting)}
+                  title="Finalize meeting"
+                  aria-label="Finalize meeting"
+                >
+                  Finalize Meeting
+                </button>
+              )}
+              {canMarkMeetingFinished(meeting) && (
+                <button
+                  type="button"
+                  className="meetings-detail__action-btn meetings-detail__action-btn--finished"
+                  onClick={() => onMarkFinished(meeting)}
+                  disabled={markingFinished}
+                  title="Mark meeting finished"
+                  aria-label={`Mark ${meeting.title} as finished`}
+                >
+                  <Icon icon="check" size="xs" />{" "}
+                  {markingFinished ? "Updating..." : "Finish"}
+                </button>
+              )}
               <button
                 type="button"
                 id="edit-meeting-btn"
                 className="meetings-detail__action-btn meetings-detail__action-btn--edit"
                 onClick={() => onEdit(meeting)}
                 title="Edit meeting"
-                aria-label="Edit meeting"
+                aria-label={`Edit ${meeting.title}`}
               >
-                <Icon icon="pen" size="xs" />
-                Edit
+                <Icon icon="pen" size="xs" /> Edit
               </button>
               <button
                 type="button"
@@ -341,10 +373,9 @@ function MeetingDetailPanel({ meeting, canManage, onFinalize, onEdit, onDelete }
                 className="meetings-detail__action-btn meetings-detail__action-btn--delete"
                 onClick={() => onDelete(meeting)}
                 title="Delete meeting"
-                aria-label="Delete meeting"
+                aria-label={`Delete ${meeting.title}`}
               >
-                <Icon icon="xmark" size="xs" />
-                Delete
+                <Icon icon="trash" size="xs" /> Delete
               </button>
             </div>
           )}
@@ -368,18 +399,6 @@ function MeetingDetailPanel({ meeting, canManage, onFinalize, onEdit, onDelete }
           <MemberAttendance meeting={meeting} />
         </div>
       </div>
-
-      {meeting.status === "pending" && (
-        <div className="meetings-detail__footer">
-          <button
-            type="button"
-            className="meetings-btn meetings-btn--primary meetings-detail__finalize-btn"
-            onClick={() => onFinalize(meeting)}
-          >
-            Finalize Meeting
-          </button>
-        </div>
-      )}
     </div>
   );
 }
@@ -407,6 +426,7 @@ function Meetings() {
   const [modalMeeting, setModalMeeting] = useState(null);
   const [editingMeeting, setEditingMeeting] = useState(null);
   const [deletingMeeting, setDeletingMeeting] = useState(null);
+  const [markingFinishedId, setMarkingFinishedId] = useState(null);
 
   const loadMeetings = useCallback(async () => {
     if (!user?.userId) {
@@ -555,6 +575,23 @@ function Meetings() {
     removeMeeting(meeting.id);
   };
 
+  const handleMarkFinished = async (meeting) => {
+    setMarkingFinishedId(meeting.id);
+    try {
+      const data = await updateMeetingStatus(meeting.id, "FINISHED");
+      const mapped = mapMeetingForMeetingsList(data.meeting);
+      applyMeetingUpdate({
+        ...meeting,
+        ...mapped,
+        attending: meeting.attending ?? [],
+        notAttending: meeting.notAttending ?? [],
+      });
+      setFilter("finished");
+    } finally {
+      setMarkingFinishedId(null);
+    }
+  };
+
   // A user can manage a meeting if they are the owner (userId) of that meeting's group
   const canManageMeeting = (meeting) => {
     if (!meeting || !user) return false;
@@ -642,6 +679,8 @@ function Meetings() {
             onFinalize={openFinalizeModal}
             onEdit={(m) => setEditingMeeting(m)}
             onDelete={(m) => setDeletingMeeting(m)}
+            onMarkFinished={handleMarkFinished}
+            markingFinished={markingFinishedId === selected?.id}
           />
         </div>
       </div>
