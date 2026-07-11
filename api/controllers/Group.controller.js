@@ -195,11 +195,10 @@ export const sendInvite = async (req, res) => {
             }
         });
 
-        await createInAppNotification({
-            userId: user.userId,
+        await createInAppNotification([user.userId], {   // ✅ wrapped in array
             groupId: parseInt(groupId),
             title: "Group Invite",
-            body: `You've been invited to join a group.`
+            body: "You've been invited to join a group."
         });
 
         res.status(201).json({ member });
