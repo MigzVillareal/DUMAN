@@ -320,6 +320,13 @@ function MeetingDetailPanel({
     );
   }
 
+  // Status-based action permissions (leader-only)
+  const canEdit   = canManage && meeting.status === "pending";
+  const canDelete = canManage && (meeting.status === "cancelled" || meeting.status === "finished");
+  const canFinalize = canManage && meeting.status === "pending";
+  const canFinish = canManage && canMarkMeetingFinished(meeting);
+  const hasAnyAction = canEdit || canDelete || canFinalize || canFinish;
+
   return (
     <div className="meetings-detail-wrap">
       <div className="meetings-detail">
@@ -331,9 +338,9 @@ function MeetingDetailPanel({
             </div>
             <p className="meetings-detail__group">{meeting.group}</p>
           </div>
-          {canManage && (
+          {hasAnyAction && (
             <div className="meetings-detail__actions">
-              {meeting.status === "pending" && (
+              {canFinalize && (
                 <button
                   type="button"
                   className="meetings-detail__action-btn meetings-detail__action-btn--finalize"
@@ -344,7 +351,7 @@ function MeetingDetailPanel({
                   Finalize Meeting
                 </button>
               )}
-              {canMarkMeetingFinished(meeting) && (
+              {canFinish && (
                 <button
                   type="button"
                   className="meetings-detail__action-btn meetings-detail__action-btn--finished"
@@ -357,26 +364,30 @@ function MeetingDetailPanel({
                   {markingFinished ? "Updating..." : "Finish"}
                 </button>
               )}
-              <button
-                type="button"
-                id="edit-meeting-btn"
-                className="meetings-detail__action-btn meetings-detail__action-btn--edit"
-                onClick={() => onEdit(meeting)}
-                title="Edit meeting"
-                aria-label={`Edit ${meeting.title}`}
-              >
-                <Icon icon="pen" size="xs" /> Edit
-              </button>
-              <button
-                type="button"
-                id="delete-meeting-btn"
-                className="meetings-detail__action-btn meetings-detail__action-btn--delete"
-                onClick={() => onDelete(meeting)}
-                title="Delete meeting"
-                aria-label={`Delete ${meeting.title}`}
-              >
-                <Icon icon="trash" size="xs" /> Delete
-              </button>
+              {canEdit && (
+                <button
+                  type="button"
+                  id="edit-meeting-btn"
+                  className="meetings-detail__action-btn meetings-detail__action-btn--edit"
+                  onClick={() => onEdit(meeting)}
+                  title="Edit meeting"
+                  aria-label={`Edit ${meeting.title}`}
+                >
+                  <Icon icon="pen" size="xs" /> Edit
+                </button>
+              )}
+              {canDelete && (
+                <button
+                  type="button"
+                  id="delete-meeting-btn"
+                  className="meetings-detail__action-btn meetings-detail__action-btn--delete"
+                  onClick={() => onDelete(meeting)}
+                  title="Delete meeting"
+                  aria-label={`Delete ${meeting.title}`}
+                >
+                  <Icon icon="trash" size="xs" /> Delete
+                </button>
+              )}
             </div>
           )}
         </div>
