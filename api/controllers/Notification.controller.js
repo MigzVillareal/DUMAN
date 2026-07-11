@@ -1,9 +1,6 @@
 import prisma from "../lib/prisma.js";
 import { send24hReminderForMeeting } from "../services/Notification.service.js";
 
-const HOURS_BEFORE = 24;
-const WINDOW_MINUTES = 15; // match/exceed your cron interval
-
 export const send24hMeetingReminders = async (req, res) => {
     const authHeader = req.headers.authorization;
     if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
@@ -12,15 +9,15 @@ export const send24hMeetingReminders = async (req, res) => {
 
     try {
         const now = new Date();
-        const target = new Date(now.getTime() + HOURS_BEFORE * 60 * 60 * 1000);
-        const windowStart = new Date(target.getTime() - WINDOW_MINUTES * 60 * 1000);
-        const windowEnd = new Date(target.getTime() + WINDOW_MINUTES * 60 * 1000);
+        
+        const windowStart = new Date(now.getTime() + 20 * 60 * 60 * 1000); // ~20h out
+        const windowEnd = new Date(now.getTime() + 32 * 60 * 60 * 1000);   // ~32h out
 
         const meetings = await prisma.meeting.findMany({
             where: {
                 schedule: { gte: windowStart, lte: windowEnd },
                 isReminded: false,
-                status: { in: ["PENDING", "UPCOMING"] } // skip CANCELLED, ONGOING, FINISHED
+                status: { in: ["PENDING", "UPCOMING"] }
             }
         });
 

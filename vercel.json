@@ -13,7 +13,7 @@
   "crons": [
     {
       "path": "/api/cron/check-24h-meetings",
-      "schedule": "*/15 * * * *"
+      "schedule": "0 23 * * *"
     }
   ]
 }
