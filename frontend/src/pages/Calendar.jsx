@@ -9,7 +9,7 @@ import CalendarEventPanel from "../components/calendar/CalendarEventPanel.jsx";
 import CreateMeetingModal from "../components/CreateMeetingModal.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useGroups } from "../context/GroupsContext.jsx";
-import { createMeeting } from "../services/meetingService.js";
+import { createMeeting, mapMeetingUiStatus } from "../services/meetingService.js";
 import {
   fetchCalendarEvents,
   updateMeetingRsvp,
@@ -22,12 +22,21 @@ import {
 
 const today = new Date();
 
+const STATUS_FILTERS = [
+  { key: "all", label: "All Status" },
+  { key: "upcoming", label: "Upcoming" },
+  { key: "pending", label: "Pending" },
+  { key: "finished", label: "Finished" },
+  { key: "cancelled", label: "Cancelled" },
+];
+
 function Calendar() {
   const { user } = useAuth();
   const { groups } = useGroups();
   const [visibleYear, setVisibleYear] = useState(today.getFullYear());
   const [visibleMonth, setVisibleMonth] = useState(today.getMonth());
   const [groupFilter, setGroupFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [selectedDate, setSelectedDate] = useState(
     toISODate(today.getFullYear(), today.getMonth(), today.getDate())
   );
@@ -67,13 +76,21 @@ function Calendar() {
     }
   }, [user?.userId, monthRange.from, monthRange.to, groupFilter, groups]);
 
+  const filteredEvents = useMemo(() => {
+    if (statusFilter === "all") return events;
+
+    return events.filter(
+      (event) => mapMeetingUiStatus(event.status) === statusFilter
+    );
+  }, [events, statusFilter]);
+
   useEffect(() => {
     loadEvents();
   }, [loadEvents]);
 
   const selectedDayEvents = useMemo(
-    () => (selectedDate ? getEventsForDate(events, selectedDate) : []),
-    [events, selectedDate]
+    () => (selectedDate ? getEventsForDate(filteredEvents, selectedDate) : []),
+    [filteredEvents, selectedDate]
   );
 
   const handlePrevMonth = () => {
@@ -142,11 +159,25 @@ function Calendar() {
         }
       />
 
-      <CalendarGroupFilters
-        groups={groups}
-        activeFilter={groupFilter}
-        onChange={setGroupFilter}
-      />
+      <div className="calendar-filter-stack">
+        <CalendarGroupFilters
+          groups={groups}
+          activeFilter={groupFilter}
+          onChange={setGroupFilter}
+        />
+        <nav className="calendar-filters" aria-label="Status filters">
+          {STATUS_FILTERS.map((filter) => (
+            <button
+              key={filter.key}
+              type="button"
+              className={`calendar-filter-tab${statusFilter === filter.key ? " calendar-filter-tab--active" : ""}`}
+              onClick={() => setStatusFilter(filter.key)}
+            >
+              {filter.label}
+            </button>
+          ))}
+        </nav>
+      </div>
 
       {error && (
         <p className="calendar-page__error" role="alert">
@@ -162,7 +193,7 @@ function Calendar() {
             <CalendarMonthView
               year={visibleYear}
               month={visibleMonth}
-              events={events}
+              events={filteredEvents}
               selectedDate={selectedDate}
               todayDate={toISODate(
                 today.getFullYear(),

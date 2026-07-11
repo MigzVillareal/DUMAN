@@ -113,6 +113,13 @@ export const campusLocations = [
     floors: ["1", "2"],
   }),
   createBuildingLocation({
+    id: "college-reading-center",
+    building: "College Reading Center",
+    col: 10,
+    row: 6,
+    floors: ["1", "2"],
+  }),
+  createBuildingLocation({
     id: "arrupe-building",
     building: "Arrupe Bldg.",
     col: 15,

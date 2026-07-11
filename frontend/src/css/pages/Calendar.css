@@ -19,6 +19,13 @@
 }
 
 /* ── Group filter pills ─────────────────────────────────────────── */
+.calendar-filter-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
 .calendar-filters {
   display: flex;
   gap: 0.375rem;

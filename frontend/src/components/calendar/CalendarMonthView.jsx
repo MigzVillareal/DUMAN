@@ -6,7 +6,7 @@ import {
 } from "../../utils/calendar.js";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const MAX_VISIBLE_BARS = 3;
+const MAX_VISIBLE_BARS = 5;
 
 function CalendarMonthView({
   year,
@@ -75,7 +75,7 @@ function CalendarMonthView({
 
           const bars = getDayEventBars(events, cell.date);
           const visibleBars = bars.slice(0, MAX_VISIBLE_BARS);
-          const hiddenBarCount = bars.length - visibleBars.length;
+          const hasMoreBars = bars.length > MAX_VISIBLE_BARS;
           const dayEvents = getEventsForDate(events, cell.date);
           const isSelected = selectedDate === cell.date;
           const isToday = todayDate === cell.date;
@@ -107,10 +107,8 @@ function CalendarMonthView({
                       }`}
                     />
                   ))}
-                  {hiddenBarCount > 0 && (
-                    <span className="calendar-day__bar-overflow">
-                      +{hiddenBarCount}
-                    </span>
+                  {hasMoreBars && (
+                    <span className="calendar-day__bar-overflow">+</span>
                   )}
                 </div>
               )}
