@@ -38,3 +38,50 @@ export const send24hMeetingReminders = async (req, res) => {
         res.status(500).json({ errorMessage: "Unable to send meeting reminders." });
     }
 };
+
+export const getUserNotifications = async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const notifications = await prisma.notification.findMany({
+            where: {
+                userId: parseInt(userId),
+            },
+            orderBy: {
+                createdAt: "desc",
+            },
+        });
+
+        res.status(200).json({ notifications });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            errorMessage: "Unable to get notifications."
+        });
+    }
+};
+
+export const markNotificationAsRead = async (req, res) => {
+    try {
+        const { notificationId } = req.params;
+
+        const notification = await prisma.notification.update({
+            where: {
+                notificationId: parseInt(notificationId),
+            },
+            data: {
+                isRead: true,
+            },
+        });
+
+        res.status(200).json({
+            message: "Notification marked as read.",
+            notification,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            errorMessage: "Unable to mark notification as read.",
+        });
+    }
+};
