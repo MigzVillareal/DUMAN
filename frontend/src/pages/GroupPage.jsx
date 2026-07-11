@@ -22,6 +22,7 @@ import {
   updateMeetingStatus,
 } from "../services/meetingService.js";
 import {
+  canLeaveGroup,
   canRemoveGroupMember,
   ensureOwnerAsLeader,
   isGroupLeader,
@@ -32,7 +33,6 @@ import InviteMembersModal from "../components/InviteMembersModal.jsx";
 import CreateMeetingModal from "../components/CreateMeetingModal.jsx";
 import RemoveMemberModal from "../components/RemoveMemberModal.jsx";
 import PageHeader from "../components/PageHeader.jsx";
-import { isToday } from "../utils/date.js";
 import "../css/pages/Login.css";
 import "../css/pages/Dashboard.css";
 import "../css/pages/GroupPage.css";
@@ -145,21 +145,67 @@ function DeleteGroupModal({ group, onClose, onConfirm }) {
       role="dialog" aria-modal="true" aria-labelledby="delete-group-modal-title"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="gp-modal gp-modal--danger">
+      <div className="gp-modal gp-modal--danger gp-modal--confirm">
         <div className="gp-modal__header">
           <h2 id="delete-group-modal-title" className="gp-modal__title">Delete Group</h2>
-          <button className="gp-modal__close" onClick={onClose} aria-label="Close"><IconClose /></button>
         </div>
         <div className="gp-modal__body">
           <p className="gp-modal__confirm-text">
             Are you sure you want to delete <strong>&ldquo;{group.name}&rdquo;</strong>?{" "}
-            This action <em>cannot</em> be undone and will permanently remove the group and all its data.
+            This action cannot be undone and will permanently remove the group and all its data.
           </p>
           {error && <p className="gp-modal__error">{error}</p>}
         </div>
         <div className="gp-modal__actions gp-modal__actions--footer">
           <button type="button" className="gp-modal__btn gp-modal__btn--ghost" onClick={onClose} disabled={deleting}>Cancel</button>
           <button type="button" className="gp-modal__btn gp-modal__btn--destructive" onClick={handleDelete} disabled={deleting}>{deleting ? "Deleting…" : "Delete Group"}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Leave Group Modal ─────────────────────────────────────────────────────────
+function LeaveGroupModal({ group, onClose, onConfirm }) {
+  const [leaving, setLeaving] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    function onKey(e) { if (e.key === "Escape") onClose(); }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  async function handleLeave() {
+    setLeaving(true); setError(null);
+    try {
+      await onConfirm();
+      onClose();
+    } catch (err) {
+      setError(err.message ?? "Failed to leave group.");
+      setLeaving(false);
+    }
+  }
+
+  return (
+    <div
+      className="gp-modal-backdrop"
+      role="dialog" aria-modal="true" aria-labelledby="leave-group-modal-title"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <div className="gp-modal gp-modal--danger gp-modal--confirm">
+        <div className="gp-modal__header">
+          <h2 id="leave-group-modal-title" className="gp-modal__title">Leave Group</h2>
+        </div>
+        <div className="gp-modal__body">
+          <p className="gp-modal__confirm-text">
+            Are you sure you want to leave <strong>&ldquo;{group.name}&rdquo;</strong>? You will no longer see this group&apos;s meetings.
+          </p>
+          {error && <p className="gp-modal__error">{error}</p>}
+        </div>
+        <div className="gp-modal__actions gp-modal__actions--footer">
+          <button type="button" className="gp-modal__btn gp-modal__btn--ghost" onClick={onClose} disabled={leaving}>Cancel</button>
+          <button type="button" className="gp-modal__btn gp-modal__btn--destructive" onClick={handleLeave} disabled={leaving}>{leaving ? "Leaving…" : "Leave Group"}</button>
         </div>
       </div>
     </div>
@@ -303,47 +349,84 @@ function DeleteMeetingModal({ meeting, onClose, onConfirm }) {
 
   return (
     <div
-      className="meeting-modal-overlay"
+      className="gp-modal-backdrop"
       role="dialog" aria-modal="true" aria-labelledby="delete-meeting-modal-title"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="meeting-modal meeting-modal--sm">
-        <div className="meeting-modal__header">
-          <h2 id="delete-meeting-modal-title" className="meeting-modal__title">Delete Meeting</h2>
-          <button className="meeting-modal__close" onClick={onClose} aria-label="Close"><IconClose /></button>
+      <div className="gp-modal gp-modal--danger gp-modal--confirm">
+        <div className="gp-modal__header">
+          <h2 id="delete-meeting-modal-title" className="gp-modal__title">Delete Meeting</h2>
         </div>
-        <div className="meeting-modal__body">
-          <p className="meeting-modal__delete-msg">
+        <div className="gp-modal__body">
+          <p className="gp-modal__confirm-text">
             Are you sure you want to delete <strong>&ldquo;{meeting.title}&rdquo;</strong>?{" "}
-            This action <em>cannot</em> be undone.
+            This action cannot be undone.
           </p>
-          {error && <p className="meeting-modal__error">{error}</p>}
-          <div className="meeting-modal__actions">
-            <button type="button" className="gp-modal__btn gp-modal__btn--ghost" onClick={onClose} disabled={deleting}>Cancel</button>
-            <button type="button" className="gp-modal__btn gp-modal__btn--destructive" onClick={handleDelete} disabled={deleting}>{deleting ? "Deleting…" : "Delete Meeting"}</button>
-          </div>
+          {error && <p className="gp-modal__error">{error}</p>}
+        </div>
+        <div className="gp-modal__actions gp-modal__actions--footer">
+          <button type="button" className="gp-modal__btn gp-modal__btn--ghost" onClick={onClose} disabled={deleting}>Cancel</button>
+          <button type="button" className="gp-modal__btn gp-modal__btn--destructive" onClick={handleDelete} disabled={deleting}>{deleting ? "Deleting…" : "Delete Meeting"}</button>
         </div>
       </div>
     </div>
   );
 }
 
-function GroupMeetingCard({ meeting, canManage, onEdit, onDelete, onMarkFinished, markingFinishedId }) {
+// ── Finish Meeting Confirm Modal ──────────────────────────────────────────────
+function FinishMeetingModal({ meeting, onClose, onConfirm }) {
+  const [finishing, setFinishing] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    function onKey(e) { if (e.key === "Escape") onClose(); }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  async function handleFinish() {
+    setFinishing(true); setError(null);
+    try {
+      await onConfirm(meeting);
+      onClose();
+    } catch (err) {
+      setError(err.message ?? "Failed to finish meeting.");
+      setFinishing(false);
+    }
+  }
+
+  return (
+    <div
+      className="gp-modal-backdrop"
+      role="dialog" aria-modal="true" aria-labelledby="finish-meeting-modal-title"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <div className="gp-modal gp-modal--confirm">
+        <div className="gp-modal__header">
+          <h2 id="finish-meeting-modal-title" className="gp-modal__title">Finish Meeting</h2>
+        </div>
+        <div className="gp-modal__body">
+          <p className="gp-modal__confirm-text">
+            Are you sure you want to mark <strong>&ldquo;{meeting.title}&rdquo;</strong> as finished?
+          </p>
+          {error && <p className="gp-modal__error">{error}</p>}
+        </div>
+        <div className="gp-modal__actions gp-modal__actions--footer">
+          <button type="button" className="gp-modal__btn gp-modal__btn--ghost" onClick={onClose} disabled={finishing}>Cancel</button>
+          <button type="button" className="gp-modal__btn gp-modal__btn--primary" onClick={handleFinish} disabled={finishing}>Finish Meeting</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function GroupMeetingCard({ meeting, canManage, onEdit, onDelete, onFinish }) {
   const [expanded, setExpanded] = useState(meeting.defaultExpanded);
   const showFinishedAction =
     canManage && canMarkMeetingFinished(meeting);
-  const isMarkingFinished = markingFinishedId === meeting.id;
 
   return (
-    <article
-      className={`auth-card dashboard-meeting-card${
-        isOngoingMeeting(meeting)
-          ? " meeting-card--ongoing"
-          : isToday(meeting.date)
-            ? " meeting-card--today"
-            : ""
-      }`}
-    >
+    <article className="auth-card dashboard-meeting-card">
       <div className="dashboard-meeting-card__header">
         <div className="dashboard-meeting-card__info">
           <div className="dashboard-meeting-card__title-row">
@@ -367,13 +450,11 @@ function GroupMeetingCard({ meeting, canManage, onEdit, onDelete, onMarkFinished
                 <button
                   type="button"
                   className="meetings-detail__action-btn meetings-detail__action-btn--finished"
-                  onClick={() => onMarkFinished(meeting)}
-                  disabled={isMarkingFinished}
+                  onClick={() => onFinish(meeting)}
                   title="Mark meeting finished"
                   aria-label={`Mark ${meeting.title} as finished`}
                 >
-                  <Icon icon="check" size="xs" />{" "}
-                  {isMarkingFinished ? "Updating..." : "Finish"}
+                  <Icon icon="check" size="xs" /> Finish
                 </button>
               )}
               <button
@@ -427,7 +508,7 @@ export default function GroupPage() {
   const { groupId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { groups, loading, setGroupMembers, editGroup, removeGroup } = useGroups();
+  const { groups, loading, setGroupMembers, editGroup, removeGroup, leaveGroup } = useGroups();
   const group = groups.find((g) => g.id === groupId);
   const [members, setMembers] = useState([]);
   const [membersLoading, setMembersLoading] = useState(true);
@@ -440,12 +521,13 @@ export default function GroupPage() {
   const [showCreateMeetingModal, setShowCreateMeetingModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [allMeetings, setAllMeetings] = useState([]);
   const [meetingToEdit, setMeetingToEdit] = useState(null);
   const [meetingToDelete, setMeetingToDelete] = useState(null);
+  const [meetingToFinish, setMeetingToFinish] = useState(null);
   const [meetingFilter, setMeetingFilter] = useState("upcoming");
   const [meetingsLoading, setMeetingsLoading] = useState(!USE_MOCK_GROUPS);
-  const [markingFinishedId, setMarkingFinishedId] = useState(null);
 
   const displayedMeetings = useMemo(
     () => getDisplayedGroupMeetings(allMeetings, meetingFilter, USE_MOCK_GROUPS),
@@ -582,6 +664,7 @@ export default function GroupPage() {
   if (!group) return <Navigate to="/groups" replace />;
 
   const userIsLeader = isGroupLeader(user, group, members);
+  const userCanLeave = canLeaveGroup(user, group, members);
 
   const handleEditMeeting = useCallback(async (meetingId, payload) => {
     await updateMeeting(meetingId, payload);
@@ -596,15 +679,10 @@ export default function GroupPage() {
   }, [group?.groupId]);
 
   const handleMarkMeetingFinished = useCallback(async (meeting) => {
-    setMarkingFinishedId(meeting.id);
-    try {
-      await updateMeetingStatus(meeting.id, "FINISHED");
-      const result = await fetchGroupMeetings(group.groupId);
-      setAllMeetings(result.meetings ?? []);
-      setMeetingFilter("finished");
-    } finally {
-      setMarkingFinishedId(null);
-    }
+    await updateMeetingStatus(meeting.meetingId ?? meeting.id, "FINISHED");
+    const result = await fetchGroupMeetings(group.groupId);
+    setAllMeetings(result.meetings ?? []);
+    setMeetingFilter("finished");
   }, [group?.groupId]);
 
   const handleEditGroup = useCallback(async (id, payload) => {
@@ -615,6 +693,18 @@ export default function GroupPage() {
     await removeGroup(id);
     navigate("/groups", { replace: true });
   }, [removeGroup, navigate]);
+
+  const handleLeaveGroup = useCallback(async () => {
+    if (!USE_MOCK_GROUPS) {
+      const data = await removeGroupMember(group.groupId, user.userId);
+      if (data.errorMessage) {
+        throw new Error(data.errorMessage);
+      }
+    }
+
+    leaveGroup(group.id);
+    navigate("/groups", { replace: true });
+  }, [group?.id, group?.groupId, leaveGroup, navigate, user?.userId]);
 
   const handleRemoveMember = async (member) => {
     const allowed =
@@ -660,14 +750,15 @@ export default function GroupPage() {
       setMemberToRemove(null);
     } catch (err) {
       setRemoveError(err.message || "Unable to remove member.");
+      throw err;
     } finally {
       setRemovingMemberId(null);
     }
   };
 
-  const handleConfirmRemove = () => {
+  const handleConfirmRemove = async () => {
     if (memberToRemove) {
-      handleRemoveMember(memberToRemove);
+      await handleRemoveMember(memberToRemove);
     }
   };
 
@@ -752,6 +843,18 @@ export default function GroupPage() {
                 </button>
               </div>
             )}
+            {userCanLeave && (
+              <button
+                type="button"
+                className="meetings-detail__action-btn meetings-detail__action-btn--delete"
+                title="Leave group"
+                aria-label="Leave group"
+                onClick={() => setShowLeaveModal(true)}
+              >
+                <Icon icon="signout" size="xs" />
+                Leave Group
+              </button>
+            )}
             <button
               type="button"
               className="page-action-btn page-action-btn--primary"
@@ -800,8 +903,7 @@ export default function GroupPage() {
                   canManage={userIsLeader}
                   onEdit={(m) => setMeetingToEdit(m)}
                   onDelete={(m) => setMeetingToDelete(m)}
-                  onMarkFinished={handleMarkMeetingFinished}
-                  markingFinishedId={markingFinishedId}
+                  onFinish={(m) => setMeetingToFinish(m)}
                 />
               ))
             )}
@@ -913,6 +1015,14 @@ export default function GroupPage() {
         />
       )}
 
+      {meetingToFinish && (
+        <FinishMeetingModal
+          meeting={meetingToFinish}
+          onClose={() => setMeetingToFinish(null)}
+          onConfirm={handleMarkMeetingFinished}
+        />
+      )}
+
       {memberToRemove && (
         <RemoveMemberModal
           memberName={memberToRemove.name}
@@ -921,7 +1031,6 @@ export default function GroupPage() {
             if (!removingMemberId) setMemberToRemove(null);
           }}
           onConfirm={handleConfirmRemove}
-          confirming={removingMemberId === memberToRemove.id}
         />
       )}
 
@@ -938,6 +1047,14 @@ export default function GroupPage() {
           group={group}
           onClose={() => setShowDeleteModal(false)}
           onConfirm={handleDeleteGroup}
+        />
+      )}
+
+      {showLeaveModal && (
+        <LeaveGroupModal
+          group={group}
+          onClose={() => setShowLeaveModal(false)}
+          onConfirm={handleLeaveGroup}
         />
       )}
     </div>

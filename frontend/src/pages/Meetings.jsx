@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import "../css/pages/Login.css";
 import "../css/pages/Meetings.css";
+import "../css/pages/GroupPage.css";
 import Icon from "../components/Icon.jsx";
 import PageHeader from "../components/PageHeader.jsx";
 import FinalizeMeetingModal from "../components/FinalizeMeetingModal.jsx";
@@ -254,15 +255,6 @@ function DeleteConfirmModal({ meeting, onClose, onConfirm }) {
           <h2 id="delete-meeting-title" className="meeting-modal__title">
             Delete Meeting
           </h2>
-          <button
-            type="button"
-            className="meeting-modal__close"
-            onClick={onClose}
-            aria-label="Close"
-            disabled={deleting}
-          >
-            &times;
-          </button>
         </div>
 
         <div className="meeting-modal__body">
@@ -301,6 +293,59 @@ function DeleteConfirmModal({ meeting, onClose, onConfirm }) {
   );
 }
 
+// ── Finish Confirmation Modal ─────────────────────────────────────────────────
+function FinishConfirmModal({ meeting, onClose, onConfirm }) {
+  const [finishing, setFinishing] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    function onKey(e) { if (e.key === "Escape") onClose(); }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  const handleConfirm = async () => {
+    if (finishing) return;
+
+    setFinishing(true);
+    setError(null);
+
+    try {
+      await onConfirm(meeting);
+      onClose();
+    } catch (err) {
+      setError(err.message ?? "Unable to finish meeting.");
+      setFinishing(false);
+    }
+  };
+
+  return (
+    <div
+      className="gp-modal-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="finish-meeting-title"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <div className="gp-modal gp-modal--confirm">
+        <div className="gp-modal__header">
+          <h2 id="finish-meeting-title" className="gp-modal__title">Finish Meeting</h2>
+        </div>
+        <div className="gp-modal__body">
+          <p className="gp-modal__confirm-text">
+            Are you sure you want to mark <strong>&ldquo;{meeting.title}&rdquo;</strong> as finished?
+          </p>
+          {error && <p className="gp-modal__error" role="alert">{error}</p>}
+        </div>
+        <div className="gp-modal__actions gp-modal__actions--footer">
+          <button type="button" className="gp-modal__btn gp-modal__btn--ghost" onClick={onClose} disabled={finishing}>Cancel</button>
+          <button type="button" className="gp-modal__btn gp-modal__btn--primary" onClick={handleConfirm} disabled={finishing}>Finish Meeting</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Meeting detail panel ──────────────────────────────────────────────────────
 function MeetingDetailPanel({
   meeting,
@@ -309,8 +354,7 @@ function MeetingDetailPanel({
   onFinalize,
   onEdit,
   onDelete,
-  onMarkFinished,
-  markingFinished,
+  onFinish,
 }) {
   if (!meeting) {
     return (
@@ -360,13 +404,11 @@ function MeetingDetailPanel({
                 <button
                   type="button"
                   className="meetings-detail__action-btn meetings-detail__action-btn--finished"
-                  onClick={() => onMarkFinished(meeting)}
-                  disabled={markingFinished}
+                  onClick={() => onFinish(meeting)}
                   title="Mark meeting finished"
                   aria-label={`Mark ${meeting.title} as finished`}
                 >
-                  <Icon icon="check" size="xs" />{" "}
-                  {markingFinished ? "Updating..." : "Finish"}
+                  <Icon icon="check" size="xs" /> Finish
                 </button>
               )}
               {canEdit && (
@@ -442,7 +484,7 @@ function Meetings() {
   const [modalMeeting, setModalMeeting] = useState(null);
   const [editingMeeting, setEditingMeeting] = useState(null);
   const [deletingMeeting, setDeletingMeeting] = useState(null);
-  const [markingFinishedId, setMarkingFinishedId] = useState(null);
+  const [finishingMeeting, setFinishingMeeting] = useState(null);
 
   const loadMeetings = useCallback(async () => {
     if (!user?.userId) {
@@ -592,20 +634,15 @@ function Meetings() {
   };
 
   const handleMarkFinished = async (meeting) => {
-    setMarkingFinishedId(meeting.id);
-    try {
-      const data = await updateMeetingStatus(meeting.id, "FINISHED");
-      const mapped = mapMeetingForMeetingsList(data.meeting);
-      applyMeetingUpdate({
-        ...meeting,
-        ...mapped,
-        attending: meeting.attending ?? [],
-        notAttending: meeting.notAttending ?? [],
-      });
-      setFilter("finished");
-    } finally {
-      setMarkingFinishedId(null);
-    }
+    const data = await updateMeetingStatus(meeting.id, "FINISHED");
+    const mapped = mapMeetingForMeetingsList(data.meeting);
+    applyMeetingUpdate({
+      ...meeting,
+      ...mapped,
+      attending: meeting.attending ?? [],
+      notAttending: meeting.notAttending ?? [],
+    });
+    setFilter("finished");
   };
 
   // A user can manage a meeting if they are the owner (userId) of that meeting's group
@@ -704,8 +741,7 @@ function Meetings() {
             onFinalize={openFinalizeModal}
             onEdit={(m) => setEditingMeeting(m)}
             onDelete={(m) => setDeletingMeeting(m)}
-            onMarkFinished={handleMarkFinished}
-            markingFinished={markingFinishedId === selected?.id}
+            onFinish={(m) => setFinishingMeeting(m)}
           />
         </div>
       </div>
@@ -736,6 +772,14 @@ function Meetings() {
           meeting={deletingMeeting}
           onClose={() => setDeletingMeeting(null)}
           onConfirm={handleDeleteConfirm}
+        />
+      )}
+
+      {finishingMeeting && (
+        <FinishConfirmModal
+          meeting={finishingMeeting}
+          onClose={() => setFinishingMeeting(null)}
+          onConfirm={handleMarkFinished}
         />
       )}
     </div>

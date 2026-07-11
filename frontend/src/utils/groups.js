@@ -163,6 +163,16 @@ export function canRemoveGroupMember(authUser, group, member, members = []) {
   return true;
 }
 
+export function canLeaveGroup(authUser, group, members = []) {
+  if (!authUser || !group) return false;
+  if (isGroupLeader(authUser, group, members)) return false;
+
+  return members.some(
+    (member) =>
+      Number(member.id) === Number(authUser.userId) && member.role === "member"
+  );
+}
+
 export function ensureOwnerAsLeader(members, user, groupOwnerId) {
   if (!user || groupOwnerId !== user.userId) return members;
 

@@ -193,6 +193,10 @@ export function GroupsProvider({ children }) {
     setGroups((prev) => prev.filter((g) => g.id !== String(groupId)));
   }, []);
 
+  const leaveGroup = useCallback((targetGroupId) => {
+    setGroups((prev) => prev.filter((g) => g.id !== String(targetGroupId)));
+  }, []);
+
   return (
     <GroupsContext.Provider
       value={{
@@ -200,6 +204,7 @@ export function GroupsProvider({ children }) {
         addGroup,
         editGroup,
         removeGroup,
+        leaveGroup,
         mergeGroup,
         setGroupMembers,
         loading,

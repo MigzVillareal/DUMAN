@@ -7,6 +7,9 @@
 }
 
 .group-page__btn-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   width: auto;
   padding: 0.45rem 1.1rem;
   font-size: 0.8125rem;
@@ -231,6 +234,18 @@
 
 .gp-modal--danger .gp-modal__title {
   color: var(--color-destructive, #e05555);
+}
+
+.gp-modal--confirm {
+  border: none;
+}
+
+.gp-modal--confirm .gp-modal__header {
+  border-bottom: none;
+}
+
+.gp-modal--confirm .gp-modal__actions--footer {
+  border-top: none;
 }
 
 .gp-modal__close {
