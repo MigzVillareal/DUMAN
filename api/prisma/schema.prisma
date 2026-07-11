@@ -133,9 +133,8 @@ model Notification {
   meetingId      Int?
 
   title  String
-  body   String             @db.Text
-  status NotificationStatus @default(PENDING)
-  isRead Boolean            @default(false)
+  body   String  @db.Text
+  isRead Boolean @default(false)
 
   user    User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
   group   Group    @relation(fields: [groupId], references: [groupId], onDelete: Cascade)

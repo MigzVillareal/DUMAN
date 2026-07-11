@@ -1,6 +1,7 @@
 import { PrismaClient } from '../prisma/generated/index.js';
 import prisma from "../lib/prisma.js";
 import supabase from "../lib/supabase.js";
+import { createInAppNotification } from "../services/In-App.Notification.service.js";
 
 // Group CRUD
 
@@ -192,6 +193,13 @@ export const sendInvite = async (req, res) => {
                 role: role || "MEMBER",
                 status: "PENDING"
             }
+        });
+
+        await createInAppNotification({
+            userId: user.userId,
+            groupId: parseInt(groupId),
+            title: "Group Invite",
+            body: `You've been invited to join a group.`
         });
 
         res.status(201).json({ member });

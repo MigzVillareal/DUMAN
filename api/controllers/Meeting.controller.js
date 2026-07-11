@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 // import { sendNotificationEmail } from '../services/email.service.js';
 import supabase from "../lib/supabase.js";
 import { sendCancellationNoticeForMeeting } from "../services/Notification.service.js";
+import { createInAppNotification } from '../services/In-App.Notification.service.js';
 
 // Meeting CRUD
 
@@ -67,6 +68,13 @@ export const createMeeting = async (req, res) => {
                     </ul>
                     `,
         });
+
+        await createInAppNotification(memberIds, {
+            groupId: parseInt(groupId),
+            meetingId: meeting.meetingId,
+            title: `New Meeting: ${title}`,
+            body: `A meeting has been scheduled for ${fSchedule}`
+        });
         
         res.status(201).json({ meeting });
     } catch (error) {
@@ -111,6 +119,19 @@ export const updateMeeting = async (req, res) => {
             },
         });
 
+        const members = await prisma.groupMember.findMany({
+            where: { groupId: meeting.groupId, status: "ACCEPTED"}
+        });
+
+        const memberIds = members.map(member => member.memberId);
+
+        await createInAppNotification(memberIds, {
+            groupId: meeting.groupId,
+            meetingId: meeting.meetingId,
+            title: "Meeting Update",
+            body: `Meeting details have been updated.`
+        });
+
         res.status(200).json({ meeting });
     } catch (error) {
         res.status(500).json({ errorMessage: "Unable to update meeting." });
@@ -149,13 +170,35 @@ export const updateMeetingStatus = async (req, res) => {
             data: { status }
         });
 
-        // only fire on a fresh transition into CANCELLED
+        if (status === "UPCOMING" && existing.status === "PENDING") {
+            await createInAppNotification(memberIds, {
+                groupId: meeting.groupId,
+                meetingId: meeting.meetingId,
+                title: `Meeting Finalized: ${meeting.title}`,
+                body: `The details for "${meeting.title}" have been finalized.`
+            });
+        }
+
+        const members = await prisma.groupMember.findMany({
+                where: { groupId: meeting.groupId, status: "ACCEPTED"}
+            });
+
+            const memberIds = members.map(member => member.memberId);
+
         if (status === "CANCELLED" && existing.status !== "CANCELLED") {
             try {
                 await sendCancellationNoticeForMeeting(meeting.meetingId);
             } catch (err) {
                 console.log(`Failed to send cancellation notice for meeting ${meeting.meetingId}:`, err);
             }
+
+            await createInAppNotification(memberIds, {
+                groupId: meeting.groupId,
+                meetingId: meeting.meetingId,
+                title: `Meeting Cancelled: ${meeting.title}`,
+                body: `The meeting "${meeting.title}" has been cancelled.`
+            });
+
         }
 
         res.status(200).json({ meeting });
