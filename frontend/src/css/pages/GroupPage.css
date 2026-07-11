@@ -170,40 +170,6 @@
   flex-wrap: wrap;
 }
 
-/* Edit / Delete icon-text buttons */
-.gp-icon-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.45rem 0.85rem;
-  font-family: var(--font-ui);
-  font-size: 0.8125rem;
-  font-weight: var(--weight-semibold);
-  border-radius: 0.5rem;
-  border: 1px solid var(--color-border);
-  background: transparent;
-  cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-}
-
-.gp-icon-btn--edit {
-  color: var(--color-primary);
-}
-
-.gp-icon-btn--edit:hover {
-  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
-  border-color: var(--color-primary);
-}
-
-.gp-icon-btn--delete {
-  color: var(--color-destructive, #e05555);
-}
-
-.gp-icon-btn--delete:hover {
-  background: color-mix(in srgb, var(--color-destructive, #e05555) 10%, transparent);
-  border-color: var(--color-destructive, #e05555);
-}
-
 /* ══════════════════════════════════════════════════════════════════════════
    Group-page modals (Edit & Delete)
    ══════════════════════════════════════════════════════════════════════════ */
@@ -325,14 +291,8 @@
   border-radius: 0.5rem;
   box-sizing: border-box;
   outline: none;
-  resize: vertical;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.gp-modal__input:focus,
-.gp-modal__textarea:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 20%, transparent);
+  resize: none;
+  transition: border-color 0.15s ease;
 }
 
 .gp-modal__error {

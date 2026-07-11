@@ -49,7 +49,7 @@ function FinalizeStep1({ meetings, onSelect, onClose }) {
       <div className="finalize-modal__actions finalize-modal__actions--right">
         <button
           type="button"
-          className="btn-primary meetings-btn meetings-btn--outline"
+          className="meetings-btn meetings-btn--outline"
           onClick={onClose}
         >
           Cancel
@@ -111,7 +111,7 @@ function FinalizeStep2({ meeting, onConfirm, onCancelMeeting, onBack, saving, er
       <div className="finalize-modal__actions">
         <button
           type="button"
-          className="btn-primary meetings-btn meetings-btn--outline"
+          className="meetings-btn meetings-btn--outline"
           onClick={onBack}
           disabled={saving}
         >
@@ -120,7 +120,7 @@ function FinalizeStep2({ meeting, onConfirm, onCancelMeeting, onBack, saving, er
         <div className="finalize-modal__actions-group">
           <button
             type="button"
-            className="btn-primary meetings-btn meetings-btn--danger"
+            className="meetings-btn meetings-btn--destructive"
             onClick={() => onCancelMeeting(meeting)}
             disabled={saving}
           >
@@ -128,7 +128,7 @@ function FinalizeStep2({ meeting, onConfirm, onCancelMeeting, onBack, saving, er
           </button>
           <button
             type="button"
-            className="btn-primary meetings-btn meetings-btn--primary"
+            className="meetings-btn meetings-btn--primary"
             onClick={() => onConfirm(meeting)}
             disabled={saving}
           >

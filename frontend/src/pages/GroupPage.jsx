@@ -36,28 +36,6 @@ import "../css/pages/GroupPage.css";
 import "../css/pages/Meetings.css";
 
 // ── Shared icon helpers ──────────────────────────────────────────────────────
-function IconEdit() {
-  return (
-    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" style={{ width: "1em", height: "1em" }}>
-      <path
-        d="M13.586 3.586a2 2 0 1 1 2.828 2.828l-9 9A2 2 0 0 1 6 16H4a1 1 0 0 1-1-1v-2a2 2 0 0 1 .586-1.414l9-9Z"
-        stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function IconTrash() {
-  return (
-    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" style={{ width: "1em", height: "1em" }}>
-      <path
-        d="M8 4h4M3 6h14M5 6l1 10a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2l1-10"
-        stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 function IconClose() {
   return (
     <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" style={{ width: "1em", height: "1em" }}>
@@ -370,7 +348,7 @@ function GroupMeetingCard({ meeting, canManage, onEdit, onDelete }) {
                 title="Edit meeting"
                 aria-label={`Edit ${meeting.title}`}
               >
-                <IconEdit /> Edit
+                <Icon icon="pen" size="xs" /> Edit
               </button>
               <button
                 type="button"
@@ -379,7 +357,7 @@ function GroupMeetingCard({ meeting, canManage, onEdit, onDelete }) {
                 title="Delete meeting"
                 aria-label={`Delete ${meeting.title}`}
               >
-                <IconTrash /> Delete
+                <Icon icon="trash" size="xs" /> Delete
               </button>
             </>
           )}
@@ -700,28 +678,28 @@ export default function GroupPage() {
         action={
           <div className="group-page__header-actions">
             {userIsLeader && (
-              <>
+              <div className="meetings-detail__actions">
                 <button
                   type="button"
-                  className="gp-icon-btn gp-icon-btn--edit"
+                  className="meetings-detail__action-btn meetings-detail__action-btn--edit"
                   title="Edit group"
                   aria-label="Edit group"
                   onClick={() => setShowEditModal(true)}
                 >
-                  <IconEdit />
+                  <Icon icon="pen" size="xs" />
                   Edit
                 </button>
                 <button
                   type="button"
-                  className="gp-icon-btn gp-icon-btn--delete"
+                  className="meetings-detail__action-btn meetings-detail__action-btn--delete"
                   title="Delete group"
                   aria-label="Delete group"
                   onClick={() => setShowDeleteModal(true)}
                 >
-                  <IconTrash />
+                  <Icon icon="trash" size="xs" />
                   Delete
                 </button>
-              </>
+              </div>
             )}
             <button
               type="button"

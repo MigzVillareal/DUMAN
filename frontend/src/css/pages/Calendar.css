@@ -354,30 +354,16 @@
   font-family: var(--font-ui);
 }
 
-.calendar-event-card--upcoming {
-  background-color: #eef3fc;
-  border-color: #c5d4f0;
-}
-
-.calendar-event-card--pending {
-  background-color: #fff8e6;
-  border-color: #e6c84a;
-}
-
-.calendar-event-card--cancelled {
-  background-color: #fde8e8;
-  border-color: #f5b4b4;
-}
-
-.calendar-event-card--muted {
-  background-color: #f5f5f5;
-  border-color: #e0e0e0;
-}
-
 .calendar-event-card__info {
   display: flex;
   flex-direction: column;
   gap: 0.175rem;
+}
+
+.calendar-event-card__status {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.125rem;
 }
 
 .calendar-event-card__info .meetings-list-item__name {

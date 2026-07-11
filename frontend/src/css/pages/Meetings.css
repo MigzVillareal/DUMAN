@@ -232,18 +232,12 @@
   font-size: 0.9rem;
   color: var(--color-text);
   outline: none;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color 0.15s ease;
   box-sizing: border-box;
 }
 
-.meeting-modal__input:focus,
-.meeting-modal__textarea:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(39, 60, 141, 0.1);
-}
-
 .meeting-modal__textarea {
-  resize: vertical;
+  resize: none;
   min-height: 90px;
 }
 
@@ -807,6 +801,10 @@
 
 .finalize-modal__actions--right {
   justify-content: flex-end;
+}
+
+.finalize-modal .meetings-btn--destructive:hover:not(:disabled) {
+  background-color: var(--color-destructive);
 }
 
 /* ================================================================
