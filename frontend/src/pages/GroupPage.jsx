@@ -11,10 +11,12 @@ import {
 } from "../services/groupService.js";
 import {
   createMeeting,
+  deleteMeeting,
   fetchGroupMeetings,
   isPastMeetingStatus,
   isUpcomingMeetingStatus,
   mapMeetingForGroupPage,
+  updateMeeting,
 } from "../services/meetingService.js";
 import {
   canRemoveGroupMember,
@@ -220,7 +222,132 @@ function getDisplayedGroupMeetings(meetings, filter, isMock) {
     .map((meeting, index) => mapMeetingForGroupPage(meeting, index));
 }
 
-function GroupMeetingCard({ meeting }) {
+// ── Edit Meeting Modal ────────────────────────────────────────────────────────
+function EditMeetingModal({ meeting, onClose, onSave }) {
+  const [title, setTitle] = useState(meeting.title);
+  const [description, setDescription] = useState(meeting.description ?? "");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
+  const inputRef = useRef(null);
+
+  useEffect(() => { inputRef.current?.focus(); inputRef.current?.select(); }, []);
+
+  useEffect(() => {
+    function onKey(e) { if (e.key === "Escape") onClose(); }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const trimmedTitle = title.trim();
+    if (!trimmedTitle) { setError("Meeting title cannot be empty."); return; }
+    setSaving(true); setError(null);
+    try {
+      await onSave(meeting.meetingId, { title: trimmedTitle, description: description.trim() });
+      onClose();
+    } catch (err) {
+      setError(err.message ?? "Failed to update meeting.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div
+      className="meeting-modal-overlay"
+      role="dialog" aria-modal="true" aria-labelledby="edit-meeting-modal-title"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <div className="meeting-modal">
+        <div className="meeting-modal__header">
+          <h2 id="edit-meeting-modal-title" className="meeting-modal__title">Edit Meeting</h2>
+          <button className="meeting-modal__close" onClick={onClose} aria-label="Close"><IconClose /></button>
+        </div>
+        <div className="meeting-modal__body">
+          <form onSubmit={handleSubmit} style={{ display: "contents" }}>
+            <div className="meeting-modal__field">
+              <label className="meeting-modal__label" htmlFor="em-title">Meeting Title</label>
+              <input
+                id="em-title" ref={inputRef}
+                className="meeting-modal__input"
+                type="text" value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                maxLength={120} required
+              />
+            </div>
+            <div className="meeting-modal__field">
+              <label className="meeting-modal__label" htmlFor="em-desc">
+                Description <span style={{ fontWeight: 400, color: "#999" }}>(optional)</span>
+              </label>
+              <textarea
+                id="em-desc" className="meeting-modal__textarea"
+                value={description} onChange={(e) => setDescription(e.target.value)}
+                rows={3} maxLength={500} placeholder="What is this meeting about?"
+              />
+            </div>
+            {error && <p className="meeting-modal__error">{error}</p>}
+            <div className="meeting-modal__actions">
+              <button type="button" className="gp-modal__btn gp-modal__btn--ghost" onClick={onClose} disabled={saving}>Cancel</button>
+              <button type="submit" className="gp-modal__btn gp-modal__btn--primary" disabled={saving}>{saving ? "Saving…" : "Save Changes"}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Delete Meeting Confirm Modal ──────────────────────────────────────────────
+function DeleteMeetingModal({ meeting, onClose, onConfirm }) {
+  const [deleting, setDeleting] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    function onKey(e) { if (e.key === "Escape") onClose(); }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  async function handleDelete() {
+    setDeleting(true); setError(null);
+    try {
+      await onConfirm(meeting.meetingId);
+      onClose();
+    } catch (err) {
+      setError(err.message ?? "Failed to delete meeting.");
+      setDeleting(false);
+    }
+  }
+
+  return (
+    <div
+      className="meeting-modal-overlay"
+      role="dialog" aria-modal="true" aria-labelledby="delete-meeting-modal-title"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <div className="meeting-modal meeting-modal--sm">
+        <div className="meeting-modal__header">
+          <h2 id="delete-meeting-modal-title" className="meeting-modal__title">Delete Meeting</h2>
+          <button className="meeting-modal__close" onClick={onClose} aria-label="Close"><IconClose /></button>
+        </div>
+        <div className="meeting-modal__body">
+          <p className="meeting-modal__delete-msg">
+            Are you sure you want to delete <strong>&ldquo;{meeting.title}&rdquo;</strong>?{" "}
+            This action <em>cannot</em> be undone.
+          </p>
+          {error && <p className="meeting-modal__error">{error}</p>}
+          <div className="meeting-modal__actions">
+            <button type="button" className="gp-modal__btn gp-modal__btn--ghost" onClick={onClose} disabled={deleting}>Cancel</button>
+            <button type="button" className="gp-modal__btn gp-modal__btn--destructive" onClick={handleDelete} disabled={deleting}>{deleting ? "Deleting…" : "Delete Meeting"}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function GroupMeetingCard({ meeting, canManage, onEdit, onDelete }) {
   const [expanded, setExpanded] = useState(meeting.defaultExpanded);
 
   return (
@@ -234,6 +361,28 @@ function GroupMeetingCard({ meeting }) {
           <p className="dashboard-meeting-card__meta">{meeting.schedule}</p>
         </div>
         <div className="dashboard-meeting-card__actions">
+          {canManage && (
+            <>
+              <button
+                type="button"
+                className="meetings-detail__action-btn meetings-detail__action-btn--edit"
+                onClick={() => onEdit(meeting)}
+                title="Edit meeting"
+                aria-label={`Edit ${meeting.title}`}
+              >
+                <IconEdit /> Edit
+              </button>
+              <button
+                type="button"
+                className="meetings-detail__action-btn meetings-detail__action-btn--delete"
+                onClick={() => onDelete(meeting)}
+                title="Delete meeting"
+                aria-label={`Delete ${meeting.title}`}
+              >
+                <IconTrash /> Delete
+              </button>
+            </>
+          )}
           <button type="button" className="btn-primary group-page__btn-pill group-page__btn-pill--soft">
             View Location
           </button>
@@ -276,6 +425,8 @@ export default function GroupPage() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [allMeetings, setAllMeetings] = useState([]);
+  const [meetingToEdit, setMeetingToEdit] = useState(null);
+  const [meetingToDelete, setMeetingToDelete] = useState(null);
   const [meetingFilter, setMeetingFilter] = useState("upcoming");
   const [meetingsLoading, setMeetingsLoading] = useState(!USE_MOCK_GROUPS);
 
@@ -414,6 +565,18 @@ export default function GroupPage() {
   if (!group) return <Navigate to="/groups" replace />;
 
   const userIsLeader = isGroupLeader(user, group, members);
+
+  const handleEditMeeting = useCallback(async (meetingId, payload) => {
+    await updateMeeting(meetingId, payload);
+    const result = await fetchGroupMeetings(group.groupId);
+    setAllMeetings(result.meetings ?? []);
+  }, [group?.groupId]);
+
+  const handleDeleteMeeting = useCallback(async (meetingId) => {
+    await deleteMeeting(meetingId);
+    const result = await fetchGroupMeetings(group.groupId);
+    setAllMeetings(result.meetings ?? []);
+  }, [group?.groupId]);
 
   const handleEditGroup = useCallback(async (id, payload) => {
     await editGroup(id, payload);
@@ -602,7 +765,13 @@ export default function GroupPage() {
               </p>
             ) : (
               displayedMeetings.map((meeting) => (
-                <GroupMeetingCard key={meeting.id} meeting={meeting} />
+                <GroupMeetingCard
+                  key={meeting.id}
+                  meeting={meeting}
+                  canManage={userIsLeader}
+                  onEdit={(m) => setMeetingToEdit(m)}
+                  onDelete={(m) => setMeetingToDelete(m)}
+                />
               ))
             )}
           </div>
@@ -694,6 +863,22 @@ export default function GroupPage() {
             setAllMeetings(result.meetings ?? []);
             setMeetingFilter("upcoming");
           }}
+        />
+      )}
+
+      {meetingToEdit && (
+        <EditMeetingModal
+          meeting={meetingToEdit}
+          onClose={() => setMeetingToEdit(null)}
+          onSave={handleEditMeeting}
+        />
+      )}
+
+      {meetingToDelete && (
+        <DeleteMeetingModal
+          meeting={meetingToDelete}
+          onClose={() => setMeetingToDelete(null)}
+          onConfirm={handleDeleteMeeting}
         />
       )}
 

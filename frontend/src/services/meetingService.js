@@ -152,6 +152,8 @@ export function mapMeetingForMeetingsList(meeting) {
   return {
     id: meeting.meetingId,
     group: meeting.group?.name ?? "",
+    groupId: meeting.groupId ?? meeting.group?.groupId ?? null,
+    setterId: meeting.setterId ?? null,
     title: meeting.title,
     location: formatMeetingLocation(meeting),
     schedule: formatMeetingSchedule(meeting.schedule, meeting.endsAt),
@@ -211,6 +213,7 @@ export async function attachAttendanceToMeeting(meeting) {
 export function mapMeetingForGroupPage(meeting, index = 0) {
   return {
     id: meeting.meetingId,
+    meetingId: meeting.meetingId,
     title: meeting.title,
     location: formatMeetingLocation(meeting),
     schedule: formatMeetingSchedule(meeting.schedule, meeting.endsAt),

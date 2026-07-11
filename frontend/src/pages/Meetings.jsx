@@ -6,6 +6,7 @@ import Icon from "../components/Icon.jsx";
 import PageHeader from "../components/PageHeader.jsx";
 import FinalizeMeetingModal from "../components/FinalizeMeetingModal.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
+import { useGroups } from "../context/GroupsContext.jsx";
 import {
   attachAttendanceToMeeting,
   fetchUserMeetings,
@@ -299,7 +300,7 @@ function DeleteConfirmModal({ meeting, onClose, onConfirm }) {
 }
 
 // ── Meeting detail panel ──────────────────────────────────────────────────────
-function MeetingDetailPanel({ meeting, onFinalize, onEdit, onDelete }) {
+function MeetingDetailPanel({ meeting, canManage, onFinalize, onEdit, onDelete }) {
   if (!meeting) {
     return (
       <div className="meetings-detail meetings-detail--empty">
@@ -313,57 +314,59 @@ function MeetingDetailPanel({ meeting, onFinalize, onEdit, onDelete }) {
   return (
     <div className="meetings-detail-wrap">
       <div className="meetings-detail">
-      <div className="meetings-detail__header">
-        <div className="meetings-detail__header-main">
-          <div className="meetings-detail__title-row">
-            <h2 className="meetings-detail__title">{meeting.title}</h2>
-            <StatusBadge status={meeting.status} />
+        <div className="meetings-detail__header">
+          <div className="meetings-detail__header-main">
+            <div className="meetings-detail__title-row">
+              <h2 className="meetings-detail__title">{meeting.title}</h2>
+              <StatusBadge status={meeting.status} />
+            </div>
+            <p className="meetings-detail__group">{meeting.group}</p>
           </div>
-          <p className="meetings-detail__group">{meeting.group}</p>
+          {canManage && (
+            <div className="meetings-detail__actions">
+              <button
+                type="button"
+                id="edit-meeting-btn"
+                className="meetings-detail__action-btn meetings-detail__action-btn--edit"
+                onClick={() => onEdit(meeting)}
+                title="Edit meeting"
+                aria-label="Edit meeting"
+              >
+                <Icon icon="pen" size="xs" />
+                Edit
+              </button>
+              <button
+                type="button"
+                id="delete-meeting-btn"
+                className="meetings-detail__action-btn meetings-detail__action-btn--delete"
+                onClick={() => onDelete(meeting)}
+                title="Delete meeting"
+                aria-label="Delete meeting"
+              >
+                <Icon icon="xmark" size="xs" />
+                Delete
+              </button>
+            </div>
+          )}
         </div>
-        <div className="meetings-detail__actions">
-            <button
-              type="button"
-              id="edit-meeting-btn"
-              className="meetings-detail__action-btn meetings-detail__action-btn--edit"
-              onClick={() => onEdit(meeting)}
-              title="Edit meeting"
-              aria-label="Edit meeting"
-            >
-              <Icon icon="pen" size="xs" />
-              Edit
-            </button>
-            <button
-              type="button"
-              id="delete-meeting-btn"
-              className="meetings-detail__action-btn meetings-detail__action-btn--delete"
-              onClick={() => onDelete(meeting)}
-              title="Delete meeting"
-              aria-label="Delete meeting"
-            >
-              <Icon icon="xmark" size="xs" />
-              Delete
-            </button>
-        </div>
-      </div>
 
-      <div className="meetings-detail__body">
-        <div className="meetings-detail__field">
-          <span className="meetings-detail__label">Location</span>
-          <span className="meetings-detail__value">{meeting.location}</span>
+        <div className="meetings-detail__body">
+          <div className="meetings-detail__field">
+            <span className="meetings-detail__label">Location</span>
+            <span className="meetings-detail__value">{meeting.location}</span>
+          </div>
+          <div className="meetings-detail__field">
+            <span className="meetings-detail__label">Schedule</span>
+            <span className="meetings-detail__value">{meeting.schedule}</span>
+          </div>
+          <div className="meetings-detail__field meetings-detail__field--block">
+            <span className="meetings-detail__label">Description</span>
+            <p className="meetings-detail__value meetings-detail__value--text">
+              {meeting.description}
+            </p>
+          </div>
+          <MemberAttendance meeting={meeting} />
         </div>
-        <div className="meetings-detail__field">
-          <span className="meetings-detail__label">Schedule</span>
-          <span className="meetings-detail__value">{meeting.schedule}</span>
-        </div>
-        <div className="meetings-detail__field meetings-detail__field--block">
-          <span className="meetings-detail__label">Description</span>
-          <p className="meetings-detail__value meetings-detail__value--text">
-            {meeting.description}
-          </p>
-        </div>
-        <MemberAttendance meeting={meeting} />
-      </div>
       </div>
 
       {meeting.status === "pending" && (
@@ -393,6 +396,7 @@ const FILTERS = [
 // ── Main Page ─────────────────────────────────────────────────────────────────
 function Meetings() {
   const { user } = useAuth();
+  const { groups } = useGroups();
   const location = useLocation();
   const [meetings, setMeetings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -452,7 +456,7 @@ function Meetings() {
           prev.map((meeting) => (meeting.id === updated.id ? updated : meeting))
         );
       })
-      .catch(() => {});
+      .catch(() => { });
 
     return () => {
       cancelled = true;
@@ -551,6 +555,16 @@ function Meetings() {
     removeMeeting(meeting.id);
   };
 
+  // A user can manage a meeting if they are the owner (userId) of that meeting's group
+  const canManageMeeting = (meeting) => {
+    if (!meeting || !user) return false;
+    const matchedGroup = (groups ?? []).find(
+      (g) => g.groupId != null && Number(g.groupId) === Number(meeting.groupId)
+    );
+    if (!matchedGroup) return false;
+    return Number(matchedGroup.userId) === Number(user.userId);
+  };
+
   return (
     <div className="meetings-page">
       {/* ── Page Header ── */}
@@ -624,6 +638,7 @@ function Meetings() {
         <div className="meetings-detail-panel">
           <MeetingDetailPanel
             meeting={selected}
+            canManage={canManageMeeting(selected)}
             onFinalize={openFinalizeModal}
             onEdit={(m) => setEditingMeeting(m)}
             onDelete={(m) => setDeletingMeeting(m)}
