@@ -1,6 +1,6 @@
 import prisma from "../lib/prisma.js";
 
-export const createInAppNotification = async (userIds, { groupId, meetingId = null, title, body }) => {
+export const createInAppNotification = async (userIds, { groupId, meetingId = null, title, body } = {}) => {
     const notifications = userIds.map(userId => ({
         userId,
         groupId,
@@ -9,4 +9,6 @@ export const createInAppNotification = async (userIds, { groupId, meetingId = nu
         body,
         isRead: false
     }));
+
+    return await prisma.notification.createMany({ data: notifications });
 };

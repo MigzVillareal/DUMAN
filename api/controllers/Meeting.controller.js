@@ -179,6 +179,10 @@ export const updateMeetingStatus = async (req, res) => {
         const memberIds = members.map((member) => member.memberId);
 
         if (status === "UPCOMING" && existing.status === "PENDING") {
+
+            console.log("memberIds:", memberIds);
+            console.log("about to create notification...");
+
             await createInAppNotification(memberIds, {
                 groupId: meeting.groupId,
                 meetingId: meeting.meetingId,
