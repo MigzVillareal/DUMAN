@@ -121,6 +121,24 @@ export function mapApiInvite(record) {
   };
 }
 
+export function getUserGroupRoleLabel(authUser, group) {
+  if (!authUser || !group) return null;
+
+  if (
+    group.userId != null &&
+    Number(group.userId) === Number(authUser.userId)
+  ) {
+    return "Leader";
+  }
+
+  const self = group.members?.find(
+    (member) => Number(member.id) === Number(authUser.userId)
+  );
+
+  if (self?.role === "leader") return "Leader";
+  return "Member";
+}
+
 export function isGroupLeader(authUser, group, members = []) {
   if (!authUser || !group) return false;
 

@@ -7,6 +7,7 @@ import PageHeader from "../components/PageHeader.jsx";
 import FinalizeMeetingModal from "../components/FinalizeMeetingModal.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useGroups } from "../context/GroupsContext.jsx";
+import { getUserGroupRoleLabel } from "../utils/groups.js";
 import {
   attachAttendanceToMeeting,
   canMarkMeetingFinished,
@@ -303,6 +304,7 @@ function DeleteConfirmModal({ meeting, onClose, onConfirm }) {
 // ── Meeting detail panel ──────────────────────────────────────────────────────
 function MeetingDetailPanel({
   meeting,
+  userRole,
   canManage,
   onFinalize,
   onEdit,
@@ -337,6 +339,9 @@ function MeetingDetailPanel({
               <StatusBadge status={meeting.status} />
             </div>
             <p className="meetings-detail__group">{meeting.group}</p>
+            {userRole && (
+              <p className="meetings-detail__role">Role: {userRole}</p>
+            )}
           </div>
           {hasAnyAction && (
             <div className="meetings-detail__actions">
@@ -613,6 +618,14 @@ function Meetings() {
     return Number(matchedGroup.userId) === Number(user.userId);
   };
 
+  const getMeetingUserRole = (meeting) => {
+    if (!meeting || !user) return null;
+    const matchedGroup = (groups ?? []).find(
+      (g) => g.groupId != null && Number(g.groupId) === Number(meeting.groupId)
+    );
+    return getUserGroupRoleLabel(user, matchedGroup);
+  };
+
   return (
     <div className="meetings-page">
       {/* ── Page Header ── */}
@@ -686,6 +699,7 @@ function Meetings() {
         <div className="meetings-detail-panel">
           <MeetingDetailPanel
             meeting={selected}
+            userRole={getMeetingUserRole(selected)}
             canManage={canManageMeeting(selected)}
             onFinalize={openFinalizeModal}
             onEdit={(m) => setEditingMeeting(m)}
