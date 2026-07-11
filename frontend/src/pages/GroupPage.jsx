@@ -13,7 +13,7 @@ import {
   createMeeting,
   deleteMeeting,
   fetchGroupMeetings,
-  isPastMeetingStatus,
+  isFinishedMeetingStatus,
   isUpcomingMeetingStatus,
   mapMeetingForGroupPage,
   updateMeeting,
@@ -165,7 +165,7 @@ function DeleteGroupModal({ group, onClose, onConfirm }) {
 
 const MEETING_FILTERS = [
   { key: "upcoming", label: "Upcoming" },
-  { key: "past", label: "Finished" },
+  { key: "finished", label: "Finished" },
 ];
 
 function getDisplayedGroupMeetings(meetings, filter, isMock) {
@@ -174,11 +174,11 @@ function getDisplayedGroupMeetings(meetings, filter, isMock) {
 
     return meetings
       .filter((meeting) =>
-        filter === "past" ? meeting.date < today : meeting.date >= today
+        filter === "finished" ? meeting.date < today : meeting.date >= today
       )
       .sort((a, b) => {
         const diff = a.date.localeCompare(b.date);
-        return filter === "past" ? -diff : diff;
+        return filter === "finished" ? -diff : diff;
       })
       .map((meeting, index) => ({
         ...meeting,
@@ -188,14 +188,14 @@ function getDisplayedGroupMeetings(meetings, filter, isMock) {
 
   return (meetings ?? [])
     .filter((meeting) =>
-      filter === "past"
-        ? isPastMeetingStatus(meeting.status)
-        : isUpcomingMeetingStatus(meeting.status)
+      filter === "finished"
+        ? isFinishedMeetingStatus(meeting.status, meeting)
+        : isUpcomingMeetingStatus(meeting.status, meeting)
     )
     .sort((a, b) => {
       const diff =
         new Date(a.schedule).getTime() - new Date(b.schedule).getTime();
-      return filter === "past" ? -diff : diff;
+      return filter === "finished" ? -diff : diff;
     })
     .map((meeting, index) => mapMeetingForGroupPage(meeting, index));
 }
@@ -717,7 +717,7 @@ export default function GroupPage() {
         <section className="dashboard-panel">
           <div className="group-page__meetings-header">
             <h2 className="dashboard-panel__title">
-              {meetingFilter === "past" ? "Finished Group Meetings" : "Upcoming Group Meetings"}
+              {meetingFilter === "finished" ? "Finished Group Meetings" : "Upcoming Group Meetings"}
             </h2>
             <nav className="meetings-filters" aria-label="Meeting filters">
               {MEETING_FILTERS.map((item) => (
@@ -737,7 +737,7 @@ export default function GroupPage() {
               <p className="group-page__empty">Loading meetings...</p>
             ) : displayedMeetings.length === 0 ? (
               <p className="group-page__empty">
-                {meetingFilter === "past"
+                {meetingFilter === "finished"
                   ? "No finished meetings."
                   : "No upcoming meetings scheduled."}
               </p>

@@ -60,7 +60,7 @@ export function mapMeetingUiStatus(status) {
     case "ONGOING":
       return "upcoming";
     case "FINISHED":
-      return "past";
+      return "finished";
     case "CANCELLED":
       return "cancelled";
     default:
@@ -68,11 +68,30 @@ export function mapMeetingUiStatus(status) {
   }
 }
 
-export function isPastMeetingStatus(status) {
+export function isMeetingTimeFinished(meeting) {
+  if (!meeting?.schedule) return false;
+
+  const endTime = new Date(meeting.endsAt ?? meeting.schedule);
+  return endTime.getTime() < Date.now();
+}
+
+export function resolveMeetingUiStatus(meeting) {
+  const status = meeting?.status;
+
+  if (status === "CANCELLED") return "cancelled";
+  if (isMeetingTimeFinished(meeting)) return "finished";
+
+  return mapMeetingUiStatus(status);
+}
+
+export function isFinishedMeetingStatus(status, meeting = null) {
+  if (status === "CANCELLED" || meeting?.status === "CANCELLED") return false;
+  if (meeting && isMeetingTimeFinished(meeting)) return true;
   return status === "FINISHED";
 }
 
-export function isUpcomingMeetingStatus(status) {
+export function isUpcomingMeetingStatus(status, meeting = null) {
+  if (meeting && isMeetingTimeFinished(meeting)) return false;
   return status === "UPCOMING" || status === "ONGOING";
 }
 
@@ -157,8 +176,10 @@ export function mapMeetingForMeetingsList(meeting) {
     title: meeting.title,
     location: formatMeetingLocation(meeting),
     schedule: formatMeetingSchedule(meeting.schedule, meeting.endsAt),
+    scheduleAt: meeting.schedule,
+    endsAt: meeting.endsAt ?? null,
     date: getDateKey(meeting.schedule),
-    status: mapMeetingUiStatus(meeting.status),
+    status: resolveMeetingUiStatus(meeting),
     finalized: meeting.status !== "PENDING",
     description: meeting.description ?? "",
     attending: [],

@@ -1,3 +1,5 @@
+import { isMeetingTimeFinished } from "../services/meetingService.js";
+
 /**
  * @param {number} year
  * @param {number} month 0-indexed
@@ -96,8 +98,10 @@ export function getEventsForDate(events, dateKey) {
 export function getDayEventBars(events, dateKey) {
   return getEventsForDate(events, dateKey).map((event) => ({
     meetingId: event.meetingId,
-    muted: event.status === "VOTING" || event.status === "FINISHED",
-    pending: event.status === "PENDING",
+    muted:
+      event.status === "FINISHED" ||
+      (isMeetingTimeFinished(event) && event.status !== "CANCELLED"),
+    pending: event.status === "PENDING" && !isMeetingTimeFinished(event),
     cancelled: event.status === "CANCELLED",
   }));
 }

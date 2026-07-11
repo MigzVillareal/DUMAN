@@ -1,17 +1,17 @@
 import { Link } from "react-router-dom";
 import { formatEventTime, formatLongDate } from "../../utils/calendar.js";
-import { mapMeetingUiStatus } from "../../services/meetingService.js";
+import { resolveMeetingUiStatus, isMeetingTimeFinished } from "../../services/meetingService.js";
 import "../../css/pages/Meetings.css";
 
 const STATUS_LABELS = {
   upcoming: "Upcoming",
-  past: "Finished",
+  finished: "Finished",
   pending: "Pending",
   cancelled: "Cancelled",
 };
 
-function EventStatusBadge({ status }) {
-  const uiStatus = mapMeetingUiStatus(status);
+function EventStatusBadge({ event }) {
+  const uiStatus = resolveMeetingUiStatus(event);
 
   return (
     <span className={`meetings-badge meetings-badge--${uiStatus}`}>
@@ -22,7 +22,8 @@ function EventStatusBadge({ status }) {
 
 function CalendarEventCard({ event, onRsvp, isUpdating }) {
   const rsvpStatus = event.rsvp?.status ?? "PENDING";
-  const isFinalized = event.status !== "PENDING";
+  const isFinalized =
+    event.status !== "PENDING" || isMeetingTimeFinished(event);
   const schedule =
     event.scheduleLabel ?? formatEventTime(event.schedule, event.endsAt);
 
@@ -30,7 +31,7 @@ function CalendarEventCard({ event, onRsvp, isUpdating }) {
     <article className="calendar-event-card">
       <div className="calendar-event-card__info">
         <div className="calendar-event-card__status">
-          <EventStatusBadge status={event.status} />
+          <EventStatusBadge event={event} />
         </div>
         <p className="meetings-list-item__name">
           {event.group?.name ?? "—"} &mdash; {event.title}

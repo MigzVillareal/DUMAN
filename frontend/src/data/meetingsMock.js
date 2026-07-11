@@ -46,7 +46,7 @@ export const MEETINGS_LIST = [
     location: "Library, 3rd Floor",
     schedule: "Last Friday, 1:00 PM – 2:30 PM",
     date: new Date(Date.now() - 86400000 * 2).toISOString().slice(0, 10),
-    status: "past",
+    status: "finished",
     finalized: true,
     description:
       "Reviewed and compiled relevant literature for the research background section.",
@@ -58,7 +58,7 @@ export const MEETINGS_LIST = [
     location: "Bonoan Building, Room 204",
     schedule: "Last Monday, 5:00 PM – 6:30 PM",
     date: new Date(Date.now() - 86400000 * 5).toISOString().slice(0, 10),
-    status: "past",
+    status: "finished",
     finalized: true,
     description: "Intensive preparation for the midterm examinations.",
   },

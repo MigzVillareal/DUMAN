@@ -96,7 +96,7 @@ function Dashboard() {
     try {
       const data = await fetchUserMeetings(user.userId);
       const upcomingMeetings = (data.meetings ?? [])
-        .filter((meeting) => isUpcomingMeetingStatus(meeting.status))
+        .filter((meeting) => isUpcomingMeetingStatus(meeting.status, meeting))
         .map(mapMeetingForMeetingsList)
         .sort((a, b) => a.date.localeCompare(b.date))
         .map((meeting, index) => ({

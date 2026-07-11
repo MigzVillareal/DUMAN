@@ -462,7 +462,7 @@
   color: var(--color-primary);
 }
 
-.meetings-badge--past {
+.meetings-badge--finished {
   background-color: #f0f0f0;
   color: #555;
 }

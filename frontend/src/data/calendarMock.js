@@ -57,7 +57,7 @@ const STATUS_FROM_MEETINGS = {
   upcoming: "UPCOMING",
   pending: "PENDING",
   voting: "VOTING",
-  past: "FINISHED",
+  finished: "FINISHED",
 };
 
 /** UTC times aligned with meetingsMock schedule labels (UTC+8 display). */

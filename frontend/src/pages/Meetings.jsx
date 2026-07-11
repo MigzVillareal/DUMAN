@@ -20,7 +20,7 @@ import {
 function StatusBadge({ status }) {
   const labels = {
     upcoming: "Upcoming",
-    past: "Finished",
+    finished: "Finished",
     pending: "Pending",
     cancelled: "Cancelled",
   };
@@ -389,7 +389,7 @@ const FILTERS = [
   { key: "all", label: "All Meetings" },
   { key: "upcoming", label: "Upcoming" },
   { key: "pending", label: "Pending" },
-  { key: "past", label: "Finished" },
+  { key: "finished", label: "Finished" },
   { key: "cancelled", label: "Cancelled" },
 ];
 
