@@ -2,6 +2,28 @@ export function locationHasRoomSelection(location) {
   return location?.hasRoomSelection === true;
 }
 
+export function findCampusLocationByBuilding(buildingName) {
+  if (!buildingName) return null;
+
+  const normalized = buildingName.trim().toLowerCase();
+  return (
+    campusLocations.find(
+      (location) => location.building.trim().toLowerCase() === normalized,
+    ) ?? null
+  );
+}
+
+export function getCampusMapPath({ building, floor, roomNumber } = {}) {
+  const location = findCampusLocationByBuilding(building);
+  if (!location) return "/campus-map";
+
+  const params = new URLSearchParams({ locationId: location.id });
+  if (floor) params.set("floor", String(floor));
+  if (roomNumber) params.set("room", String(roomNumber));
+
+  return `/campus-map?${params.toString()}`;
+}
+
 export function createBuildingLocation({
   id,
   building,

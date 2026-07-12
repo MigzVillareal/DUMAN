@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import Icon from "../components/Icon.jsx";
 import "../css/pages/CampusMap.css";
 import CreateMeetingModal from "../components/CreateMeetingModal.jsx";
@@ -11,11 +12,36 @@ const SHOW_CAMPUS_MAP_GRID = false;
 
 function CampusMap() {
   const { groups } = useGroups();
+  const [searchParams] = useSearchParams();
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedFloor, setSelectedFloor] = useState("");
   const [selectedRoom, setSelectedRoom] = useState("");
   const [locationSearch, setLocationSearch] = useState("");
   const [showCreateMeetingModal, setShowCreateMeetingModal] = useState(false);
+
+  useEffect(() => {
+    const locationId = searchParams.get("locationId");
+    if (!locationId) return;
+
+    const location = campusLocations.find((item) => item.id === locationId);
+    if (!location) return;
+
+    const floor = searchParams.get("floor") ?? "";
+    const room = searchParams.get("room") ?? "";
+
+    setSelectedLocation(location);
+
+    if (locationHasRoomSelection(location)) {
+      setSelectedFloor(
+        floor && location.floors.includes(floor) ? floor : location.floors[0],
+      );
+      setSelectedRoom(room);
+      return;
+    }
+
+    setSelectedFloor("");
+    setSelectedRoom("");
+  }, [searchParams]);
 
   function selectLocation(location) {
     setSelectedLocation(location);

@@ -3,6 +3,7 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useGroups } from "../context/GroupsContext.jsx";
 import { getGroupDetails } from "../data/groupsMock.js";
+import { getCampusMapPath } from "../data/campusLocations.js";
 import {
   fetchGroupMembers,
   removeGroupMember,
@@ -421,6 +422,7 @@ function FinishMeetingModal({ meeting, onClose, onConfirm }) {
 }
 
 function GroupMeetingCard({ meeting, canManage, onEdit, onDelete, onFinish }) {
+  const navigate = useNavigate();
   const [expanded, setExpanded] = useState(meeting.defaultExpanded);
   const showFinishedAction =
     canManage && canMarkMeetingFinished(meeting);
@@ -480,6 +482,7 @@ function GroupMeetingCard({ meeting, canManage, onEdit, onDelete, onFinish }) {
           <button
             type="button"
             className="meetings-detail__action-btn meetings-detail__action-btn--location"
+            onClick={() => navigate(getCampusMapPath(meeting))}
           >
             View Location
           </button>

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../css/pages/Login.css";
 import "../css/pages/Dashboard.css";
 import "../css/pages/Meetings.css";
@@ -20,6 +21,7 @@ import {
 } from "../services/meetingService.js";
 import { isToday } from "../utils/date.js";
 import { mapApiInvite } from "../utils/groups.js";
+import { getCampusMapPath } from "../data/campusLocations.js";
 
 const UNIVERSITY_NAME = "Ateneo de Naga University";
 
@@ -33,6 +35,7 @@ function formatWelcomeDate() {
 }
 
 function MeetingCard({ meeting }) {
+  const navigate = useNavigate();
   const [expanded, setExpanded] = useState(meeting.defaultExpanded);
 
   return (
@@ -62,6 +65,7 @@ function MeetingCard({ meeting }) {
           <button
             type="button"
             className="meetings-detail__action-btn meetings-detail__action-btn--location"
+            onClick={() => navigate(getCampusMapPath(meeting))}
           >
             View Location
           </button>
