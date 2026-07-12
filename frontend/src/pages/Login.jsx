@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { login, register } from "../services/api.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import "../css/pages/Login.css";
 
 function Login() {
   const navigate = useNavigate();
-  const { setUser } = useAuth();
+  const { user, token, setUser } = useAuth();
   const [authMode, setAuthMode] = useState("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,6 +17,10 @@ function Login() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  if (user && token) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   function switchMode(mode) {
     setAuthMode(mode);

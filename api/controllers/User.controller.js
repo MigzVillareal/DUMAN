@@ -158,6 +158,10 @@ export const getUserNotifications = async (req, res) => {
             orderBy: {
                 createdAt: "desc",
             },
+            include: {
+                group: true,
+                meeting: true,
+            },
         });
 
         res.status(200).json({ notifications });

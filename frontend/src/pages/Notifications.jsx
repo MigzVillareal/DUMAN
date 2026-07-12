@@ -1,10 +1,12 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import PageHeader from "../components/PageHeader.jsx";
 import NotificationDetailModal from "../components/NotificationDetailModal.jsx";
 import {
-  NOTIFICATIONS_LIST,
+  fetchUserNotifications,
+  markNotificationRead,
   NOTIFICATION_TYPES,
-} from "../data/notificationsMock.js";
+} from "../services/notificationService.js";
+import { useAuth } from "../context/AuthContext.jsx";
 import "../css/pages/Notifications.css";
 
 const TABS = [
@@ -13,7 +15,7 @@ const TABS = [
 ];
 
 function NotificationItem({ notification, onSelect }) {
-  const message = NOTIFICATION_TYPES[notification.type] ?? "New notification";
+  const message = NOTIFICATION_TYPES[notification.type] ?? notification.title ?? "New notification";
 
   return (
     <button
@@ -34,9 +36,33 @@ function NotificationItem({ notification, onSelect }) {
 }
 
 function Notifications() {
-  const [notifications, setNotifications] = useState(NOTIFICATIONS_LIST);
+  const { user } = useAuth();
+  const [notifications, setNotifications] = useState([]);
   const [activeTab, setActiveTab] = useState("unread");
   const [selectedNotification, setSelectedNotification] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const loadNotifications = useCallback(async () => {
+    if (!user?.userId) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const items = await fetchUserNotifications(user.userId);
+      setNotifications(items);
+    } catch (err) {
+      setError(err.message ?? "Unable to load notifications.");
+      setNotifications([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [user?.userId]);
+
+  useEffect(() => {
+    loadNotifications();
+  }, [loadNotifications]);
 
   const unreadCount = useMemo(
     () => notifications.filter((item) => !item.read).length,
@@ -51,11 +77,17 @@ function Notifications() {
     [notifications, activeTab],
   );
 
-  const handleMarkRead = (id) => {
+  const handleMarkRead = useCallback(async (id) => {
     setNotifications((prev) =>
       prev.map((item) => (item.id === id ? { ...item, read: true } : item)),
     );
-  };
+
+    try {
+      await markNotificationRead(id);
+    } catch {
+      await loadNotifications();
+    }
+  }, [loadNotifications]);
 
   const activeSelection = selectedNotification
     ? notifications.find((item) => item.id === selectedNotification.id) ??
@@ -88,7 +120,11 @@ function Notifications() {
         </div>
 
         <div className="notifications-list">
-          {visibleNotifications.length === 0 ? (
+          {loading ? (
+            <p className="notifications-list__empty">Loading notifications...</p>
+          ) : error ? (
+            <p className="notifications-list__empty">{error}</p>
+          ) : visibleNotifications.length === 0 ? (
             <p className="notifications-list__empty">
               {activeTab === "unread"
                 ? "No unread notifications."

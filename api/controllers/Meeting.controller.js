@@ -218,9 +218,9 @@ export const getMeetingNotifications = async (req, res) => {
     try {
         const { meetingId } = req.params;
 
-        const notification = await prisma.notifications.findMany({
+        const notification = await prisma.notification.findMany({
             where: { meetingId: parseInt(meetingId) },
-            include: { user: true }
+            include: { user: true },
         });
 
         res.status(200).json({ notifications });

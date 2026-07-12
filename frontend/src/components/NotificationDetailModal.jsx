@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  NOTIFICATION_TYPES,
   getNotificationDestination,
-} from "../data/notificationsMock.js";
+  NOTIFICATION_TYPES,
+} from "../services/notificationService.js";
 import "../css/components_styles/NotificationDetailModal.css";
 
 export default function NotificationDetailModal({ notification, onClose, onMarkRead }) {
@@ -29,7 +29,10 @@ export default function NotificationDetailModal({ notification, onClose, onMarkR
     if (event.target === overlayRef.current) onClose();
   };
 
-  const message = NOTIFICATION_TYPES[notification.type] ?? "New notification";
+  const message =
+    NOTIFICATION_TYPES[notification.type] ??
+    notification.title ??
+    "New notification";
   const destination = getNotificationDestination(notification);
 
   const handleGoTo = () => {
