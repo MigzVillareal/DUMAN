@@ -14,5 +14,6 @@ router.delete("/:userId", authenticateToken, userController.deleteUser);
 router.get("/:userId/invites", authenticateToken, userController.getUserInvites);
 router.get("/:userId/meetings", authenticateToken, userController.getUserMeetings);
 router.get("/:userId/meeting", authenticateToken, userController.getUserMeeting);
+router.get("/:userId", authenticateToken, userController.getUserNotifications);
 
 export default router;
